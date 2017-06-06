@@ -6,6 +6,8 @@ import java.util.List;
 import org.istv.ske.dal.Offer;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,6 +24,13 @@ public class TestController {
 		//TODO
 		List<Offer> offers = new ArrayList<Offer>();
 		return offers;
+	}
+	
+	@RequestMapping(value = { "/player" }, method = RequestMethod.GET, headers = "Accept=*/*", produces = "Application/json")
+	@ResponseBody
+	public String getAccountsByEmail() {
+		String s = "[{\"Nom\": \"test\"},{\"Type\": \"\"}]";
+		return s;
 	}
 
 
