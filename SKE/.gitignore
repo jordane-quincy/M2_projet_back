@@ -1,2 +1,6 @@
 /target/
 .settings/
+# IntelliJ
+/.idea/
+/out/
+*.iml
