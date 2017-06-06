@@ -6,9 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.springframework.context.annotation.Scope;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 @Data
 @Entity

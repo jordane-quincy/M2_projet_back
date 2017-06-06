@@ -20,6 +20,8 @@ public class Domain {
 	private int id;
 	private String domainName;
 	
+	
+	
 	public Domain(){
 		
 	}

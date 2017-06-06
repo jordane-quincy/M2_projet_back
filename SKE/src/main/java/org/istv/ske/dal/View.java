@@ -4,9 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.springframework.context.annotation.Scope;
-
 import lombok.Data;
+
 @Data
 @Entity
 public class View {
@@ -20,4 +19,5 @@ public class View {
 		this.idView = idView;
 		this.textView = textView;
 	}
+	
 }
