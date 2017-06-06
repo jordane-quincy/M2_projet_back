@@ -1,4 +1,4 @@
-/*package org.istv.ske.dal;
+package org.istv.ske.dal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,23 +23,14 @@ public class Offer {
 	private String titleOffer;
 	private String descriptionOffer;
 	
-	@ManyToOne
+	/*@ManyToOne
 	private User user;
 	@ManyToOne
-	private Subject subject;
+	private Subject subject;*/
 	
 	public Offer(){
 		
 	}
-
-	public Offer(int id, int duration, String titleOffer, String descriptionOffer, User userId, Subject subjectId) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.type = type;
-		this.decouvert = decouvert;
-	}
-	
 
 	public int getId() {
 		return id;
@@ -49,37 +40,30 @@ public class Offer {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
+	public int getDuration() {
+		return duration;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
-	public Offre getClient() {
-		return client;
+	public String getTitleOffer() {
+		return titleOffer;
 	}
 
-	public void setClient(Offre client) {
-		this.client = client;
+	public void setTitleOffer(String titleOffer) {
+		this.titleOffer = titleOffer;
 	}
 
-	public double getMontant() {
-		return montant;
+	public String getDescriptionOffer() {
+		return descriptionOffer;
 	}
 
-	public void setMontant(double montant) {
-		this.montant = montant;
+	public void setDescriptionOffer(String descriptionOffer) {
+		this.descriptionOffer = descriptionOffer;
 	}
 
-	public double getDecouvert() {
-		return decouvert;
-	}
 
-	public void setDecouvert(double decouvert) {
-		this.decouvert = decouvert;
-	}
 
 }
-*/
