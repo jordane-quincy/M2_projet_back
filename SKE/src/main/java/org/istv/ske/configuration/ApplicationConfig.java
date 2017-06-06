@@ -3,10 +3,12 @@ package org.istv.ske.configuration;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
+import javax.servlet.Filter;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,6 +27,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = "org.istv.ske")
 @EnableAsync
 public class ApplicationConfig {
+	
+	public static final String JSON_SUCCESS = "{\"ok\":\"true\"}";
 
 	@Autowired
 	private Environment env;
@@ -57,5 +61,20 @@ public class ApplicationConfig {
 	@Bean(name = "transactionManager")
 	public PlatformTransactionManager platformTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
+	}
+	
+	@Bean
+	public FilterRegistrationBean someFilterRegistration() {
+	    FilterRegistrationBean registration = new FilterRegistrationBean();
+	    registration.setFilter(getTokenValidationFilter());
+	    registration.addUrlPatterns("/*");
+	    registration.setName("tokenValidationFilter");
+	    registration.setOrder(1);
+	    return registration;
+	} 
+
+	@Bean(name = "tokenValidationFilter")
+	public Filter getTokenValidationFilter() {
+	    return new TokenValidationFilter();
 	}
 }

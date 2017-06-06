@@ -8,41 +8,40 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tomcat.util.http.parser.HttpParser;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 public class TokenValidationFilter implements Filter {
-	
-	private JsonParser parser = new JsonParser();
 
 	@Override
 	public void destroy() {}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-
+		
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletResponse response = (HttpServletResponse) res;
+		
 		try {
-			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
-			final String token = content.get("token").getAsString();
+			String token = request.getHeader("Authorization");
 			
-			if(token.length() > 6)
-				chain.doFilter(request, response);
-			else
-				throw new RuntimeException("");
+			if(token == null)
+				throw new RuntimeException("Aucun token fourni");
 			
+			if(token.length() < 6)
+				throw new RuntimeException("Le token fourni est invalide");
+
+			chain.doFilter(request, response);
+
 		} catch(Exception e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, "Token invalide");
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 		}
 	}
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
-
+		
 	}
 
 }

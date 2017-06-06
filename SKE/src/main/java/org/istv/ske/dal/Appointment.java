@@ -19,10 +19,9 @@ public class Appointment {
 
 	@Id
 	@GeneratedValue
-	@ManyToOne
 	@JoinColumn(name="appointment_id")
 	private int appointmentID;
-	@ManyToOne
+
 	@JoinColumn(name="user_id")
 	private int applicantID;
 	
