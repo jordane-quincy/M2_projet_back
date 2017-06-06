@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "subject")
+@Table(name = "domain")
 public class Domain {
 	
 	@Id
@@ -22,6 +22,22 @@ public class Domain {
 	
 	public Domain(){
 		
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDomainName() {
+		return domainName;
+	}
+
+	public void setDomainName(String domainName) {
+		this.domainName = domainName;
 	}
 	
 }
