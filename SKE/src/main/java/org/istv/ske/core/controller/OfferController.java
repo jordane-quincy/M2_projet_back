@@ -3,7 +3,11 @@ package org.istv.ske.core.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
+
 import org.istv.ske.dal.Offer;
+import org.istv.ske.dal.Subject;
+import org.istv.ske.dal.User;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +28,17 @@ public class OfferController {
 	@RequestMapping(value = { "/add/{iduser}" }, method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
 	public Offer addOffers(@PathVariable("iduser") String idUser){
 		//TODO add offer 
+		/*
+			private int duration;
+			private String titleOffer;
+			private String descriptionOffer;
+	
+			@ManyToOne
+			private User user;
+			@ManyToOne
+			private Subject subject;
+		 */
+		
 		Offer offers = new Offer();
 		return offers;
 	}
