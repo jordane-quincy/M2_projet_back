@@ -42,6 +42,7 @@ public class Appointment {
 	public void setApplicantID(int applicantID) {
 		this.applicantID = applicantID;
 	}
+	
 	@Override
 	public String toString() {
 		return "Appointment [appointmentID=" + appointmentID + ", applicantID=" + applicantID + "]";

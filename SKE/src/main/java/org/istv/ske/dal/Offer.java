@@ -1,9 +1,12 @@
 package org.istv.ske.dal;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -23,6 +26,9 @@ public class Offer {
 	private User user;
 	@ManyToOne
 	private Subject subject;
+	
+	@OneToMany(mappedBy="offer")
+	private Collection<View> views;
 	
 	public Offer(){
 		
