@@ -5,41 +5,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Scope("session")
+@Table(name = "offer")
 public class Offer {
 	
 	@Id
 	@GeneratedValue
 	private int id;
-	private String type;
 	
-	@ManyToOne
-	@JoinColumn(name="offre_id")
-	//@JsonIgnore
-	private Offer offre;
 	private int duration;
-	
 	private String titleOffer;
 	private String descriptionOffer;
+	
+	/*@ManyToOne
+	private User user;
+	@ManyToOne
+	private Subject subject;*/
 	
 	public Offer(){
 		
 	}
-
-	public Offer(int id, String type, Offer offre, int duration, String titleOffer, String descriptionOffert) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.type = type;
-		this.decouvert = decouvert;
-	}
-	
 
 	public int getId() {
 		return id;
@@ -49,36 +40,30 @@ public class Offer {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
+	public int getDuration() {
+		return duration;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
-	public Offre getClient() {
-		return client;
+	public String getTitleOffer() {
+		return titleOffer;
 	}
 
-	public void setClient(Offre client) {
-		this.client = client;
+	public void setTitleOffer(String titleOffer) {
+		this.titleOffer = titleOffer;
 	}
 
-	public double getMontant() {
-		return montant;
+	public String getDescriptionOffer() {
+		return descriptionOffer;
 	}
 
-	public void setMontant(double montant) {
-		this.montant = montant;
+	public void setDescriptionOffer(String descriptionOffer) {
+		this.descriptionOffer = descriptionOffer;
 	}
 
-	public double getDecouvert() {
-		return decouvert;
-	}
 
-	public void setDecouvert(double decouvert) {
-		this.decouvert = decouvert;
-	}
 
 }

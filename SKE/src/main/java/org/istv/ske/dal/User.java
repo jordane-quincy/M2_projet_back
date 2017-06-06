@@ -1,5 +1,7 @@
 package org.istv.ske.dal;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
+/*@Entity
 @Scope("session")
 public class User {
 	
@@ -23,15 +25,13 @@ public class User {
 	private String userPassword;
 	private String userName;
 	private String userFirstName;
-	private Date
+	private java.sql.Date birthday;
 	
 	//@OneToMany(mappedBy="user")
-	@JoinColumn(name="offre_id")
+	//@JoinColumn(name="offre_id")
 	//@JsonIgnore
-	private Offre offre;
-	private double montant;
-	@JsonIgnore
-	private double decouvert;
+	@OneToMany(mappedBy="user")
+	private Collection<Offer> offers;
 	
 	public User(){
 		
@@ -87,3 +87,4 @@ public class User {
 	}
 
 }
+*/

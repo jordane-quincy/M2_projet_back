@@ -1,4 +1,4 @@
-package org.istv.ske.dal;
+/*package org.istv.ske.dal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -81,3 +81,4 @@ public class Role {
 	}
 
 }
+*/
