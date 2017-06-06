@@ -1,5 +1,7 @@
 package org.istv.ske.core.controller;
 
+import java.util.List;
+
 import org.istv.ske.core.service.SearchService;
 import org.istv.ske.dal.Domain;
 import org.istv.ske.dal.Subject;
@@ -18,9 +20,9 @@ public class SearchController
 	SearchService search_service;
 	
 	@RequestMapping(value = "/get/domain", method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
-	public Domain ListDomain(){
+	public List<Domain> ListDomain(){
 		//TODO Get all Domains with  
-		Domain domain = search_service.findAllDomain();
+		List<Domain> domain = search_service.findAllDomain();
 		return domain;
 	}
 	

@@ -4,9 +4,16 @@ import java.util.List;
 
 import org.istv.ske.dal.Offer;
 import org.istv.ske.dal.User;
+import org.istv.ske.dal.repository.OfferRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class OfferServiceImlp implements OfferService {
+@Service
+public class OfferServiceImpl implements OfferService {
 
+	@Autowired
+	OfferRepository offerRepository;
+	
 	@Override
 	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer) {
 		// TODO Auto-generated method stub
