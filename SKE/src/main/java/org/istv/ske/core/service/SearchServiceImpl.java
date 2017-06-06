@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class SearchServiceImpl {
+public class SearchServiceImpl implements SearchService {
 
 	@Autowired
 	DomainRepository domain_repository;
@@ -19,14 +19,16 @@ public class SearchServiceImpl {
 	@Autowired
 	SubjectRepository subject_repository;
 	
-	@Transactional
+	@Override
 	public List<Domain> findAllDomain() {
 		return (List<Domain>) domain_repository.findAll();
 	}
 	
-	public List<Subject> findbyId(int idDomain)
+	@Override
+	public Subject findbyId(int idDomain)
 	{
-		return (List<Subject>) subject_repository.findAll();
+		//TODO
+		return subject_repository.findOne(idDomain);
 	}
 
 
