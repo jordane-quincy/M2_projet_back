@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
+/*@Entity
 @Scope("session")
 public class User {
 	
@@ -87,3 +87,4 @@ public class User {
 	}
 
 }
+*/

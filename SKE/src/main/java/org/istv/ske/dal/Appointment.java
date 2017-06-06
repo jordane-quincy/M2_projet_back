@@ -1,4 +1,4 @@
-package org.istv.ske.dal;
+/*package org.istv.ske.dal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Scope("session")
-public class appointment {
+public class Appointment {
 	
 	@Id
 	@GeneratedValue
@@ -27,11 +27,11 @@ public class appointment {
 	@JsonIgnore
 	private double decouvert;
 	
-	public appointment(){
+	public Appointment(){
 		
 	}
 
-	public appointment(appointment client, double montant, String type, double decouvert) {
+	public Appointment(Appointment client, double montant, String type, double decouvert) {
 		super();
 		this.client = client;
 		this.montant = montant;
@@ -56,11 +56,11 @@ public class appointment {
 		this.type = type;
 	}
 
-	public appointment getClient() {
+	public Appointment getClient() {
 		return client;
 	}
 
-	public void setClient(appointment client) {
+	public void setClient(Appointment client) {
 		this.client = client;
 	}
 
@@ -81,3 +81,4 @@ public class appointment {
 	}
 
 }
+*/
