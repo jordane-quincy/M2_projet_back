@@ -13,5 +13,6 @@ public interface UserService {
 	public User updateUser(User user);
 	public List<User> getAll();
 	public User updateUser(String email, String fieldName, String value);
+	public User getUser(int userID);
 	
 }
