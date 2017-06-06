@@ -7,7 +7,7 @@ import org.istv.ske.dal.User;
 
 public interface OfferService {
 	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer);
-	public void deleteOffer(String email);
-	public User updateOffer(Offer offer);
-	public List<Offer> getAll();
+	public void deleteOffer(int idOffer);
+	public Offer updateOffer(Offer offer);
+	public List<Offer> getAll(int idUser);
 }
