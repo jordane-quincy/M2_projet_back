@@ -25,21 +25,17 @@ public class OfferController {
 		return offers;
 	}
 	
-	@RequestMapping(value = { "/add/{iduser}" }, method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
-	public Offer addOffers(@PathVariable("iduser") String idUser){
+	@RequestMapping(value = { "/add/{iduser}/{title}/{duration}" }, method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
+	public Offer addOffers(@PathVariable("iduser") String idUser,//
+			@PathVariable("title") String titleOffer,
+			@PathVariable("duration") int duration){
 		//TODO add offer 
-		/*
-			private int duration;
-			private String titleOffer;
-			private String descriptionOffer;
-	
-			@ManyToOne
-			private User user;
-			@ManyToOne
-			private Subject subject;
-		 */
+
 		
 		Offer offers = new Offer();
+		offers.setTitleOffer(titleOffer);
+		offers.setDuration(duration);
+	//	offers.setDescriptionOffer(descriptionOffer);
 		return offers;
 	}
 	
