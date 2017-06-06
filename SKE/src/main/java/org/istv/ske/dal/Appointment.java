@@ -21,7 +21,6 @@ public class Appointment {
 	@GeneratedValue
 	@JoinColumn(name="appointment_id")
 	private int appointmentID;
-
 	@JoinColumn(name="user_id")
 	private int applicantID;
 	
