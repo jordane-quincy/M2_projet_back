@@ -5,7 +5,7 @@ import java.util.List;
 import org.istv.ske.dal.Offer;
 import org.istv.ske.dal.User;
 
-public class OfferServiceImlp implements OfferService {
+public class OfferServiceImpl implements OfferService {
 
 	@Override
 	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer) {
