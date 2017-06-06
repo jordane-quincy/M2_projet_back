@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.istv.ske.dal.Offer;
 import org.istv.ske.dal.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OfferServiceImpl implements OfferService {
 
 	@Override
