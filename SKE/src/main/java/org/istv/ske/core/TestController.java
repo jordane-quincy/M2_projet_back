@@ -11,10 +11,6 @@ public class TestController {
 	public String getAccountsByEmail(@PathVariable("name") String name) {
 		return name;
 	} 
-	
-	@RequestMapping("/player2/{name}")
-	public String test(@PathVariable("name") String name) {
-		return name;
-	} 
+
 
 }
