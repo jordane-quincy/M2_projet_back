@@ -35,8 +35,10 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "Application/json")
-	public User update(User user){
-		User updatedUser = userService.updateUser(user);
+	public User update(@RequestParam(name = "email", required = true)String email,
+			@RequestParam(name = "field", required = true)String fieldName,
+			@RequestParam(name = "value", required = true)String value){
+		User updatedUser = userService.updateUser(email, fieldName, value);
 		return updatedUser;
 	}
 	
