@@ -32,21 +32,20 @@ public class UserController {
 		try {
 			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
 			final String email = content.get("email").getAsString();
-			final String name = content.get("email").getAsString();
-			final String firstName = content.get("email").getAsString();
-			final String password = content.get("email").getAsString();
-//			final String name = content.get("email").getAsString();
-//			final String name = content.get("email").getAsString();
-//			final String name = content.get("email").getAsString();
+			final String name = content.get("name").getAsString();
+			final String firstName = content.get("firstName").getAsString();
+			final String password = content.get("password").getAsString();
+			final String birthday = content.get("birthday").getAsString();
+			final String formationName = content.get("formationName").getAsString();
+			final String formationLevel = content.get("formationLevel").getAsString();
+			
+			user = userService.createUser(email, name, firstName, password, birthday, formationName, formationLevel);
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return null;
 		
-		
-//		String email = "";
-//		User  user= userService.createUser(email, name, firstName, password, birthday, formationName, formationLevel);
+		return user;
 
 	}
 	
