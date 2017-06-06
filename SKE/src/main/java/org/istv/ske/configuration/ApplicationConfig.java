@@ -1,12 +1,17 @@
 package org.istv.ske.configuration;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.Filter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.istv.ske.core.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +25,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 @Configuration
 @PropertySource("classpath:/META-INF/database.properties")
@@ -73,8 +81,17 @@ public class ApplicationConfig {
 	    return registration;
 	} 
 
-	@Bean(name = "tokenValidationFilter")
+	@Bean(name="tokenValidationFilter")
 	public Filter getTokenValidationFilter() {
 	    return new TokenValidationFilter();
+	}
+	
+	@ControllerAdvice
+	public class BadRequestExceptionHandler {
+	    @ExceptionHandler(value = {BadRequestException.class})
+	    public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, BadRequestException e) throws IOException {
+	    	response.sendError(e.getStatus(), e.getMessage());
+	    	return null;
+	    }
 	}
 }
