@@ -18,8 +18,10 @@ public class Formation {
 	private int idFormation;
 	private String formationLevel;
 	private String formationName;
-	 @ManyToOne
-     private User user ;
+	@ManyToOne
+    private User user ;
+	
+	
 	public int getIdFormation() {
 		return idFormation;
 	}

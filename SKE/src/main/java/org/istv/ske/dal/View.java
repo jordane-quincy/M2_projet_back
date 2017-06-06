@@ -3,6 +3,7 @@ package org.istv.ske.dal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,7 +17,7 @@ public class View {
 	private int idView;
 	private String textView;
 	
-	@OneToMany
+	@ManyToOne
 	private Offer offer;
 	
 	public Offer getOffer() {
