@@ -14,24 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/my_offer")
 public class OfferController {
 
-	@RequestMapping(value = { "/get/{iduser}" }, method = RequestMethod.GET, headers = "Accept=*/*", produces = "Application/json")
-	@ResponseBody
+	@RequestMapping(value = { "/get/{iduser}" }, method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
 	public List<Offer> getOffers(@PathVariable("iduser") String idUser){
 		//TODO lister offer 
 		List<Offer> offers = new ArrayList<Offer>();
 		return offers;
 	}
 	
-	@RequestMapping(value = { "/add/{iduser}" }, method = RequestMethod.GET, headers = "Accept=*/*", produces = "Application/json")
-	@ResponseBody
+	@RequestMapping(value = { "/add/{iduser}" }, method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
 	public Offer addOffers(@PathVariable("iduser") String idUser){
 		//TODO add offer 
 		Offer offers = new Offer();
 		return offers;
 	}
 	
-	@RequestMapping(value = { "/del/{iduser}" }, method = RequestMethod.GET, headers = "Accept=*/*", produces = "Application/json")
-	@ResponseBody
+	@RequestMapping(value = { "/del/{iduser}" }, method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
 	public Offer deleteOffers(@PathVariable("iduser") String idUser){
 		//TODO delete offer 
 		Offer offers = new Offer();

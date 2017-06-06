@@ -3,6 +3,7 @@ package org.istv.ske.dal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -17,7 +18,8 @@ public class Formation {
 	private int idFormation;
 	private String formationLevel;
 	private String formationName;
-
+	 @ManyToOne
+     private User user ;
 	public int getIdFormation() {
 		return idFormation;
 	}
@@ -35,6 +37,13 @@ public class Formation {
 	}
 	public void setFormationName(String formationName) {
 		this.formationName = formationName;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	@Override
 	public String toString() {
