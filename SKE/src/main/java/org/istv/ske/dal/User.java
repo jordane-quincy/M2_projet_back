@@ -38,7 +38,6 @@ public class User {
 	private String userFirstName;
 	private java.sql.Date birthday;
 	
-	//@OneToMany(mappedBy="user")
 	//@JoinColumn(name="offre_id")
 	//@JsonIgnore
 	@OneToMany(mappedBy="user")

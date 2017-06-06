@@ -25,6 +25,10 @@ public class Appointment {
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private int applicantID;
+	
+	public Appointment(){
+		
+	}
 
 	public int getAppointmentID() {
 		return appointmentID;
