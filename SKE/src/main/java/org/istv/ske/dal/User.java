@@ -33,6 +33,8 @@ public class User {
 	@OneToMany(mappedBy="user")
 	private Collection<Offer> offers;
 	@ManyToOne
+	private Role role;
+	@ManyToOne
 	private Formation formation;
 	
 	public User(){
