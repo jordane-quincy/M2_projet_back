@@ -14,8 +14,7 @@ import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/*@Entity
-@Scope("session")
+@Entity
 public class User {
 	
 	@Id
@@ -30,21 +29,12 @@ public class User {
 	//@OneToMany(mappedBy="user")
 	//@JoinColumn(name="offre_id")
 	//@JsonIgnore
-	@OneToMany(mappedBy="user")
-	private Collection<Offer> offers;
+	/*@OneToMany(mappedBy="user")
+	private Collection<Offer> offers;*/
 	
 	public User(){
 		
 	}
-
-	public User(User client, double montant, String type, double decouvert) {
-		super();
-		this.client = client;
-		this.montant = montant;
-		this.type = type;
-		this.decouvert = decouvert;
-	}
-	
 
 	public int getId() {
 		return id;
@@ -54,37 +44,44 @@ public class User {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
+	public String getUserMail() {
+		return userMail;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setUserMail(String userMail) {
+		this.userMail = userMail;
 	}
 
-	public User getClient() {
-		return client;
+	public String getUserPassword() {
+		return userPassword;
 	}
 
-	public void setClient(User client) {
-		this.client = client;
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 
-	public double getMontant() {
-		return montant;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setMontant(double montant) {
-		this.montant = montant;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public double getDecouvert() {
-		return decouvert;
+	public String getUserFirstName() {
+		return userFirstName;
 	}
 
-	public void setDecouvert(double decouvert) {
-		this.decouvert = decouvert;
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
 	}
 
+	public java.sql.Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(java.sql.Date birthday) {
+		this.birthday = birthday;
+	}
+	
 }
-*/
