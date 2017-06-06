@@ -10,4 +10,5 @@ public interface OfferService {
 	public void deleteOffer(int idOffer);
 	public Offer updateOffer(Offer offer);
 	public List<Offer> getAll(int idUser);
+	
 }
