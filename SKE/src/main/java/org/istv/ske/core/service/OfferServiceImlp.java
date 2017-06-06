@@ -13,6 +13,7 @@ public class OfferServiceImlp implements OfferService {
 		return null;
 	}
 
+	
 	@Override
 	public void deleteOffer(int idOffer) {
 		// TODO Auto-generated method stub
