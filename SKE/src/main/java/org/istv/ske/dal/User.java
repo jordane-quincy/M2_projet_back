@@ -22,15 +22,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-
-	public int getCredit() {
-		return credit;
-	}
-
-	public void setCredit(int credit) {
-		this.credit = credit;
-	}
-
+	
 	private int credit;
 	private String userMail;
 	private String userPassword;
@@ -38,8 +30,6 @@ public class User {
 	private String userFirstName;
 	private java.sql.Date birthday;
 	
-	//@JoinColumn(name="offre_id")
-	//@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private Collection<Offer> offers;
 	@ManyToOne
@@ -56,7 +46,13 @@ public class User {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public int getCredit() {
+		return credit;
+	}
 
+	public void setCredit(int credit) {
+		this.credit = credit;
+	}
 	public String getUserMail() {
 		return userMail;
 	}
