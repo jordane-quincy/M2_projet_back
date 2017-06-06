@@ -13,6 +13,6 @@ public interface UserService {
 	public void deleteUser(String email);
 	public User updateUser(User user);
 	public List<User> getAll();
-	
+	public User getUser(int userID);
 	
 }
