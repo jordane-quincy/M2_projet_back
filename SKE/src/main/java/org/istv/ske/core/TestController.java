@@ -12,4 +12,42 @@ public class TestController {
 		return name;
 	}
 
+	@RequestMapping("/profile/{id}")
+	public String getProfile(@PathVariable("id") String idUser){
+		//TODO
+		return idUser;
+	}
+	
+	@RequestMapping("/credit_user/{id}")
+	public int getCredit(@PathVariable("id") String idUser){
+		//TODO
+		return 0;
+	}
+	
+	@RequestMapping("/my_offer/{id}")
+	public int getMyOffer(@PathVariable("id") String idUser){
+		//TODO
+		return 0;
+	}
+	
+	
+	@RequestMapping("/transac/{idd}/{idc}/{much}")
+	public int transaction(@PathVariable("idd") String idDebiteur,//
+			@PathVariable("idc") String idCrediteur,//
+			@PathVariable("much") int montant){
+		//TODO
+		return 0;
+	}
+	
+	@RequestMapping("/matiere/{id}")
+	public int getListMatiereOfDomain(@PathVariable("id") String id){
+		//TODO
+		return 0;
+	}
+	
+	@RequestMapping("/domain")
+	public int getListDomain(){
+		//TODO
+		return 0;
+	}
 }
