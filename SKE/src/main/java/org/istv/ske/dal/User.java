@@ -9,17 +9,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "user")
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+
+	public int getCredit() {
+		return credit;
+	}
+
+	public void setCredit(int credit) {
+		this.credit = credit;
+	}
+
+	private int credit;
 	private String userMail;
 	private String userPassword;
 	private String userName;
@@ -29,8 +41,10 @@ public class User {
 	//@OneToMany(mappedBy="user")
 	//@JoinColumn(name="offre_id")
 	//@JsonIgnore
-	/*@OneToMany(mappedBy="user")
-	private Collection<Offer> offers;*/
+	@OneToMany(mappedBy="user")
+	private Collection<Offer> offers;
+	@ManyToOne
+	private Formation formation;
 	
 	public User(){
 		
