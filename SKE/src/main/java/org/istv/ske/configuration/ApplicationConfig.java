@@ -1,7 +1,6 @@
 package org.istv.ske.configuration;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
@@ -27,7 +26,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 @Configuration
 @PropertySource("classpath:/META-INF/database.properties")
@@ -91,6 +89,15 @@ public class ApplicationConfig {
 	    @ExceptionHandler(value = {BadRequestException.class})
 	    public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, BadRequestException e) throws IOException {
 	    	response.sendError(e.getStatus(), e.getMessage());
+	    	return null;
+	    }
+	}
+	
+	@ControllerAdvice
+	public class InternalExceptionHandler {
+	    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
+	    public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception e) throws IOException {
+	    	response.sendError(500, e.getMessage());
 	    	return null;
 	    }
 	}
