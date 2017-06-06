@@ -1,4 +1,4 @@
-/*package org.istv.ske.dal;
+package org.istv.ske.dal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,76 +9,17 @@ import javax.persistence.ManyToOne;
 import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Data;
+@Data
 @Entity
-@Scope("session")
 public class Appointment {
 	
 	@Id
 	@GeneratedValue
-	private int id;
-	private String type;
-	
 	@ManyToOne
-	@JoinColumn(name="offre_id")
-	//@JsonIgnore
-	private Offre offre;
-	private double montant;
-	@JsonIgnore
-	private double decouvert;
+	@JoinColumn(name="appointment_id")
+	private int appointmentID;
+	private int applicantID;
+
 	
-	public Appointment(){
-		
-	}
-
-	public Appointment(Appointment client, double montant, String type, double decouvert) {
-		super();
-		this.client = client;
-		this.montant = montant;
-		this.type = type;
-		this.decouvert = decouvert;
-	}
-	
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public Appointment getClient() {
-		return client;
-	}
-
-	public void setClient(Appointment client) {
-		this.client = client;
-	}
-
-	public double getMontant() {
-		return montant;
-	}
-
-	public void setMontant(double montant) {
-		this.montant = montant;
-	}
-
-	public double getDecouvert() {
-		return decouvert;
-	}
-
-	public void setDecouvert(double decouvert) {
-		this.decouvert = decouvert;
-	}
-
 }
-*/
