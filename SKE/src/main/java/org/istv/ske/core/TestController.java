@@ -10,7 +10,8 @@ public class TestController {
 	@RequestMapping("/player/{name}")
 	public String getAccountsByEmail(@PathVariable("name") String name) {
 		return name;
-	}
+	} 
+
 
 	@RequestMapping("/profile/{id}")
 	public String getProfile(@PathVariable("id") String idUser){
