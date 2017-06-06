@@ -12,14 +12,14 @@ public class Offer {
 	
 	@Id
 	@GeneratedValue
-	private int OferId;
+	private int OfferId;
 	
 	private int duration;
 	private String titleOffer;
 	private String descriptionOffer;
 	
-	/*@ManyToOne
-	private User user;*/
+	@ManyToOne
+	private User user;
 	@ManyToOne
 	private Subject subject;
 	
@@ -28,11 +28,11 @@ public class Offer {
 	}
 
 	public int getId() {
-		return OferId;
+		return OfferId;
 	}
 
 	public void setId(int id) {
-		this.OferId = id;
+		this.OfferId = id;
 	}
 
 	public int getDuration() {
