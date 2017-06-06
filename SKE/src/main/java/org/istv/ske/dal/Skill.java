@@ -18,7 +18,6 @@ public class Skill {
 	
 	@Id
 	@GeneratedValue
-	@ManyToOne
 	@JoinColumn(name="skill_id")
 	private int skillID;
 	private String description;
