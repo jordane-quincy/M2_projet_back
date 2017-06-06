@@ -7,6 +7,7 @@ import org.istv.ske.dal.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,13 +18,19 @@ public class UserController {
 	UserService userService;
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "Application/json")
-	public User create(String email, String name, String firstName, String password, String birthday, String formationName, String formationLevel){
+	public User create(@RequestParam(name = "email", required = true)String email,
+			@RequestParam(name = "name", required = true)String name,
+			@RequestParam(name = "firstName", required = true)String firstName,
+			@RequestParam(name = "password", required = true)String password,
+			@RequestParam(name = "birthday", required = true)String birthday,
+			@RequestParam(name = "formationName", required = true)String formationName,
+			@RequestParam(name = "formationLevel", required = true)String formationLevel){
 		User  user= userService.createUser(email, name, firstName, password, birthday, formationName, formationLevel);
 		return user;
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "Application/json")
-	public void delete(String email){
+	public void delete(@RequestParam(name = "email", required = true)String email){
 		userService.deleteUser(email);
 	}
 	
