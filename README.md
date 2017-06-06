@@ -1,6 +1,4 @@
 # M2_projet_back
-Test push
 
-Test Jordan
-
-Test Jordan Eclipse
+Nom du package principal : 
+org.istv.ske
