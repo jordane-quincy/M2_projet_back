@@ -1,8 +1,11 @@
 package org.istv.ske.dal;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -25,7 +28,8 @@ public class Role {
 		super();
 		this.idRole = idRole;
 	}
-
+	   @OneToMany(mappedBy="role")
+private Collection<User> users;
 	@Override
 	public String toString() {
 		return "Role [idRole=" + idRole + "]";

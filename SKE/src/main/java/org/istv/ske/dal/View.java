@@ -3,9 +3,8 @@ package org.istv.ske.dal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Scope;
 
 
 @Entity
@@ -17,8 +16,21 @@ public class View {
 	private int idView;
 	private String textView;
 	
+	@OneToMany
+	private Offer offer;
 	
-	
+	public Offer getOffer() {
+		return offer;
+	}
+
+
+
+	public void setOffer(Offer offer) {
+		this.offer = offer;
+	}
+
+
+
 	public int getIdView() {
 		return idView;
 	}
