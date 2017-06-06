@@ -7,10 +7,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "master")
 public class Master {
+	
 	@Id
-private int masterId;
-
-	@Id
-	private int id;
+	private int masterId;
 
 }
