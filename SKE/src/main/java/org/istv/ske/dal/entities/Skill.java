@@ -78,4 +78,12 @@ public class Skill {
 	public User getUser() {
 		return user;
 	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
 }
