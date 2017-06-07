@@ -2,6 +2,7 @@ package org.istv.ske.core.service;
 
 import java.util.List;
 
+import org.istv.ske.dal.Formation;
 import org.istv.ske.dal.User;
 import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(String email, String name, String firstName, String password, String birthday,
 			String formationName, String formationLevel) {
+		
+		User user = new User();
+		Formation formation = new Formation(formationLevel, formationName);
+		
+		
+		user.setUserMail(email);
+		//TODO
+		//user.setBirthday(birthday);
+		user.setCredit(5);
+		user.setUserFirstName(firstName);
+		user.setUserName(name);
+		user.setUserPassword(password);
+		
+		user.setFormation(formation);
+		
+		
+		userRepository.save(user);
 		return null;
 	}
 
 	@Override
-	public void deleteUser(String email) {
-		// TODO Auto-generated method stub
+	public void deleteUser(int id) {
+		userRepository.delete(id);
 	}
 
 	@Override

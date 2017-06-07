@@ -30,6 +30,9 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
 
+	@OneToMany(mappedBy = "user")
+	private Collection<Notification> notifications;
+
 	@ManyToOne
 	private Role role;
 
@@ -94,6 +97,30 @@ public class User {
 
 	public void setBirthday(java.sql.Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public Collection<Offer> getOffers() {
+		return offers;
+	}
+
+	public void setOffers(Collection<Offer> offers) {
+		this.offers = offers;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Formation getFormation() {
+		return formation;
+	}
+
+	public void setFormation(Formation formation) {
+		this.formation = formation;
 	}
 
 }
