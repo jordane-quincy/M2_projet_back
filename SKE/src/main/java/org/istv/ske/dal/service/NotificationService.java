@@ -1,6 +1,7 @@
-package org.istv.ske.messages.service;
+package org.istv.ske.dal.service;
 
 import org.istv.ske.dal.entities.Notification;
+import org.istv.ske.dal.entities.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 @Service
 public interface NotificationService {
 
-    public Notification createNotification(String title, String content, String type, String createDate);
+    public Notification createNotification(User user, String title, String content, String type);
 
     public void deleteNotification(Long notificationID);
 
