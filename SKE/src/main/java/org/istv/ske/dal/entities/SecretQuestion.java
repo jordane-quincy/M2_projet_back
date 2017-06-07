@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class SecretQuestion {
@@ -18,6 +20,7 @@ public class SecretQuestion {
 	private String answer;
 	
 	@OneToOne(mappedBy="question")
+	@JsonIgnore
 	private User user;
 	
 	public SecretQuestion() {

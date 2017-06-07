@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class User {
 
@@ -41,9 +43,11 @@ public class User {
 	@OneToOne
 	private SecretQuestion question;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Collection<Notification> notifications;
 
@@ -58,12 +62,15 @@ public class User {
 	@ManyToOne
 	private Formation formation;
 
+	
 	@OneToMany(mappedBy="user")
 	private List<Skill> ownedSkilled;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy="validators")
 	private List<Skill> validatedSkills;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="applicant")
 	private List<Appointment> appointments;
 	
