@@ -1,4 +1,4 @@
-package org.istv.ske.dal;
+package org.istv.ske.dal.entities;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -24,6 +26,7 @@ public class Offer {
 	private String description;
 	
 	@ManyToOne
+	@JsonIgnore
 	private User user;
 	
 	@ManyToOne

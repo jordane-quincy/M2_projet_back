@@ -1,6 +1,6 @@
 package org.istv.ske.core.service;
 
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.User;
 
 public interface AuthenticationService {
 

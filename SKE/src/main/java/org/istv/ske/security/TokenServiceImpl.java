@@ -1,7 +1,8 @@
 package org.istv.ske.security;
 
 import java.util.HashMap;
-import org.istv.ske.dal.User;
+
+import org.istv.ske.dal.entities.User;
 import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;

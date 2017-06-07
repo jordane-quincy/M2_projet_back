@@ -1,11 +1,10 @@
-package org.istv.ske.core.service;
+package org.istv.ske.dal.service;
 
 import java.util.List;
 
-import org.istv.ske.dal.Offer;
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.Offer;
+import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.OfferRepository;
-import org.istv.ske.dal.repository.SubjectRepository;
 import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,20 +18,17 @@ public class OfferServiceImpl implements OfferService {
 	@Autowired
 	UserRepository userRepository;
 	
-	@Autowired
-	SubjectRepository subjectRepository;
-	
 	@Override
-	public Offer createOffer(long idUser, String titleOffer, int duration, String descriptionOffer,long subjectID) {
+	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer) {
 		Offer offer = new Offer();
 		
-		offer.setAppointments(null);
+		//offer.setAppointments(appointments);
 		offer.setDescription(descriptionOffer);
 		offer.setDuration(duration);
-		offer.setRemarks(null);
-		//offer.setSubject(subjectRepository.findOne(subjectID));   
+		//offer.setRemarks(remarks);
+		//offer.setSubject(subject);
 		offer.setTitle(titleOffer);
-		offer.setUser(userRepository.findOne(idUser));
+		offer.setUser(user);
 		
 		offerRepository.save(offer);
 		// TODO Auto-generated method stub

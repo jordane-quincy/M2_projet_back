@@ -1,4 +1,4 @@
-package org.istv.ske.dal;
+package org.istv.ske.dal.entities;
 
 import java.util.Collection;
 import java.util.Date;
@@ -24,23 +24,21 @@ public class User {
 	private Long id;
 
 	private int credit;
-
+	
 	@Column(unique = true)
 	private String userMail;
-
+	
 	private String userPassword;
-
+	
 	private String userName;
-
+	
 	private String userFirstName;
-
+	
 	private Date birthday;
-
-	private String token;
-
+	
 	@OneToOne
 	private SecretQuestion question;
-
+	
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
 
@@ -49,23 +47,24 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
+	
 	public enum Role {
-		STUDENT, TEACHER, LEARNER
+		STUDENT,
+		TEACHER
 	}
 
 	@ManyToOne
 	private Formation formation;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy="user")
 	private List<Skill> ownedSkilled;
-
-	@ManyToMany(mappedBy = "validators")
+	
+	@ManyToMany(mappedBy="validators")
 	private List<Skill> validatedSkills;
-
-	@OneToMany(mappedBy = "applicant")
+	
+	@OneToMany(mappedBy="applicant")
 	private List<Appointment> appointments;
-
+	
 	public User() {
 
 	}
@@ -140,14 +139,6 @@ public class User {
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public Collection<Offer> getOffers() {

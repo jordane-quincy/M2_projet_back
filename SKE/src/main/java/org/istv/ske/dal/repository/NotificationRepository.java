@@ -1,7 +1,7 @@
 package org.istv.ske.dal.repository;
 
-import org.istv.ske.dal.Notification;
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.Notification;
+import org.istv.ske.dal.entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package org.istv.ske.dal;
+package org.istv.ske.dal.entities;
 
 import java.util.Date;
 
