@@ -31,7 +31,7 @@ public class SubscriptionController {
 		try {
 			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
-			app.setApplicantID(1);
+			app.setApplicantId(1);
 
 			if (subscriptionService.subscription(app))
 				return true;

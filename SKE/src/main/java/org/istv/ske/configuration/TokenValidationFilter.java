@@ -23,6 +23,12 @@ public class TokenValidationFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
+		System.out.println(request.getContextPath());
+		if(request.getServletPath().equals("/auth/connect")) {
+			chain.doFilter(request, response);
+			return;
+		}
+		
 		try {
 			String token = request.getHeader("Authorization");
 			

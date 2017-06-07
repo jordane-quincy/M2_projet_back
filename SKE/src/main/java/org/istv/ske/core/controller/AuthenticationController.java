@@ -32,7 +32,7 @@ public class AuthenticationController {
 			email = object.get("email").getAsString();
 			password = object.get("password").getAsString();
 		} catch(Exception e) {
-			throw new BadRequestException("Contenu de la requête invalide");
+			throw new BadRequestException(e.getMessage());
 		}
 		
 		User user = null;
@@ -53,7 +53,6 @@ public class AuthenticationController {
 			response.addProperty("ok", false);
 			response.add("content", content);
 			return jsonService.stringify(response);
-			
 		} catch (Exception e) {
 			response.addProperty("ok", false);
 			response.addProperty("message", e.getMessage());

@@ -1,56 +1,69 @@
 package org.istv.ske.dal;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Scope;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
 @Table(name = "appointment")
 public class Appointment {
 	
-
 	@Id
 	@GeneratedValue
 	@JoinColumn(name="offer_id")
-	private int appointmentID;
-	private int applicantID;
+	private Long appointmentId;
 	
-	private org.joda.time.DateTime AppointmentDateTime;
-	private String AppointmentStatus;
+	private int applicantId;
 	
+	private Date date;
 	
-	public Appointment(){
+	private String status;
+	
+	public Appointment() {
 		
 	}
 
-	public int getAppointmentID() {
-		return appointmentID;
+	public Appointment(int applicantId, Date date, String status) {
+		this.applicantId = applicantId;
+		this.date = date;
+		this.status = status;
 	}
-	public void setAppointmentID(int appointmentID) {
-		this.appointmentID = appointmentID;
+
+	public Long getAppointmentId() {
+		return appointmentId;
 	}
-	public int getApplicantID() {
-		return applicantID;
+
+	public void setAppointmentId(Long appointmentId) {
+		this.appointmentId = appointmentId;
 	}
-	public void setApplicantID(int applicantID) {
-		this.applicantID = applicantID;
+
+	public int getApplicantId() {
+		return applicantId;
+	}
+
+	public void setApplicantId(int applicantId) {
+		this.applicantId = applicantId;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
-	@Override
-	public String toString() {
-		return "Appointment [appointmentID=" + appointmentID + ", applicantID=" + applicantID + "]";
-	}
-	public Appointment(int appointmentID, int applicantID) {
-		super();
-		this.appointmentID = appointmentID;
-		this.applicantID = applicantID;
-	}
 }
