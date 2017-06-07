@@ -1,5 +1,7 @@
 # M2_projet_back
 
+[![Build Status](https://travis-ci.org/jordane-quincy/M2_projet_back.svg?branch=master)](https://travis-ci.org/jordane-quincy/M2_projet_back) 
+
 Nom du package principal : 
 org.istv.ske
 
