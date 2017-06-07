@@ -3,12 +3,15 @@ package org.istv.ske.core.service;
 import java.util.List;
 
 import org.istv.ske.dal.entities.Skill;
-import org.istv.ske.dal.entities.User;
 
 public interface SkillService {
 
-	public Skill createSkill(User user, String label, int mark, List<User> validators);
-	public Skill updateSkill(User user, String label, int mark, List<User> validators);
-	public void deleteSkill(Skill skill);
-	public List<Skill> getAll();
+	public Skill createSkill(String label);
+	
+	public Skill updateSkill(Long skillId, String label);
+	
+	public void deleteSkill(Long skillId);
+	
+	public List<Skill> findAll();
+	
 }

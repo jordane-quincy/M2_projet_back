@@ -2,17 +2,22 @@ package org.istv.ske.dal.entities;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -61,14 +66,12 @@ public class User {
 
 	@ManyToOne
 	private Formation formation;
-
 	
-	@OneToMany(mappedBy="user")
-	private List<Skill> ownedSkilled;
-	
-	@JsonIgnore
-	@ManyToMany(mappedBy="validators")
-	private List<Skill> validatedSkills;
+	@ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "VALIDATED_SKILLS")
+    @MapKeyColumn(name = "SKILL_ID")
+    @Column(name = "VALIDATED")
+	private Map<Skill, Boolean> skills;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="applicant")
@@ -91,7 +94,10 @@ public class User {
 		this.notifications = notifications;
 		this.role = role;
 		this.formation = formation;
-		this.ownedSkilled = skills;
+		Map<Skill, Boolean> m = new HashMap<>();
+		for(Skill s : skills)
+			m.put(s, false);
+		this.skills = m;
 	}
 
 	public Long getId() {
@@ -182,12 +188,28 @@ public class User {
 		this.formation = formation;
 	}
 
-	public List<Skill> getSkills() {
-		return ownedSkilled;
+	public SecretQuestion getQuestion() {
+		return question;
 	}
 
-	public void setSkills(List<Skill> skills) {
-		this.ownedSkilled = skills;
+	public void setQuestion(SecretQuestion question) {
+		this.question = question;
+	}
+
+	public Map<Skill, Boolean> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(Map<Skill, Boolean> skills) {
+		this.skills = skills;
+	}
+
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
 	}
 
 	public String getToken() {
