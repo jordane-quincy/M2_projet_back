@@ -77,7 +77,7 @@ public class UserController {
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(
 			HttpServletRequest request, 
-			@PathVariable(required=true) Long userId) throws Exception{
+			@PathVariable(required=true) Long userId) throws Exception {
 		
 		JsonObject response = new JsonObject();
 		

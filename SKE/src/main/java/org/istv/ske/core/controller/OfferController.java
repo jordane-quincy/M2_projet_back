@@ -5,19 +5,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.exception.BadRequestException;
-import org.istv.ske.core.exception.InternalException;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.service.OfferService;
 import org.istv.ske.dal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @RestController
 @RequestMapping("/offer")
@@ -32,31 +31,28 @@ public class OfferController {
 	@Autowired
 	private JsonService jsonService;
 
-	@RequestMapping(value = "/create/{userId}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
-	public Offer create(HttpServletRequest request,//
-			@PathVariable(required=true) Long userId) throws Exception {
+	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	public Offer create(HttpServletRequest request) throws Exception {
+		Offer offer = null;
 		User user = null;
-		String offerTitle = null, offerDescription = null;
+		String offerTitle = null;
 		int duration = 0;
-		long subectID = 0L;
-
+		String offerDescription = null;
+		Long subjectID;
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+			long idUser = content.get("idUser").getAsLong();
 			offerTitle = content.get("titleOffer").getAsString();
 			duration = content.get("duration").getAsInt();
 			offerDescription = content.get("descriptionOffer").getAsString();
-			user = userService.getUser(userId);
-			subectID = content.get("subectID").getAsLong();
+			user = userService.getUser(idUser);
+			subjectID = content.get("subjectId").getAsLong();
 			System.out.println(user.getUserFirstName());
 		} catch (Exception e) {
 			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
 		}
-		Offer offer = null;
-		try {
-			offer = offerService.createOffer(user, offerTitle, duration, offerDescription, subectID);
-		} catch (Exception e) {
-			throw new InternalException("Erreur lors de la création de l'utilisateur");
-		}
+		
+		offer = offerService.createOffer(user, offerTitle, duration, offerDescription, 0L);
 		return offer;
 	}
 
@@ -65,67 +61,45 @@ public class OfferController {
 		long idOffer = 0;
 		JsonObject content = null;
 		try {
+			// TODO tester
 			content = jsonService.parse(request.getReader()).getAsJsonObject();
 			idOffer = content.get("idOffer").getAsLong();
 		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
+			String paramManquantMsg = "";
+			if (content.get("idOffer") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'idOffer' :";
+			}
+			if (!paramManquantMsg.equals("")) {
+				throw new BadRequestException(paramManquantMsg);
+			} else {
+				throw e;
+			}
 		}
-		try {
-			offerService.deleteOffer(idOffer);
-		} catch (Exception e) {
-			throw new InternalException("Erreur lors de la création de l'utilisateur");
-		}
+		offerService.deleteOffer(idOffer);
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public List<Offer> lister(HttpServletRequest request,//
-			@PathVariable(required=true) Long userId) throws Exception {
-		List<Offer> offers = null;
+	public List<Offer> lister(HttpServletRequest request) throws Exception {
+		JsonObject content = null;
+		int idUser = 0;
 		try {
-			offers = offerService.getAll(userId);
+			content = jsonService.parse(request.getReader()).getAsJsonObject();
+			idUser = content.get("idUser").getAsInt();
 		} catch (Exception e) {
-			throw new InternalException("Erreur lors de la création de l'utilisateur");
+			String paramManquantMsg = "";
+			if (content.get("idUser") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'idUser' :";
+			}
+			if (!paramManquantMsg.equals("")) {
+				throw new BadRequestException(paramManquantMsg);
+			} else {
+				throw e;
+			}
 		}
+
+		// tester
+		List<Offer> offers = offerService.getAll(idUser);
 		return offers;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public Offer update(HttpServletRequest request) throws Exception{
-		Offer offers = null;
-		
-		String offerTitle = null, offerDescription = null;
-		int duration = 0;
-		long offerID = 0L ,subectID = 0L;
-
-		try {
-			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
-			offerID = content.get("offerID").getAsLong();
-			offerTitle = content.get("titleOffer").getAsString();
-			duration = content.get("duration").getAsInt();
-			offerDescription = content.get("descriptionOffer").getAsString();
-			subectID = content.get("subectID").getAsLong();
-		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
-		}
-		
-		offers = offerService.updateOffer(offerID,offerTitle,duration,offerDescription,subectID);
-		return offers;
-	}
-	
-	@RequestMapping(value = "/addcomm", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public Offer addCommentary(HttpServletRequest request) throws Exception{
-		Offer offers = null;
-		long offerID = 0L;
-		String comment;
-		try {
-			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
-			offerID = content.get("offerID").getAsLong();
-			comment = content.get("comment").getAsString();
-			
-		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
-		}
-		offers = offerService.addCommentary(offerID,comment);
-		return offers;
-	}
 }

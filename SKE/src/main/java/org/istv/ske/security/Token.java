@@ -1,30 +1,31 @@
 package org.istv.ske.security;
 
-import java.sql.Timestamp;
-
 public class Token {
 	
-	Timestamp timestamp;
+	long timestamp;
 	String value;
 	
 	public Token() {
 		
 	}
 	
-	public Token(Timestamp timestamp, String token) {
+	public Token(long timestamp, String token) {
 		this.timestamp = timestamp;
 		this.value = token;
 	}
 	
-	public Timestamp getTimestamp() {
+	public long getTimestamp() {
 		return timestamp;
 	}
-	public void setTimestamp(Timestamp timestamp) {
+	
+	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
+	
 	public String getValue() {
 		return value;
 	}
+	
 	public void setValue(String value) {
 		this.value = value;
 	}
