@@ -35,7 +35,7 @@ public class SearchController {
 	@Autowired
 	private JsonService jsonService;
 
-	@RequestMapping(value = "/domains", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/all", method = RequestMethod.POST, produces = "application/json")
 	public List<Domain> findAllDomains() throws Exception {
 		try {
 			List<Domain> domains = domainService.findAll();
