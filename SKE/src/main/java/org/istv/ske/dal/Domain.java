@@ -5,29 +5,23 @@ import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Scope;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "domain")
 public class Domain {
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
 	private String domainName;
-	
-	@OneToMany(mappedBy="domain")
+
+	@OneToMany(mappedBy = "domain")
 	private Collection<Subject> subjects;
-	
-	public Domain(){
-		
+
+	public Domain() {
+
 	}
 
 	public int getId() {
@@ -45,5 +39,5 @@ public class Domain {
 	public void setDomainName(String domainName) {
 		this.domainName = domainName;
 	}
-	
+
 }

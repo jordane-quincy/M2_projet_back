@@ -51,9 +51,8 @@ public class Formation {
 				+ formationName + "]";
 	}
 
-	public Formation(int idFormation, String formationLevel, String formationName) {
+	public Formation(String formationLevel, String formationName) {
 		super();
-		this.idFormation = idFormation;
 		this.formationLevel = formationLevel;
 		this.formationName = formationName;
 	}
