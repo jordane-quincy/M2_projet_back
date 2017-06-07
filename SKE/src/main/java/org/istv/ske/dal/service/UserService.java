@@ -19,4 +19,5 @@ public interface UserService {
 	
 	public User updateUser(Long id, String email, String name, String firstName, String password, Long birthday, Formation formation);
 	
+	public List<User> getUserByToken(String token);
 }
