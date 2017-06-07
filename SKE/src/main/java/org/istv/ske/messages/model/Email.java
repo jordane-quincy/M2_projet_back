@@ -1,7 +1,7 @@
 package org.istv.ske.messages.model;
 
-import org.istv.ske.dal.User;
-import org.istv.ske.messages.common.EmailType;
+import org.istv.ske.dal.entities.User;
+import org.istv.ske.messages.enums.EmailType;
 
 /**
  * Created by abdel on 06/06/2017.
