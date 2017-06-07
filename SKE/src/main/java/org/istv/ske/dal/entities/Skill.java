@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 
  * @author M2
@@ -28,9 +30,11 @@ public class Skill {
 	private int grade;
 
 	@ManyToOne
+	@JsonIgnore
 	private User user;
 
 	@ManyToMany
+	@JsonIgnore
 	private List<User> validators;
 
 	public Skill() {
