@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest")
 public class TestController {
 
+
 	@RequestMapping("/player/{name}")
 	public String getAccountsByEmail(@PathVariable("name") String name) {
 		return name;
