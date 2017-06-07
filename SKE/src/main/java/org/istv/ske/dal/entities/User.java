@@ -80,7 +80,7 @@ public class User {
 
 	public User(int credit, String userMail, String userPassword, String userName, String userFirstName, Date birthday,
 			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation,
-			List<Skill> skills) {
+			List<Skill> skills, SecretQuestion secretQuestion) {
 		this.credit = credit;
 		this.userMail = userMail;
 		this.userPassword = userPassword;
@@ -92,6 +92,7 @@ public class User {
 		this.role = role;
 		this.formation = formation;
 		this.ownedSkilled = skills;
+		this.question = secretQuestion;
 	}
 
 	public Long getId() {
@@ -197,5 +198,39 @@ public class User {
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+	public SecretQuestion getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(SecretQuestion question) {
+		this.question = question;
+	}
+
+	public List<Skill> getOwnedSkilled() {
+		return ownedSkilled;
+	}
+
+	public void setOwnedSkilled(List<Skill> ownedSkilled) {
+		this.ownedSkilled = ownedSkilled;
+	}
+
+	public List<Skill> getValidatedSkills() {
+		return validatedSkills;
+	}
+
+	public void setValidatedSkills(List<Skill> validatedSkills) {
+		this.validatedSkills = validatedSkills;
+	}
+
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+	
+	
 
 }

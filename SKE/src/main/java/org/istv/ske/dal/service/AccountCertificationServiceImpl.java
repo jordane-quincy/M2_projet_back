@@ -1,10 +1,10 @@
 package org.istv.ske.dal.service;
 
-import java.util.List;
-
 import org.istv.ske.dal.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AccountCertificationServiceImpl implements AccountCertificationService {
 
 	@Autowired

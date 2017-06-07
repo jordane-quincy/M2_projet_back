@@ -3,10 +3,6 @@ package org.istv.ske.core.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import org.istv.ske.dal.entities.Appointment;
 import org.istv.ske.dal.entities.Skill;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.SkillRepository;
