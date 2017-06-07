@@ -6,7 +6,9 @@ import java.util.List;
 import org.istv.ske.dal.entities.Formation;
 import org.istv.ske.dal.repository.FormationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FormationServiceImpl implements FormationService {
 	
 	@Autowired
