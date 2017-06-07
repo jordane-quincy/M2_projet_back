@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.exception.BadRequestException;
+import org.istv.ske.core.exception.InternalException;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.User;
@@ -33,7 +34,7 @@ public class UserController {
 		String name = null;
 		String firstName = null;
 		String password = null;
-		String birthday = null;
+		Long birthday = null;
 		String formationName = null;
 		String formationLevel = null;
 		
@@ -43,7 +44,7 @@ public class UserController {
 			name = content.get("name").getAsString();
 			firstName = content.get("firstName").getAsString();
 			password = content.get("password").getAsString();
-			birthday = content.get("birthday").getAsString();
+			birthday = content.get("birthday").getAsLong();
 			formationName = content.get("formationName").getAsString();
 			formationLevel = content.get("formationLevel").getAsString();
 		
@@ -57,7 +58,7 @@ public class UserController {
 			user = userService.createUser(email, name, firstName, password, birthday, formationName, formationLevel);
 			
 		} catch (Exception e) {
-			//TODO: handle exception
+			throw new InternalException("Erreur lors de la création de l'utilisateur");
 		}
 		
 		return user;
@@ -67,12 +68,12 @@ public class UserController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "Application/json")
 	public String delete(HttpServletRequest request) throws Exception{
 		
-		int id = (Integer) null;
+		Long id = null;
 		JsonObject response = new JsonObject();
 		
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
-			id = content.get("id").getAsInt();
+			id = content.get("id").getAsLong();
 		} catch (Exception e) {
 			throw new BadRequestException("Contenu de la requête invalide");
 		}
@@ -91,22 +92,54 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "Application/json")
-	public User update(@RequestParam(name = "email", required = true)String email,
-			@RequestParam(name = "field", required = true)String fieldName,
-			@RequestParam(name = "value", required = true)String value){
-		User updatedUser = userService.updateUser(email, fieldName, value);
+	public User update(HttpServletRequest request) throws Exception{
+		
+		Long id = null;
+		String email = null;
+		String name = null;
+		String firstName = null;
+		String password = null;
+		Long birthday = null;
+		String formationName = null;
+		String formationLevel = null;
+		
+		try {
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+			id = content.get("id").getAsLong();
+			email = content.get("email").getAsString();
+			name = content.get("name").getAsString();
+			firstName = content.get("firstName").getAsString();
+			password = content.get("password").getAsString();
+			birthday = content.get("birthday").getAsLong();
+			formationName = content.get("formationName").getAsString();
+			formationLevel = content.get("formationLevel").getAsString();
+		
+		} catch (Exception e) {
+			throw new BadRequestException("Contenu de la requête invalide");		
+		}
+		
+		User updatedUser = null;
+		
+		try {
+			updatedUser = userService.updateUser(id, email, name, firstName, password, birthday, formationName, formationLevel);
+		} catch (Exception e) {
+			throw new InternalException("Erreur lors de la mise à jour de l'utilisateur");
+		}
+		
+			
+		
 		return updatedUser;
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = "Application/json")
-	public List<User> list(){
+	public List<User> list() throws Exception{
 		
 		List<User> list = null;
 		
 		try {
 			list = userService.getAll();	
 		} catch (Exception e) {
-			// TODO: handle exception
+			throw new InternalException("Erreur lors de la recherche des utilisateurs");
 		}
 		
 		return list;
