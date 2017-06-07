@@ -1,68 +1,91 @@
 package org.istv.ske.dal;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+
 
 @Entity
-@Table(name = "appointment")
 public class Appointment {
-
+	
 	@Id
-	@GeneratedValue
-	@JoinColumn(name = "offer_id")
-	private int appointmentID;
-	private int applicantID;
-
-	private org.joda.time.DateTime appointmentDateTime;
-	private String appointmentStatus;
-
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
+	
+	@ManyToOne
+	private Offer offer;
+	
+	@ManyToOne
+	private User applicant;
+	
+	private Date date;
+	
+	@Enumerated(EnumType.STRING)
+	private AppointmentStatus status;
+	
+	public enum AppointmentStatus {
+		PENDING,
+		VALIDATED,
+		REFUSED,
+		FINISHED,
+		CANCELLED
+	}
+	
 	public Appointment() {
-
+		
 	}
 
-	public int getAppointmentID() {
-		return appointmentID;
+	public Appointment(Offer offer, User applicant, Date date, AppointmentStatus status) {
+		this.offer = offer;
+		this.applicant = applicant;
+		this.date = date;
+		this.status = status;
 	}
 
-	public void setAppointmentID(int appointmentID) {
-		this.appointmentID = appointmentID;
+	public Long getId() {
+		return id;
 	}
 
-	public int getApplicantID() {
-		return applicantID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setApplicantID(int applicantID) {
-		this.applicantID = applicantID;
+	public Offer getOffer() {
+		return offer;
 	}
 
-	public org.joda.time.DateTime getAppointmentDateTime() {
-		return appointmentDateTime;
+	public void setOffer(Offer offer) {
+		this.offer = offer;
 	}
 
-	public void setAppointmentDateTime(org.joda.time.DateTime appointmentDateTime) {
-		this.appointmentDateTime = appointmentDateTime;
+	public User getApplicant() {
+		return applicant;
 	}
 
-	public String getAppointmentStatus() {
-		return appointmentStatus;
+	public void setApplicant(User applicant) {
+		this.applicant = applicant;
 	}
 
-	public void setAppointmentStatus(String appointmentStatus) {
-		this.appointmentStatus = appointmentStatus;
+	public Date getDate() {
+		return date;
 	}
 
-	@Override
-	public String toString() {
-		return "Appointment [appointmentID=" + appointmentID + ", applicantID=" + applicantID + "]";
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
-	public Appointment(int appointmentID, int applicantID) {
-		super();
-		this.appointmentID = appointmentID;
-		this.applicantID = applicantID;
+	public AppointmentStatus getStatus() {
+		return status;
 	}
+
+	public void setStatus(AppointmentStatus status) {
+		this.status = status;
+	}
+
 }

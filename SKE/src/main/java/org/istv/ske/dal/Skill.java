@@ -1,53 +1,61 @@
 package org.istv.ske.dal;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.springframework.context.annotation.Scope;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name = "skill")
 public class Skill {
 	
 	@Id
 	@GeneratedValue
-	@JoinColumn(name="skill_id")
-	private int skillID;
+	private long id;
+	
 	private String description;
-	public int getSkillID() {
-		return skillID;
+
+	@ManyToOne
+	private User user;
+	
+	@ManyToMany
+	private List<User> validators;
+	
+	public Skill() {
+		// TODO Auto-generated constructor stub
 	}
-	public void setSkillID(int skillID) {
-		this.skillID = skillID;
+
+	public Skill(String description, User user) {
+		super();
+		this.description = description;
+		this.user = user;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
-	public String toString() {
-		return "Skill [skillID=" + skillID + ", description=" + description + "]";
-	}
-	public Skill(int skillID, String description) {
-		super();
-		this.skillID = skillID;
-		this.description = description;
-	}
-	public Skill() {
-		super();
-	}
-	
-	
-	
 
+	public User getUser() {
+		return user;
+	}
 
+	public void setUsers(User user) {
+		this.user = user;
+	}
+	
 }
