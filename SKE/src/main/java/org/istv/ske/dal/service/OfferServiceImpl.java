@@ -19,7 +19,7 @@ public class OfferServiceImpl implements OfferService {
 	UserRepository userRepository;
 	
 	@Override
-	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer) {
+	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer, Long subjectId) {
 		Offer offer = new Offer();
 		
 		//offer.setAppointments(appointments);

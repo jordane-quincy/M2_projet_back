@@ -51,7 +51,7 @@ public class OfferController {
 			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
 		}
 		
-		offer = offerService.createOffer(user, offerTitle, duration, offerDescription);
+		offer = offerService.createOffer(user, offerTitle, duration, offerDescription, 0L);
 		return offer;
 	}
 
