@@ -5,6 +5,7 @@ import java.util.List;
 import org.istv.ske.dal.Offer;
 import org.istv.ske.dal.User;
 import org.istv.ske.dal.repository.OfferRepository;
+import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,29 @@ public class OfferServiceImpl implements OfferService {
 	@Autowired
 	OfferRepository offerRepository;
 	
+	@Autowired
+	UserRepository userRepository;
+	
 	@Override
 	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer) {
+		Offer offer = new Offer();
+		
+		//offer.setAppointments(appointments);
+		offer.setDescription(descriptionOffer);
+		offer.setDuration(duration);
+		//offer.setRemarks(remarks);
+		//offer.setSubject(subject);
+		offer.setTitle(titleOffer);
+		//offer.setUser(userRepository.findOne(id));
+		
+		offerRepository.save(offer);
 		// TODO Auto-generated method stub
-		return null;
+		return offer;
 	}
 
 	
 	@Override
-	public void deleteOffer(int idOffer) {
+	public void deleteOffer(long idOffer) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -34,14 +49,14 @@ public class OfferServiceImpl implements OfferService {
 	}
 
 	@Override
-	public List<Offer> getAll(int idUser) {
+	public List<Offer> getAll(long idUser) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public Offer getOffer(int Offer) {
+	public Offer getOffer(long Offer) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -68,12 +68,12 @@ public class OfferController {
 
 	@RequestMapping(value = "/del", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public void delete(HttpServletRequest request) throws Exception {
-		int idOffer = 0;
+		long idOffer = 0;
 		JsonObject content = null;
 		try {
 			// TODO tester
 			content = parser.parse(request.getReader()).getAsJsonObject();
-			idOffer = content.get("idOffer").getAsInt();
+			idOffer = content.get("idOffer").getAsLong();
 		} catch (Exception e) {
 			String paramManquantMsg = "";
 			if (content.get("idOffer") == null) {
@@ -90,7 +90,7 @@ public class OfferController {
 
 	@RequestMapping(value = "/del/{iduser}", method = RequestMethod.POST, produces = "Application/json")
 	public Offer update(Offer offer) {
-		// TODO delete offer
+		// TODO delete offer rereflechir
 		Offer offers = offerService.updateOffer(offer);
 		return offers;
 	}
