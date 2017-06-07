@@ -1,9 +1,12 @@
 package org.istv.ske.core.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.service.SubscriptionService;
 import org.istv.ske.dal.Appointment;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,9 +35,9 @@ public class SubscriptionController {
 			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 			app.setApplicantID(1);
-
-			if (subscriptionService.subscription(app))
-				return true;
+			app.setAppointmentDateTime(DateTime.now());
+			app.setAppointmentStatus("ok");
+			subscriptionService.subscription(app);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
