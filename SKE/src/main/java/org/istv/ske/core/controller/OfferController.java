@@ -1,7 +1,5 @@
 package org.istv.ske.core.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,15 +10,12 @@ import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.Offer;
 import org.istv.ske.dal.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 
 @RestController
 @RequestMapping("/my_offer")
@@ -36,11 +31,10 @@ public class OfferController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
-		// TODO add offer // erreur si user n'existe pas
 		JsonObject content = null;
 		Offer offer = null;
 		try {
-			// TODO tester + impl throw badException
+			// TODO tester 
 			content = parser.parse(request.getReader()).getAsJsonObject();
 			int idUser = content.get("idUser").getAsInt();
 			String titleOffer = content.get("titleOffer").getAsString();
@@ -49,39 +43,48 @@ public class OfferController {
 
 			User user = userService.getUser(idUser);
 			offer = offerService.createOffer(user, titleOffer, duration, descriptionOffer);
-		} catch(Exception e ){
+		} catch (Exception e) {
 			String paramManquantMsg = "";
-			if(content.get("idOffer") == null){
-				paramManquantMsg = paramManquantMsg +": missing param 'idOffer' :";
+			if (content.get("idUser") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'idUser' :";
 			}
-			if(!paramManquantMsg.equals("")){
+			if (content.get("titleOffer") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'titleOffer' :";
+			}
+			if (content.get("duration") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'duration' :";
+			}
+			if (content.get("descriptionOffer") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'descriptionOffer' :";
+			}
+			if (!paramManquantMsg.equals("")) {
 				throw new BadRequestException(paramManquantMsg);
-			}else{
+			} else {
 				throw e;
 			}
-		} 
+		}
 		return offer;
 	}
 
 	@RequestMapping(value = "/del", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public void delete(HttpServletRequest request) throws Exception {
-		int idOffer =0;
+		int idOffer = 0;
 		JsonObject content = null;
 		try {
-			// TODO tester 
+			// TODO tester
 			content = parser.parse(request.getReader()).getAsJsonObject();
 			idOffer = content.get("idOffer").getAsInt();
-		} catch(Exception e ){
+		} catch (Exception e) {
 			String paramManquantMsg = "";
-			if(content.get("idOffer") == null){
-				paramManquantMsg = paramManquantMsg +": missing param 'idOffer' :";
+			if (content.get("idOffer") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'idOffer' :";
 			}
-			if(!paramManquantMsg.equals("")){
+			if (!paramManquantMsg.equals("")) {
 				throw new BadRequestException(paramManquantMsg);
-			}else{
+			} else {
 				throw e;
 			}
-		} 
+		}
 		offerService.deleteOffer(idOffer);
 	}
 
@@ -92,9 +95,26 @@ public class OfferController {
 		return offers;
 	}
 
-	@RequestMapping(value = "/get/{iduser}", method = RequestMethod.POST, produces = "Application/json")
-	public List<Offer> lister(int idUser) {
-		// TODO lister offer
+	@RequestMapping(value = "/get", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	public List<Offer> lister(HttpServletRequest request) throws Exception {
+		JsonObject content = null;
+		int idUser = 0;
+		try {
+			content = parser.parse(request.getReader()).getAsJsonObject();
+			idUser = content.get("idUser").getAsInt();
+		} catch (Exception e) {
+			String paramManquantMsg = "";
+			if (content.get("idUser") == null) {
+				paramManquantMsg = paramManquantMsg + ": missing param 'idUser' :";
+			}
+			if (!paramManquantMsg.equals("")) {
+				throw new BadRequestException(paramManquantMsg);
+			} else {
+				throw e;
+			}
+		}
+
+		// tester
 		List<Offer> offers = offerService.getAll(idUser);
 		return offers;
 	}
