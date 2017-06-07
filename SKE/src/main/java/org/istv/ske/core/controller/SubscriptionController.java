@@ -5,13 +5,15 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.istv.ske.core.service.OfferService;
+import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.SubscriptionService;
-import org.istv.ske.core.service.UserService;
-import org.istv.ske.dal.Appointment;
-import org.istv.ske.dal.Appointment.AppointmentStatus;
-import org.istv.ske.dal.Offer;
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.Appointment;
+import org.istv.ske.dal.entities.Offer;
+import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.entities.Appointment.AppointmentStatus;
+import org.istv.ske.dal.repository.AppointmentRepository;
+import org.istv.ske.dal.repository.UserRepository;
+import org.istv.ske.dal.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,22 +21,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-@RequestMapping("/subscribe/")
+@RequestMapping("/subscribe")
 @RestController
 public class SubscriptionController {
 
 	@Autowired
-	SubscriptionService subscriptionService;
+	private SubscriptionService subscriptionService;
 
 	@Autowired
-	UserService userSerivce;
+	private UserRepository userRepository;
 
 	@Autowired
-	OfferService offerService;
-	Appointment app;
-	private JsonParser parser = new JsonParser();
+	private OfferService offerService;
+	
+	@Autowired
+	private JsonService jsonService;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 
 	@RequestMapping(value = { "/subscription" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody boolean subsciption(HttpServletRequest request) {
@@ -42,9 +47,10 @@ public class SubscriptionController {
 		// String s = "{\"IdOffer\": 1,\"Token\": \"untoken\"}";
 
 		try {
-			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
-			User user = userSerivce.getUser(1);
+			//TODO find user by token
+			User user = userRepository.findOne(1L);
 			Offer offer = offerService.getOffer(Long.valueOf(idOffer));
 			
 			Appointment app = new Appointment(offer, user,new Date() ,AppointmentStatus.PENDING);
@@ -58,14 +64,11 @@ public class SubscriptionController {
 
 	@RequestMapping(value = { "/unsubscription" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody boolean unsubsciption(HttpServletRequest request) {
-
-		// String s = "{\"IdOffer\": 1,\"Token\": \"untoken\"}";
-
 		try {
-			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 			
-			Appointment app = subscriptionService.findOne(Long.valueOf(idOffer));
+			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
 			app.setStatus(AppointmentStatus.CANCELLED);
 			if (subscriptionService.subscription(app))
 				return true;

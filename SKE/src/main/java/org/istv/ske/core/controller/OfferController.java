@@ -5,10 +5,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.exception.BadRequestException;
-import org.istv.ske.core.service.OfferService;
-import org.istv.ske.core.service.UserService;
-import org.istv.ske.dal.Offer;
-import org.istv.ske.dal.User;
+import org.istv.ske.core.service.JsonService;
+import org.istv.ske.dal.entities.Offer;
+import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.service.OfferService;
+import org.istv.ske.dal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,61 +19,49 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @RestController
-@RequestMapping("/my_offer")
+@RequestMapping("/offer")
 public class OfferController {
 
 	@Autowired
-	OfferService offerService;
+	private OfferService offerService;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
-	private JsonParser parser = new JsonParser();
+	@Autowired
+	private JsonService jsonService;
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
-		JsonObject content = null;
 		Offer offer = null;
+		User user = null;
+		String offerTitle = null;
+		int duration = 0;
+		String offerDescription = null;
+		
 		try {
-			// TODO tester 
-			content = parser.parse(request.getReader()).getAsJsonObject();
-			int idUser = content.get("idUser").getAsInt();
-			String titleOffer = content.get("titleOffer").getAsString();
-			int duration = content.get("duration").getAsInt();
-			String descriptionOffer = content.get("descriptionOffer").getAsString();
-
-			User user = userService.getUser(idUser);
-			offer = offerService.createOffer(user, titleOffer, duration, descriptionOffer);
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+			long idUser = content.get("idUser").getAsLong();
+			offerTitle = content.get("titleOffer").getAsString();
+			duration = content.get("duration").getAsInt();
+			offerDescription = content.get("descriptionOffer").getAsString();
+			user = userService.getUser(idUser);
+			System.out.println(user.getUserFirstName());
 		} catch (Exception e) {
-			String paramManquantMsg = "";
-			if (content.get("idUser") == null) {
-				paramManquantMsg = paramManquantMsg + ": missing param 'idUser' :";
-			}
-			if (content.get("titleOffer") == null) {
-				paramManquantMsg = paramManquantMsg + ": missing param 'titleOffer' :";
-			}
-			if (content.get("duration") == null) {
-				paramManquantMsg = paramManquantMsg + ": missing param 'duration' :";
-			}
-			if (content.get("descriptionOffer") == null) {
-				paramManquantMsg = paramManquantMsg + ": missing param 'descriptionOffer' :";
-			}
-			if (!paramManquantMsg.equals("")) {
-				throw new BadRequestException(paramManquantMsg);
-			} else {
-				throw e;
-			}
+			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
 		}
+		
+		offer = offerService.createOffer(user, offerTitle, duration, offerDescription);
 		return offer;
 	}
 
-	@RequestMapping(value = "/del", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public void delete(HttpServletRequest request) throws Exception {
 		long idOffer = 0;
 		JsonObject content = null;
 		try {
 			// TODO tester
-			content = parser.parse(request.getReader()).getAsJsonObject();
+			content = jsonService.parse(request.getReader()).getAsJsonObject();
 			idOffer = content.get("idOffer").getAsLong();
 		} catch (Exception e) {
 			String paramManquantMsg = "";
@@ -88,19 +77,12 @@ public class OfferController {
 		offerService.deleteOffer(idOffer);
 	}
 
-	@RequestMapping(value = "/del/{iduser}", method = RequestMethod.POST, produces = "Application/json")
-	public Offer update(Offer offer) {
-		// TODO delete offer rereflechir
-		Offer offers = offerService.updateOffer(offer);
-		return offers;
-	}
-
 	@RequestMapping(value = "/get", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public List<Offer> lister(HttpServletRequest request) throws Exception {
 		JsonObject content = null;
 		int idUser = 0;
 		try {
-			content = parser.parse(request.getReader()).getAsJsonObject();
+			content = jsonService.parse(request.getReader()).getAsJsonObject();
 			idUser = content.get("idUser").getAsInt();
 		} catch (Exception e) {
 			String paramManquantMsg = "";

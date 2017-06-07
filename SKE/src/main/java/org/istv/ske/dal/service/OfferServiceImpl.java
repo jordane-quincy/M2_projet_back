@@ -1,9 +1,9 @@
-package org.istv.ske.core.service;
+package org.istv.ske.dal.service;
 
 import java.util.List;
 
-import org.istv.ske.dal.Offer;
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.Offer;
+import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.OfferRepository;
 import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class OfferServiceImpl implements OfferService {
 	UserRepository userRepository;
 	
 	@Override
-	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer) {
+	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer) {
 		Offer offer = new Offer();
 		
 		//offer.setAppointments(appointments);
@@ -28,7 +28,7 @@ public class OfferServiceImpl implements OfferService {
 		//offer.setRemarks(remarks);
 		//offer.setSubject(subject);
 		offer.setTitle(titleOffer);
-		//offer.setUser(userRepository.findOne(id));
+		offer.setUser(user);
 		
 		offerRepository.save(offer);
 		// TODO Auto-generated method stub

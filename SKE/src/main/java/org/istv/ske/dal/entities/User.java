@@ -1,4 +1,4 @@
-package org.istv.ske.dal;
+package org.istv.ske.dal.entities;
 
 import java.util.Collection;
 import java.util.Date;
@@ -50,8 +50,7 @@ public class User {
 	
 	public enum Role {
 		STUDENT,
-		TEACHER,
-		LEARNER
+		TEACHER
 	}
 
 	@ManyToOne

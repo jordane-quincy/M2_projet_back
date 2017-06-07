@@ -1,28 +1,31 @@
 package org.istv.ske.core.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.SearchService;
-import org.istv.ske.dal.Domain;
-import org.istv.ske.dal.Subject;
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.Domain;
+import org.istv.ske.dal.entities.Subject;
+import org.istv.ske.dal.service.DomainService;
+import org.istv.ske.dal.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.JsonObject;
-
 @RestController
 @RequestMapping("/search")
-public class SearchController 
-{
+public class SearchController {
 
+	@Autowired
+	private DomainService domainService;
+	
+	@Autowired
+	private SubjectService subjectService;
+	
 	@Autowired
 	SearchService search_service;
 	
@@ -30,50 +33,26 @@ public class SearchController
 	private JsonService jsonService;
 
 	
-	@RequestMapping(value = "/get/domain", method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
-	public String ListDomain(){
-		//TODO Get all Domains with  
-		JsonObject response = new JsonObject();
+	@RequestMapping(value = "/domains", method = RequestMethod.POST, produces = "application/json")
+	public List<Domain> findAllDomains() throws Exception {
 		try {
-			List<Domain> domain = search_service.findAllDomain();
-			return "ok"; 
+			List<Domain> domains = domainService.findAll();
+			return domains; 
 		} catch (Exception e) {
-			response.addProperty("ok", false);
-			response.addProperty("message", e.getMessage());
-			return jsonService.stringify(response);
+			throw new RuntimeException("Impossible de récupérer la liste de domaines");
 		}
 	}
 	
-	@RequestMapping(value = "/read/subject", method = RequestMethod.POST, headers = "Accept=*/*", produces = "Application/json")
-	public String getSubject(HttpServletRequest request) throws BadRequestException{
-		//TODO Get all subject with the idDomain  
-
-		int idDomain = 0;
+	@RequestMapping(value = "/subject/{domainId}", method = RequestMethod.GET, produces = "application/json")
+	public List<Subject> getSubject(
+			HttpServletRequest request, 
+			@PathVariable(required=true) Long domainId) throws Exception {
 		try {
-
-			JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
-			idDomain = object.get("idDomain").getAsInt();
-			
+			List<Subject> subjects = subjectService.findSubjectsByDomainId(domainId);
+			return subjects;
 		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requête invalide");
+			throw new Exception("Impossible de récupérer la liste de matières pour le domaine n°" + domainId);
 		}
-
-		JsonObject response = new JsonObject();
-		
-		try {
-			Subject subject = search_service.findbyDomain(idDomain);
-			if(subject != null){
-				throw new RuntimeException("Ce numéro de domain n'existe pas");
-			}
-			return "ok"; 
-			
-		} catch (Exception e) {
-			response.addProperty("ok", false);
-			response.addProperty("message", e.getMessage());
-			return jsonService.stringify(response);
-		}
-		
-
 	}
 }
 
