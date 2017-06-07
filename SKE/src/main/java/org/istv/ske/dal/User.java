@@ -1,42 +1,56 @@
 package org.istv.ske.dal;
 
 import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Scope;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "user")
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private int credit;
+	@Column(unique = true)
 	private String userMail;
 	private String userPassword;
 	private String userName;
 	private String userFirstName;
 	private java.sql.Date birthday;
-	
-	@OneToMany(mappedBy="user")
+
+	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
+
+	@OneToMany(mappedBy = "user")
+	private Collection<Notification> notifications;
+
+	@ManyToOne
+	private Role role;
+
 	@ManyToOne
 	private Formation formation;
+
+	@ManyToMany
+	  @JoinTable(
+	      name="Master",
+	      joinColumns=@JoinColumn(name="userID", referencedColumnName="id"),
+	      inverseJoinColumns=@JoinColumn(name="skillID", referencedColumnName="skillID"))
+	  private List<Skill> skills;
 	
-	public User(){
-		
+	public User() {
+
 	}
 
 	public int getId() {
@@ -46,6 +60,7 @@ public class User {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public int getCredit() {
 		return credit;
 	}
@@ -53,6 +68,7 @@ public class User {
 	public void setCredit(int credit) {
 		this.credit = credit;
 	}
+
 	public String getUserMail() {
 		return userMail;
 	}
@@ -92,5 +108,29 @@ public class User {
 	public void setBirthday(java.sql.Date birthday) {
 		this.birthday = birthday;
 	}
-	
+
+	public Collection<Offer> getOffers() {
+		return offers;
+	}
+
+	public void setOffers(Collection<Offer> offers) {
+		this.offers = offers;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Formation getFormation() {
+		return formation;
+	}
+
+	public void setFormation(Formation formation) {
+		this.formation = formation;
+	}
+
 }

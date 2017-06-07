@@ -15,6 +15,8 @@ public class Role {
 	@Id
 	@GeneratedValue
 	private int idRole;
+	@OneToMany(mappedBy="role")
+	private Collection<User> users;
 
 	public int getIdRole() {
 		return idRole;
@@ -28,8 +30,7 @@ public class Role {
 		super();
 		this.idRole = idRole;
 	}
-	   @OneToMany(mappedBy="role")
-private Collection<User> users;
+	
 	@Override
 	public String toString() {
 		return "Role [idRole=" + idRole + "]";

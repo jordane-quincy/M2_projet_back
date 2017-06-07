@@ -4,3 +4,9 @@
 /.idea/
 /out/
 *.iml
+<<<<<<< Updated upstream
+.classpath
+.project
+=======
+/bin/
+>>>>>>> Stashed changes

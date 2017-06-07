@@ -1,9 +1,13 @@
 package org.istv.ske.dal;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,11 +22,16 @@ public class Skill {
 	
 	@Id
 	@GeneratedValue
-	@ManyToOne
 	@JoinColumn(name="skill_id")
-	private int skillID;
+	private long skillID;
 	private String description;
-	public int getSkillID() {
+	@ManyToMany
+	  @JoinTable(
+	      name="Master",
+	      joinColumns=@JoinColumn(name="skillID", referencedColumnName="skillID"),
+	      inverseJoinColumns=@JoinColumn(name="userID", referencedColumnName="id"))
+	  private List<User> users;
+	public long getSkillID() {
 		return skillID;
 	}
 	public void setSkillID(int skillID) {
@@ -34,14 +43,18 @@ public class Skill {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
-	public String toString() {
-		return "Skill [skillID=" + skillID + ", description=" + description + "]";
+	
+	public List<User> getUsers() {
+		return users;
 	}
-	public Skill(int skillID, String description) {
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+	
+	public Skill( String description, List<User> users) {
 		super();
-		this.skillID = skillID;
 		this.description = description;
+		this.users = users;
 	}
 	public Skill() {
 		super();
