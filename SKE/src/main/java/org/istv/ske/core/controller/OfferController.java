@@ -112,7 +112,7 @@ public class OfferController {
 		return offers;
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	@RequestMapping(value = "/addcomm", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public Offer addCommentary(HttpServletRequest request) throws Exception{
 		Offer offers = null;
 		long offerID = 0L;
