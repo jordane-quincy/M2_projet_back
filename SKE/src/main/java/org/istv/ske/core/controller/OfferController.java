@@ -60,24 +60,17 @@ public class OfferController {
 		return offer;
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
-	public void delete(HttpServletRequest request) throws Exception {
-		long idOffer = 0;
-		JsonObject content = null;
+	@RequestMapping(value = "/delete/{offerID}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
+	public void delete(HttpServletRequest request,//
+			@PathVariable(required=true) Long offerID) throws Exception {
 		try {
-			content = jsonService.parse(request.getReader()).getAsJsonObject();
-			idOffer = content.get("idOffer").getAsLong();
-		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
-		}
-		try {
-			offerService.deleteOffer(idOffer);
+			offerService.deleteOffer(offerID);
 		} catch (Exception e) {
 			throw new InternalException("Erreur lors de la création de l'utilisateur");
 		}
 	}
 
-	@RequestMapping(value = "/get", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	@RequestMapping(value = "/list", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public List<Offer> lister(HttpServletRequest request,//
 			@PathVariable(required=true) Long userId) throws Exception {
 		List<Offer> offers = null;
@@ -89,13 +82,14 @@ public class OfferController {
 		return offers;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public Offer update(HttpServletRequest request) throws Exception{
+	@RequestMapping(value = "/update/{offerID}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	public Offer update(HttpServletRequest request,//
+			@PathVariable(required=true) Long offerID) throws Exception{
 		Offer offers = null;
 		
 		String offerTitle = null, offerDescription = null;
 		int duration = 0;
-		long offerID = 0L ,subectID = 0L;
+		long subectID = 0L;
 
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -112,14 +106,13 @@ public class OfferController {
 		return offers;
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public Offer addCommentary(HttpServletRequest request) throws Exception{
+	@RequestMapping(value = "/addcomm/{offerID}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	public Offer addCommentary(HttpServletRequest request,//
+			@PathVariable(required=true) Long offerID) throws Exception{
 		Offer offers = null;
-		long offerID = 0L;
 		String comment;
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
-			offerID = content.get("offerID").getAsLong();
 			comment = content.get("comment").getAsString();
 			
 		} catch (Exception e) {
