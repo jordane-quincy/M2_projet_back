@@ -10,4 +10,6 @@ public interface DomainService {
 	List<Domain> findAll();
 	
 	Domain createDomain(String DomainName);
+
+	public void deleteDomain(Long id);
 }

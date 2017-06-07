@@ -11,6 +11,7 @@ import org.istv.ske.core.service.SearchService;
 import org.istv.ske.dal.entities.Domain;
 import org.istv.ske.dal.service.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,6 +79,24 @@ public class SearchController {
 		
 		return domain;
 
+	}
+	
+	@RequestMapping(value = "/delete/{DomainId}", method = RequestMethod.DELETE, produces = "application/json")
+	public String delete(
+			HttpServletRequest request, 
+			@PathVariable(required=true) Long DomainId) throws Exception{
+
+		JsonObject response = new JsonObject();
+
+		try {
+			domainService.deleteDomain(DomainId);
+			response.addProperty("ok", true);
+		} catch (Exception e) {
+			response.addProperty("ok", false);
+			response.addProperty("message", e.getMessage());
+		}
+
+		return jsonService.stringify(response);
 	}
 }
 
