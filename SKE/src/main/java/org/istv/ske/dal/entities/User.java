@@ -34,6 +34,8 @@ public class User {
 	
 	private String userFirstName;
 	
+	private String token;
+	
 	private Date birthday;
 	
 	@OneToOne
@@ -181,4 +183,13 @@ public class User {
 		this.ownedSkilled = skills;
 	}
 
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	
 }
