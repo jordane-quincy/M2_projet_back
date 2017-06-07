@@ -35,7 +35,7 @@ public class TokenValidationFilter implements Filter {
 			chain.doFilter(request, response);
 
 		} catch(Exception e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		}
 	}
 
