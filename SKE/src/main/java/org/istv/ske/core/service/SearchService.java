@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.istv.ske.dal.Domain;
 import org.istv.ske.dal.Subject;
+import org.istv.ske.dal.User;
 
 public interface SearchService {
 
@@ -11,6 +12,7 @@ public interface SearchService {
 	public List<Domain> findAllDomain();
 	
 	// récupère tous les cours lié à un domaine
-	public Subject findbyId(int idDomain);
+	Subject findbyDomain(int idDomain);
+	
 
 }
