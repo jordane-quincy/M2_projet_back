@@ -6,7 +6,6 @@
 		<class>org.istv.ske.dal.entities.Formation</class>
 		<class>org.istv.ske.dal.entities.Appointment</class>
 		<class>org.istv.ske.dal.entities.Remark</class>
-		<class>org.istv.ske.dal.entities.Subject</class>
 		<class>org.istv.ske.dal.entities.Domain</class>
 		<class>org.istv.ske.dal.entities.Skill</class>
 		<class>org.istv.ske.dal.entities.SecretQuestion</class>

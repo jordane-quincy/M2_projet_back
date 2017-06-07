@@ -1,5 +1,6 @@
 package org.istv.ske.messages.common;
 
+import org.istv.ske.messages.enums.EmailType;
 import org.istv.ske.messages.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,15 @@ public class EmailTemplate {
         context.setVariable("message", email.getContenuMail());
         context.setVariable("objet", email.getObjet());
         context.setVariable("urlActivationAccount", email.getUrlActivationAccount());
-        context.setVariable("prenom", email.getDestinataire().getUserFirstName());
-        context.setVariable("nom", email.getDestinataire().getUserName());
-        return templateEngine.process("activateAccount", context);
+        context.setVariable("prenomDest", email.getDestinataire().getUserFirstName());
+        context.setVariable("nomDest", email.getDestinataire().getUserName());
+        context.setVariable("prenomExp", email.getExpediteur().getUserFirstName());
+        context.setVariable("nomExp", email.getExpediteur().getUserName());
+
+        if(email.getEmailType().equals(EmailType.ACTIVATION_EMAIL)){
+            return templateEngine.process("activateAccount", context);
+        } else {
+            return templateEngine.process("notificationEmail", context);
+        }
     }
 }

@@ -1,10 +1,10 @@
 package org.istv.ske.messages.manager;
 
-import org.istv.ske.messages.dao.NotificationDAO;
+import org.istv.ske.dal.entities.User;
 import org.istv.ske.messages.enums.TypeNotification;
+import org.istv.ske.dal.service.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.sql.Timestamp;
 
 /**
  * Created by abdel on 06/06/2017.
@@ -13,24 +13,25 @@ import java.sql.Timestamp;
 @Component
 public class NotificationManager {
 
-    private NotificationDAO notificationDAO;
+    @Autowired
+    NotificationService notificationService;
 
     public NotificationManager() {
     }
 
     /**
      * Fonction qui creer une notif et qui gere le contenu en fonction du type
-     * @param userId
+     *
+     * @param user
      * @param typeNotification
      */
-    public void createNotification(int userId, TypeNotification typeNotification) {
+    public void createNotification(User user, TypeNotification typeNotification) {
         System.out.println("Création d'une notif");
-        Timestamp date = new Timestamp(System.currentTimeMillis());
 
         switch (typeNotification) {
             case SIMPLE:
                 System.out.println("Simple notif");
-
+                notificationService.createNotification(user, "", "", typeNotification.toString());
                 break;
 
             case CONFIRM:
@@ -53,7 +54,7 @@ public class NotificationManager {
     /**
      * Function qui contacte le DAO pour supprimer une notif en BDD
      */
-    public void deleteNotification(){
+    public void deleteNotification() {
 
     }
 

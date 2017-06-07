@@ -28,8 +28,8 @@ INSERT INTO formation VALUES (7, 'M1','Master Etudes Culturelles')
 INSERT INTO formation VALUES (8, 'M2','Master Etudes Culturelles')
 INSERT INTO formation VALUES (9, 'DEUST1','Assistant juridique')
 INSERT INTO formation VALUES (10, 'DEUST2','Assistant juridique')
-INSERT INTO formation VALUES (11, 'M1','Technologies Nouvelles des Systèmes d'Information - TNSI')
-INSERT INTO formation VALUES (12, 'M2','Technologies Nouvelles des Systèmes d'Information - TNSI')
+INSERT INTO formation VALUES (11, 'M1','Technologies Nouvelles des Systèmes d''Information - TNSI')
+INSERT INTO formation VALUES (12, 'M2','Technologies Nouvelles des Systèmes d''Information - TNSI')
 INSERT INTO formation VALUES (13, 'M1','Génie Civil')
 INSERT INTO formation VALUES (14, 'M2','Génie Civil')
 
@@ -37,3 +37,6 @@ INSERT INTO secretquestion VALUES (1, 'Quel est le nom de votre premier animal d
 INSERT INTO secretquestion VALUES (2, 'Quel est le nom de votre premier animal de compagnie','Chocolat')
 INSERT INTO secretquestion VALUES (3, 'Quel est le nom de votre premier animal de compagnie','Princesse')
 
+INSERT INTO user VALUES (1, {ts '1990-06-07 00:00:00.00000000'}, 5, 'STUDENT',  'Jordan', 'jordane.quincy@etu.univ-valenciennes.fr', 'QUINCY', 'jquincy', 12, 1)
+INSERT INTO user VALUES (2, {ts '1980-06-07 00:00:00.00000000'}, 1, 'TEACHER', 'Mickael', 'mikael.desertot@univ-valenciennes.fr', 'DESERTOT', 'mdesertot', NULL, 2)
+INSERT INTO user VALUES (3, {ts '1979-03-02 00:00:00.00000000'}, 0, 'TEACHER', 'Sylvain', 'Sylvain.Lecomte@univ-valenciennes.fr', 'LECOMTE', 'slecomte', NULL, 3)
