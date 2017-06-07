@@ -10,6 +10,7 @@ import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.SecretQuestionService;
 import org.istv.ske.core.service.SkillService;
 import org.istv.ske.dal.entities.Formation;
+import org.istv.ske.dal.entities.SecretQuestion;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.service.FormationService;
 import org.istv.ske.dal.service.UserService;
@@ -57,6 +58,7 @@ public class UserController {
 
 		User  user = null;
 		Formation formation = null;
+		SecretQuestion secretQuestion = null;
 
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -88,8 +90,8 @@ public class UserController {
 			}
 
 			try {
-				user = userService.createUser(email, name, firstName, password, birthday, formation);
-//				secretQuestionService.createSecretQuestion(user, question, answer);
+				secretQuestion = new SecretQuestion(question, answer);
+				user = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion);
 //				for (int i = 0 ; i < skills.size(); i++) {
 //			        JsonObject skill = skills.get(i).getAsJsonObject();
 //			        String label = skill.get("skillLabel").getAsString();
@@ -143,9 +145,14 @@ public class UserController {
 		String password = null;
 		Long birthday = null;
 		Long formationID = null;
+		String question = null;
+		String answer = null;
+		JsonArray skills = null;
+		
 
-		User updatedUser = null;
+		User  updatedUser = null;
 		Formation formation = null;
+		SecretQuestion secretQuestion = null;
 
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -154,24 +161,36 @@ public class UserController {
 			firstName = content.get("firstName").getAsString();
 			password = content.get("password").getAsString();
 			birthday = content.get("birthday").getAsLong();
-			formationID = content.get("formationID").getAsLong();		
+			formationID = content.get("formationID").getAsLong();
+			question = content.get("question").getAsString();
+			answer = content.get("answer").getAsString();
+			skills = content.get("skills").getAsJsonArray();
+			for (int i = 0 ; i < skills.size(); i++) {
+		        JsonObject skill = skills.get(i).getAsJsonObject();
+		        skill.get("skillLabel").getAsString();
+		        skill.get("skillMark").getAsInt();
+		        skill.get("customSkill").getAsBoolean();
+		    }
 		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requête invalide");		
+			throw new BadRequestException("Contenu de la requête invalide");	
 		}
 
-		try {
-			formation = formationService.findFormationByID(formationID);
-		} catch (Exception e) {
-			throw new BadRequestException("Contenu de la requête invalide : formation non reconnue");
+		if(email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)")){
+
+			try {
+				formation = formationService.findFormationByID(formationID);
+			} catch (Exception e) {
+				throw new BadRequestException("Contenu de la requête invalide : formation non reconnue");
+			}
+
+			try {
+				secretQuestion = new SecretQuestion(question, answer);
+				updatedUser = userService.updateUser(id, email, name, firstName, password, birthday, formation, secretQuestion);
+			} catch (Exception e) {
+				throw new InternalException("Erreur lors de la mise à jour de l'utilisateur");
+			}
+			
 		}
-
-		try {
-			updatedUser = userService.updateUser(id, email, name, firstName, password, birthday, formation);
-		} catch (Exception e) {
-			throw new InternalException("Erreur lors de la mise à jour de l'utilisateur");
-		}
-
-
 
 		return updatedUser;
 	}
