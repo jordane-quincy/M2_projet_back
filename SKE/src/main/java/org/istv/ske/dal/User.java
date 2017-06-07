@@ -30,6 +30,9 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
 
+	@OneToMany(mappedBy = "user")
+	private Collection<Notification> notifications;
+
 	@ManyToOne
 	private Role role;
 
