@@ -1,120 +1,69 @@
 package org.istv.ske.security;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.istv.ske.dal.entities.User;
 import org.springframework.stereotype.Service;
-import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import java.sql.Timestamp;
 
 @Service
 public class TokenServiceImpl implements TokenService {
+	
+	private static final int TOKEN_SIZE = 32;
+	
+	private static final int TOKEN_VALIDITY_MS = 1 * 60 * 1000;
 
-	private HashMap<Token, User> tokens = new HashMap<Token, User>();
+	private Map<Token, Long> tokens = new HashMap<>();
+	
 	private SecureRandom random = new SecureRandom();
 
-	/**
-	 * Check if token exist
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public boolean isTokenExist(String token) {
+	public Token find(String token) {
 		for (Token t : tokens.keySet()) {
-
 			String value = t.getValue();
-			System.out.println("value:" + value);
-
-			if (value.equals(token)) {
-				return true;
-			}
+			if (value.equals(token))
+				return t;
 		}
-
-		return false;
+		return null;
 	}
 
-	/**
-	 * Display token list
-	 */
 	public void displayTokensList() {
-
 		for (Token t : tokens.keySet()) {
-
 			String value = t.getValue();
-
 			System.out.println("token_value:" + value);
 		}
-
 	}
 
-	/**
-	 * Generate random token
-	 * 
-	 * @return
-	 */
 	public String generateRandomToken() {
-		return new BigInteger(130, random).toString(32);
+		return new BigInteger(TOKEN_SIZE * 4, random).toString(16);
 	}
 
-	/**
-	 * create token
-	 */
 	@Override
 	public String createToken(User user) {
-
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis() + (3600 * 2));
-
-		try {
-			SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG", "SUN");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		}
-
-		String tokenValue = "";
-
+		String token = "";
 		do {
-			tokenValue = generateRandomToken();
-		} while (isTokenExist(tokenValue.toString()));
+			token = generateRandomToken();
+		} while(find(token) != null);
 
-		Token token = new Token(timestamp, tokenValue.toString());
+		Token t = new Token(System.currentTimeMillis(), token);
+		tokens.put(t, user.getId());
 
-		tokens.put(token, user);
-
-		this.displayTokensList();
-
-		return tokenValue.toString();
+		return token;
 	}
-
-	/**
-	 * Check if token is valid
-	 * 
-	 */
+	
 	@Override
-	public boolean isExpired(String token) {
-
-		Token getToken = new Token();
-
-		for (Token t : tokens.keySet()) {
-			// if token exist
-			if (token.equals(t.getValue())) {
-				
-				// check if token expired
-				Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-
-				// if expired
-				if (currentTimestamp.after(getToken.getTimestamp())) {
-					return false;
-				} else {
-					return false;
-				}
-			}
+	public void onRequest(String token) throws Exception {
+		Token t = find(token);
+		if(t == null)
+			throw new RuntimeException("Le token " + token + " n'existe pas");
+		
+		if(System.currentTimeMillis() - t.timestamp > TOKEN_VALIDITY_MS) {
+			tokens.remove(t);
+			throw new RuntimeException("Le token " + token + " est expiré");
 		}
-
-		return false;
+		
+		t.timestamp = System.currentTimeMillis();
 	}
+	
 }

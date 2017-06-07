@@ -50,12 +50,22 @@ public class Skill {
 		this.description = description;
 	}
 
+	public List<User> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<User> validators) {
+		this.validators = validators;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public User getUser() {
 		return user;
 	}
 
-	public void setUsers(User user) {
-		this.user = user;
-	}
+	
 	
 }

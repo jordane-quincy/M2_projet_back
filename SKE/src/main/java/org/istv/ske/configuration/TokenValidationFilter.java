@@ -11,8 +11,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.istv.ske.security.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class TokenValidationFilter implements Filter {
 
+	@Autowired
+	private TokenService tokenService;
+	
 	@Override
 	public void destroy() {}
 
@@ -24,22 +30,15 @@ public class TokenValidationFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) res;
 		
 		System.out.println(request.getContextPath());
-		if(request.getServletPath().equals("/auth/connect")) {
+		if(request.getServletPath().equals("/auth/connect") || request.getServletPath().equals("/user/create")) {
 			chain.doFilter(request, response);
 			return;
 		}
 		
 		try {
 			String token = request.getHeader("Authorization");
-			
-			if(token == null)
-				throw new RuntimeException("Aucun token fourni");
-			
-			if(token.length() < 6)
-				throw new RuntimeException("Le token fourni est invalide");
-
+			tokenService.onRequest(token);
 			chain.doFilter(request, response);
-
 		} catch(Exception e) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		}
