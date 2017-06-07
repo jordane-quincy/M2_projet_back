@@ -35,3 +35,8 @@ on rappatrie en local les modifications que les autres ont pu faire : git pull
 
 	- soit il y a un conflit, on fais le merge (on demande si on ne sais pas faire), on valide que tout fonctionne en local puis : git push
 
+Git tips :
+
+Si vous avez un soucis avec un fichier que vous n'avez pas modifié (ou par mégarde et que vous voulez la version du repo) :
+
+git checkout fichierPosantProblem
