@@ -1,12 +1,14 @@
 package org.istv.ske.dal;
 
-import javax.persistence.*;
 import java.sql.Date;
-import java.util.Collection;
 
-/**
- * Created by Quentin on 06/06/2017.
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 @Entity
 @Table(name = "notification")
 public class Notification {
@@ -16,64 +18,74 @@ public class Notification {
     private int id;
 
     private String title;
+    
     private String content;
-    private String typeNotif;
-    private java.sql.Date createDate;
+    
+    private String type;
+    
+    private Date creationDate;
 
     @ManyToOne
     private User user;
 
     public Notification() {
+    	
     }
 
-    public int getId() {
-        return id;
-    }
+    public Notification(String title, String content, String type, Date creationDate, User user) {
+		this.title = title;
+		this.content = content;
+		this.type = type;
+		this.creationDate = creationDate;
+		this.user = user;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public String getTypeNotif() {
-        return typeNotif;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public void setTypeNotif(String typeNotif) {
-        this.typeNotif = typeNotif;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public Date getCreateDate() {
-        return createDate;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public Date getCreationDate() {
+		return creationDate;
+	}
 
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", typeNotif='" + typeNotif + '\'' +
-                ", createDate=" + createDate +
-                '}';
-    }
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

@@ -16,11 +16,13 @@ public class Offer {
 	
 	@Id
 	@GeneratedValue
-	private int OfferId;
+	private int id;
 	
 	private int duration;
-	private String titleOffer;
-	private String descriptionOffer;
+	
+	private String title;
+	
+	private String description;
 	
 	@ManyToOne
 	private User user;
@@ -30,16 +32,26 @@ public class Offer {
 	@OneToMany(mappedBy="offer")
 	private Collection<View> views;
 	
-	public Offer(){
+	public Offer() {
 		
 	}
 
+	public Offer(int duration, String title, String description, User user, Subject subject, Collection<View> views) {
+		super();
+		this.duration = duration;
+		this.title = title;
+		this.description = description;
+		this.user = user;
+		this.subject = subject;
+		this.views = views;
+	}
+
 	public int getId() {
-		return OfferId;
+		return id;
 	}
 
 	public void setId(int id) {
-		this.OfferId = id;
+		this.id = id;
 	}
 
 	public int getDuration() {
@@ -50,22 +62,44 @@ public class Offer {
 		this.duration = duration;
 	}
 
-	public String getTitleOffer() {
-		return titleOffer;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTitleOffer(String titleOffer) {
-		this.titleOffer = titleOffer;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getDescriptionOffer() {
-		return descriptionOffer;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescriptionOffer(String descriptionOffer) {
-		this.descriptionOffer = descriptionOffer;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
+	public User getUser() {
+		return user;
+	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Subject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Subject subject) {
+		this.subject = subject;
+	}
+
+	public Collection<View> getViews() {
+		return views;
+	}
+
+	public void setViews(Collection<View> views) {
+		this.views = views;
+	}
 
 }

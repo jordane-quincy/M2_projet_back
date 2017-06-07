@@ -16,5 +16,6 @@ public class Question {
 	@Id
 	@GeneratedValue
 	private int questionId;
+	
 	private String questionAsked;
 }

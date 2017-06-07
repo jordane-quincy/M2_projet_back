@@ -14,51 +14,55 @@ public class Formation {
 
 	@Id
 	@GeneratedValue
-	private int idFormation;
-	private String formationLevel;
-	private String formationName;
+	private int id;
+	
+	private String level;
+	
+	private String name;
 
 	@OneToMany(mappedBy = "formation")
 	private Collection<User> users;
 
-	public int getIdFormation() {
-		return idFormation;
-	}
-
-	public void setIdFormation(int idFormation) {
-		this.idFormation = idFormation;
-	}
-
-	public String getFormationLevel() {
-		return formationLevel;
-	}
-
-	public void setFormationLevel(String formationLevel) {
-		this.formationLevel = formationLevel;
-	}
-
-	public String getFormationName() {
-		return formationName;
-	}
-
-	public void setFormationName(String formationName) {
-		this.formationName = formationName;
-	}
-
-	@Override
-	public String toString() {
-		return "Formation [idFormation=" + idFormation + ", formationLevel=" + formationLevel + ", formationName="
-				+ formationName + "]";
-	}
-
-	public Formation(String formationLevel, String formationName) {
-		super();
-		this.formationLevel = formationLevel;
-		this.formationName = formationName;
-	}
-
 	public Formation() {
-		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Formation(String level, String name, Collection<User> users) {
+		this.level = level;
+		this.name = name;
+		this.users = users;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Collection<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Collection<User> users) {
+		this.users = users;
 	}
 
 }
