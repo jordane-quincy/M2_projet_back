@@ -7,7 +7,9 @@ public class Token {
 	Timestamp timestamp;
 	String value;
 	
-	public Token() {}
+	public Token() {
+		
+	}
 	
 	public Token(Timestamp timestamp, String token) {
 		this.timestamp = timestamp;
