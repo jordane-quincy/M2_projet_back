@@ -5,6 +5,8 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.istv.ske.dal.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class TokenServiceImpl implements TokenService {
 	
 	private static final int TOKEN_SIZE = 32;
 	
-	private static final int TOKEN_VALIDITY_MS = 1 * 60 * 1000;
+	private static final int TOKEN_VALIDITY_MS = 20 * 60 * 1000;
 
 	private Map<Token, Long> tokens = new HashMap<>();
 	
@@ -64,6 +66,12 @@ public class TokenServiceImpl implements TokenService {
 		}
 		
 		t.timestamp = System.currentTimeMillis();
+	}
+
+	@Override
+	public User findUserByToken(HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

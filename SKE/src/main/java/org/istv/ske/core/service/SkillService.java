@@ -7,8 +7,8 @@ import org.istv.ske.dal.entities.User;
 
 public interface SkillService {
 
-	public Skill createSkill(User user, String description, List<User> validators);
-	public Skill updateSkill(User user, String description, List<User> validators);
+	public Skill createSkill(User user, String label, int mark, List<User> validators);
+	public Skill updateSkill(User user, String label, int mark, List<User> validators);
 	public void deleteSkill(Skill skill);
 	public List<Skill> getAll();
 }

@@ -22,5 +22,18 @@ public class DomainServiceImpl implements DomainService {
 		}
 		return domains;
 	}
+	
+	@Override
+	public Domain createDomain(String DomainName) {
+		Domain Domain = new Domain();
+		Domain.setDomainName(DomainName);
+		domainRepository.save(Domain);
+		return Domain;
+	}
 
+	@Override
+	public void deleteDomain(Long id) {
+		domainRepository.delete(id);
+	}
+	
 }

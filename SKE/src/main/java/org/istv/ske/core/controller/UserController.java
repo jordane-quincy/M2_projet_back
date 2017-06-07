@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.exception.InternalException;
 import org.istv.ske.core.service.JsonService;
+import org.istv.ske.core.service.SecretQuestionService;
+import org.istv.ske.core.service.SkillService;
 import org.istv.ske.dal.entities.Formation;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.service.FormationService;
@@ -32,7 +34,13 @@ public class UserController {
 
 	@Autowired
 	FormationService formationService;
-
+	
+	@Autowired
+	SecretQuestionService secretQuestionService;
+	
+	@Autowired
+	SkillService skillService;
+	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public User create(HttpServletRequest request) throws Exception{
 
@@ -61,6 +69,12 @@ public class UserController {
 			question = content.get("question").getAsString();
 			answer = content.get("answer").getAsString();
 			skills = content.get("skills").getAsJsonArray();
+			for (int i = 0 ; i < skills.size(); i++) {
+		        JsonObject skill = skills.get(i).getAsJsonObject();
+		        skill.get("skillLabel").getAsString();
+		        skill.get("skillMark").getAsInt();
+		        skill.get("customSkill").getAsBoolean();
+		    }
 		} catch (Exception e) {
 			throw new BadRequestException("Contenu de la requête invalide");	
 		}
@@ -73,9 +87,22 @@ public class UserController {
 				throw new BadRequestException("Contenu de la requête invalide : formation non reconnue");
 			}
 
-
 			try {
 				user = userService.createUser(email, name, firstName, password, birthday, formation);
+//				secretQuestionService.createSecretQuestion(user, question, answer);
+//				for (int i = 0 ; i < skills.size(); i++) {
+//			        JsonObject skill = skills.get(i).getAsJsonObject();
+//			        String label = skill.get("skillLabel").getAsString();
+//			        int mark = skill.get("skillMark").getAsInt();
+			        //TODO : ajouter les skills aux users
+//			        Boolean custom = skill.get("customSkill").getAsBoolean();
+//			        
+//			        if (custom){
+//			        	
+//			        } else {
+//			        	skillService.createSkill(user, label, mark, null);
+//			        }
+//			    }
 			} catch (Exception e) {
 				throw new InternalException("Erreur lors de la création de l'utilisateur");
 			}
@@ -90,7 +117,7 @@ public class UserController {
 
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(
-			HttpServletRequest request, 
+			HttpServletRequest request,
 			@PathVariable(required=true) Long userId) throws Exception{
 
 		JsonObject response = new JsonObject();
