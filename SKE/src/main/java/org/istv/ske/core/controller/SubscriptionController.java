@@ -42,7 +42,7 @@ public class SubscriptionController {
 	@Autowired
 	private AppointmentRepository appointmentRepository;
 
-	@RequestMapping(value = { "/subscribe" }, method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String subsciption(HttpServletRequest request) {
 
 		// String s = "{\"IdOffer\": 1,\"Token\": \"untoken\"}";
@@ -70,7 +70,7 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	@RequestMapping(value = { "/unsubscribe" }, method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = { "/unsub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String unsubsciption(HttpServletRequest request) {
 		JsonObject response = new JsonObject();
 		try {
@@ -110,7 +110,7 @@ public class SubscriptionController {
 	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request,
 			@PathVariable(required = true) Long id) {
 		User user = userRepository.findOne(id);
-		List<Appointment> app = appointmentRepository.findByApplicant(user);
+		List<Appointment> app = appointmentRepository.findByApplicantId(user);
 		return app;
 	}
 
