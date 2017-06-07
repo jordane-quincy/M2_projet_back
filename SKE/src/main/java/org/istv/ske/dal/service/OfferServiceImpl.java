@@ -8,11 +8,8 @@ import org.istv.ske.dal.entities.Remark;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.DomainRepository;
 import org.istv.ske.dal.repository.OfferRepository;
-<<<<<<< HEAD
-=======
 import org.istv.ske.dal.repository.RemarkRepository;
-import org.istv.ske.dal.repository.SubjectRepository;
->>>>>>> 32ae65b18c023992426c15968f7081ef6d78818f
+//import org.istv.ske.dal.repository.SubjectRepository;
 import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +24,11 @@ public class OfferServiceImpl implements OfferService {
 	UserRepository userRepository;
 
 	@Autowired
-<<<<<<< HEAD
 	DomainRepository domainRepository;
-=======
-	SubjectRepository subjectRepository;
-	
-	@Autowired 
+	// SubjectRepository subjectRepository;
+
+	@Autowired
 	RemarkRepository remarkRepository;
->>>>>>> 32ae65b18c023992426c15968f7081ef6d78818f
 
 	@Override
 	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer, Long domainId) {
@@ -73,7 +67,7 @@ public class OfferServiceImpl implements OfferService {
 		offer.setTitle(offerTitle);
 		offer.setDuration(duration);
 		offer.setDescription(offerDescription);
-		offer.setSubject(subjectRepository.findOne(subectID));
+		offer.setDomain(domainRepository.findOne(subectID));
 		offerRepository.save(offer);
 		return offer;
 	}
@@ -81,13 +75,13 @@ public class OfferServiceImpl implements OfferService {
 	@Override
 	public Offer addCommentary(long offerID, String comment) {
 		Offer offer = offerRepository.findOne(offerID);
-		Collection<Remark> remList =  offer.getRemarks();
+		Collection<Remark> remList = offer.getRemarks();
 		Remark rem = new Remark(comment, offer);
 		remList.add(rem);
 		offer.setRemarks(remList);
 		remarkRepository.save(rem);
-		offerRepository.save(offer);		
-		
+		offerRepository.save(offer);
+
 		return offer;
 	}
 
