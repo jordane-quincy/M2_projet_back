@@ -60,6 +60,11 @@ public class AuthenticationController {
 		}
 	}
 	
+	@RequestMapping
+	public String disconnect(HttpServletRequest request) {
+		return null;
+	}
+	
 	
 	
 }
