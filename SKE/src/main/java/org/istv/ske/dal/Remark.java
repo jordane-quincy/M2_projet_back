@@ -7,16 +7,17 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Remark {
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
-	
+
 	private String text;
-	
+	private int grade;
+
 	@ManyToOne
 	private Offer offer;
-	
+
 	public Remark() {
 		// TODO Auto-generated constructor stub
 	}
@@ -49,5 +50,5 @@ public class Remark {
 	public void setOffer(Offer offer) {
 		this.offer = offer;
 	}
-	
+
 }
