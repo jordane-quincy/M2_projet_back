@@ -1,16 +1,19 @@
 package org.istv.ske.dal;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "user")
 public class User {
@@ -39,6 +42,13 @@ public class User {
 	@ManyToOne
 	private Formation formation;
 
+	@ManyToMany
+	  @JoinTable(
+	      name="Master",
+	      joinColumns=@JoinColumn(name="userID", referencedColumnName="id"),
+	      inverseJoinColumns=@JoinColumn(name="skillID", referencedColumnName="skillID"))
+	  private List<Skill> skills;
+	
 	public User() {
 
 	}
