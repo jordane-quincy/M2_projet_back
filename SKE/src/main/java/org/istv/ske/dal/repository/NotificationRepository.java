@@ -12,9 +12,9 @@ import java.util.List;
  */
 
 @Repository
-public interface NotificationRepository extends CrudRepository<Notification, Integer> {
+public interface NotificationRepository extends CrudRepository<Notification, Long> {
 
-    Notification findNotificationById(int id);
+    Notification findNotificationById(Long id);
 
     List<Notification> findNotificationByUser(User user);
 }

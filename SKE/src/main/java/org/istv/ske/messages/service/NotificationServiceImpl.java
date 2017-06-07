@@ -5,6 +5,7 @@ import org.istv.ske.dal.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,26 +20,41 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification createNotification(String title, String content, String type, String createDate) {
-        return null;
+        Notification notification = new Notification();
+        notification.setType(type);
+        notification.setTitle(title);
+        notification.setContent(content);
+
+        notificationRepository.save(notification);
+        return notification;
     }
 
     @Override
     public void deleteNotification(Long notificationID) {
-
+        notificationRepository.delete(notificationID);
     }
 
     @Override
     public List<Notification> getAll() {
-        return null;
+        return (List<Notification>) notificationRepository.findAll();
     }
 
     @Override
-    public Notification updateNotification(Notification notification) {
-        return null;
+    public Notification updateNotification(Long notificationID, String title, String content, String type, String createDate) {
+        Notification notification = notificationRepository.findOne(notificationID);
+
+        notification.setTitle(title);
+        notification.setContent(content);
+        notification.setCreationDate((java.sql.Date) new Date(createDate));
+        notification.setType(type);
+
+        notificationRepository.save(notification);
+
+        return notification;
     }
 
     @Override
     public Notification getNotification(Long notificationID) {
-        return null;
+        return notificationRepository.findOne(notificationID);
     }
 }
