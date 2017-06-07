@@ -26,22 +26,24 @@ public class TokenValidationFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 		
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
+//		HttpServletRequest request = (HttpServletRequest) req;
+//		HttpServletResponse response = (HttpServletResponse) res;
+//		
+//		System.out.println(request.getContextPath());
+//		if(request.getServletPath().equals("/auth/connect") || request.getServletPath().equals("/user/create")) {
+//			chain.doFilter(request, response);
+//			return;
+//		}
+//		
+//		try {
+//			String token = request.getHeader("Authorization");
+//			tokenService.onRequest(token);
+//			chain.doFilter(request, response);
+//		} catch(Exception e) {
+//			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+//		}
 		
-		System.out.println(request.getContextPath());
-		if(request.getServletPath().equals("/auth/connect") || request.getServletPath().equals("/user/create")) {
-			chain.doFilter(request, response);
-			return;
-		}
-		
-		try {
-			String token = request.getHeader("Authorization");
-			tokenService.onRequest(token);
-			chain.doFilter(request, response);
-		} catch(Exception e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-		}
+		chain.doFilter(req, res);
 	}
 
 	@Override
