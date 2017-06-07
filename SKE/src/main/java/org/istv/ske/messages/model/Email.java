@@ -1,107 +1,86 @@
 package org.istv.ske.messages.model;
 
+import org.istv.ske.dal.User;
+import org.istv.ske.messages.common.EmailType;
+
 /**
  * Created by abdel on 06/06/2017.
  */
 public class Email {
-    private String raison;
-    private String client;
-    private String civilite;
-    private String prenom;
-    private String nom;
-    private String email;
-    private String telephone;
-    private String dateNaissance;
-    private String message;
+    private User destinataire;
+    private User expediteur;
+    private String contenuMail;
+    private String objet;
+    private String emailType;
+    private String urlActivationAccount;
 
-    public Email() {
+    public Email(String emailType) {
+        contenuMail = "Le contenu de mon mail ....";
+        objet = "Objet de mon mail";
+
+        User dest = new User();
+        dest.setUserMail("abdeloihid.elmardi@etu.univ-valenciennes.fr");
+        dest.setUserName("el mardi");
+        dest.setUserFirstName("Abdeloihid");
+
+        User exp = new User();
+        exp.setUserMail("quentin.senecat@etu.univ-valenciennes.fr");
+        exp.setUserName("Senecat");
+        exp.setUserFirstName("Quentin");
+
+        destinataire = dest;
+        expediteur = exp;
+
+        if(emailType.equals(EmailType.ACTIVATION_EMAIL)){
+            urlActivationAccount= "http://google.fr";
+        }
     }
 
-    public String getRaison() {
-        return raison;
+    public String getEmailType() {
+        return emailType;
     }
 
-    public void setRaison(String raison) {
-        this.raison = raison;
+    public void setEmailType(String emailType) {
+        this.emailType = emailType;
     }
 
-    public String getClient() {
-        return client;
+    public String getUrlActivationAccount() {
+        return urlActivationAccount;
     }
 
-    public void setClient(String client) {
-        this.client = client;
+    public void setUrlActivationAccount(String urlActivationAccount) {
+        this.urlActivationAccount = urlActivationAccount;
     }
 
-    public String getCivilite() {
-        return civilite;
+    public User getDestinataire() {
+        return destinataire;
     }
 
-    public void setCivilite(String civilite) {
-        this.civilite = civilite;
+    public void setDestinataire(User destinataire) {
+        this.destinataire = destinataire;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public User getExpediteur() {
+        return expediteur;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setExpediteur(User expediteur) {
+        this.expediteur = expediteur;
     }
 
-    public String getNom() {
-        return nom;
+    public String getContenuMail() {
+        return contenuMail;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setContenuMail(String contenuMail) {
+        this.contenuMail = contenuMail;
     }
 
-    public String getEmail() {
-        return email;
+    public String getObjet() {
+        return objet;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getDateNaissance() {
-        return dateNaissance;
-    }
-
-    public void setDateNaissance(String dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getHtmlMsg() {
-        return "<strong> <p>Raison de la demande : " + raison + "</p>"
-                + "<p>Nom du contact : " + civilite + " " + prenom + " " + nom
-                + "</p>" + "<p>Email du client : " + email + "</p>" + "<p>Téléphone : "
-                + telephone + "</p>" + "<p>Date de naissance : " + dateNaissance + "</p></strong>"
-                + "<pre>" + message + "</pre>";
-    }
-
-    @Override
-    public String toString() {
-        return "Email [raison=" + raison + ", client=" + client + ", civilite="
-                + civilite + ", prenom=" + prenom + ", nom=" + nom + ", email="
-                + email + ", telephone=" + telephone + ", dateNaissance="
-                + dateNaissance + ", message=" + message + "]";
+    public void setObjet(String objet) {
+        this.objet = objet;
     }
 }
