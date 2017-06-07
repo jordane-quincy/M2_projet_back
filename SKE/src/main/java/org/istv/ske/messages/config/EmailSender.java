@@ -15,8 +15,6 @@ import java.util.Properties;
  */
 @Configuration
 @PropertySource("classpath:emailSender.properties")
-@EnableAsync
-@EnableTransactionManagement
 public class EmailSender {
     @Value("${mailSender.host}")
     private String host;
@@ -40,10 +38,9 @@ public class EmailSender {
 
     public Properties javaMailProperties(){
         Properties properties = new Properties();
-        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.transport.protocol", "smtps");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.quitwait", "true");
         return properties;
     }
 }

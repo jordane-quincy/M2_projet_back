@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.service.AuthenticationService;
 import org.istv.ske.core.service.JsonService;
-import org.istv.ske.dal.User;
+import org.istv.ske.dal.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +50,7 @@ public class AuthenticationController {
 			String token = user.getUserMail() + user.getUserPassword();
 			JsonObject content = new JsonObject();
 			content.addProperty("token", token);
-			response.addProperty("ok", false);
+			response.addProperty("ok", true);
 			response.add("content", content);
 			return jsonService.stringify(response);
 		} catch (Exception e) {
@@ -58,6 +58,11 @@ public class AuthenticationController {
 			response.addProperty("message", e.getMessage());
 			return jsonService.stringify(response);
 		}
+	}
+	
+	@RequestMapping
+	public String disconnect(HttpServletRequest request) {
+		return null;
 	}
 	
 	
