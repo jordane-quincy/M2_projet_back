@@ -9,6 +9,7 @@ import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.SubscriptionService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.Appointment;
+import org.istv.ske.dal.Appointment.AppointmentStatus;
 import org.istv.ske.dal.Offer;
 import org.istv.ske.dal.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +45,9 @@ public class SubscriptionController {
 			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 			User user = userSerivce.getUser(1);
-			Offer offer = offerService.getOffer(1);
+			Offer offer = offerService.getOffer(Long.valueOf(idOffer));
 			
-			//Appointment app = new Appointment(1, user,new Date() ,"pending");
-			//app.setAppointmentDateTime(DateTime.now());
+			Appointment app = new Appointment(offer, user,new Date() ,AppointmentStatus.PENDING);
 			
 			subscriptionService.subscription(app);
 		} catch (Exception e) {
@@ -64,8 +64,10 @@ public class SubscriptionController {
 		try {
 			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
-
-			if (subscriptionService.unsubscription(null))
+			
+			Appointment app = subscriptionService.findOne(Long.valueOf(idOffer));
+			app.setStatus(AppointmentStatus.CANCELLED);
+			if (subscriptionService.subscription(app))
 				return true;
 		} catch (Exception e) {
 			// TODO: handle exception
