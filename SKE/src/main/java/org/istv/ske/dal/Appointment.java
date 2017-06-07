@@ -19,10 +19,13 @@ public class Appointment {
 
 	@Id
 	@GeneratedValue
-	@JoinColumn(name="appointment_id")
+	@JoinColumn(name="offer_id")
 	private int appointmentID;
-	@JoinColumn(name="user_id")
 	private int applicantID;
+	
+	private org.joda.time.DateTime AppointmentDateTime;
+	private String AppointmentStatus;
+	
 	
 	public Appointment(){
 		

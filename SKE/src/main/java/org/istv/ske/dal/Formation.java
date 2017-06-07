@@ -1,14 +1,16 @@
 package org.istv.ske.dal;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
 @Entity
-
 @Table(name = "formation")
 public class Formation {
 	
@@ -18,8 +20,9 @@ public class Formation {
 	private int idFormation;
 	private String formationLevel;
 	private String formationName;
-	@ManyToOne
-    private User user ;
+	
+	@OneToMany(mappedBy="formation")
+	private Collection<User> users;
 	
 	
 	public int getIdFormation() {
@@ -39,13 +42,6 @@ public class Formation {
 	}
 	public void setFormationName(String formationName) {
 		this.formationName = formationName;
-	}
-	
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
 	}
 	@Override
 	public String toString() {

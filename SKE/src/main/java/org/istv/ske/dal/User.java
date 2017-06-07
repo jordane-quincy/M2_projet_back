@@ -2,6 +2,7 @@ package org.istv.ske.dal;
 
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,8 @@ public class User {
 	private int id;
 	
 	private int credit;
+	//[Index("UserMailIndex", IsUnique = True)]
+	@Column(unique = true)
 	private String userMail;
 	private String userPassword;
 	private String userName;
@@ -35,7 +38,7 @@ public class User {
 	@ManyToOne
 	private Role role;
 	@ManyToOne
-	private Formation formation;
+    private Formation formation ;
 	
 	public User(){
 		
