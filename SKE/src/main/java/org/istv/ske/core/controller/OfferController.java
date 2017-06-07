@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.exception.BadRequestException;
+import org.istv.ske.core.exception.InternalException;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @RestController
 @RequestMapping("/offer")
@@ -33,12 +33,11 @@ public class OfferController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
-		Offer offer = null;
 		User user = null;
-		String offerTitle = null;
+		String offerTitle = null, offerDescription = null;
 		int duration = 0;
-		String offerDescription = null;
-		
+		long subectID = 0L;
+
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			long idUser = content.get("idUser").getAsLong();
@@ -46,12 +45,17 @@ public class OfferController {
 			duration = content.get("duration").getAsInt();
 			offerDescription = content.get("descriptionOffer").getAsString();
 			user = userService.getUser(idUser);
+			subectID = content.get("subectID").getAsLong();
 			System.out.println(user.getUserFirstName());
 		} catch (Exception e) {
 			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
 		}
-		
-		offer = offerService.createOffer(user, offerTitle, duration, offerDescription, 0L);
+		Offer offer = null;
+		try {
+			offer = offerService.createOffer(user, offerTitle, duration, offerDescription, subectID);
+		} catch (Exception e) {
+			throw new InternalException("Erreur lors de la création de l'utilisateur");
+		}
 		return offer;
 	}
 
@@ -64,17 +68,13 @@ public class OfferController {
 			content = jsonService.parse(request.getReader()).getAsJsonObject();
 			idOffer = content.get("idOffer").getAsLong();
 		} catch (Exception e) {
-			String paramManquantMsg = "";
-			if (content.get("idOffer") == null) {
-				paramManquantMsg = paramManquantMsg + ": missing param 'idOffer' :";
-			}
-			if (!paramManquantMsg.equals("")) {
-				throw new BadRequestException(paramManquantMsg);
-			} else {
-				throw e;
-			}
+			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
 		}
-		offerService.deleteOffer(idOffer);
+		try {
+			offerService.deleteOffer(idOffer);
+		} catch (Exception e) {
+			throw new InternalException("Erreur lors de la création de l'utilisateur");
+		}
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
@@ -85,19 +85,14 @@ public class OfferController {
 			content = jsonService.parse(request.getReader()).getAsJsonObject();
 			idUser = content.get("idUser").getAsInt();
 		} catch (Exception e) {
-			String paramManquantMsg = "";
-			if (content.get("idUser") == null) {
-				paramManquantMsg = paramManquantMsg + ": missing param 'idUser' :";
-			}
-			if (!paramManquantMsg.equals("")) {
-				throw new BadRequestException(paramManquantMsg);
-			} else {
-				throw e;
-			}
+			throw new BadRequestException("Contenu de la requete invalide : " + e.getMessage());
 		}
-
-		// tester
-		List<Offer> offers = offerService.getAll(idUser);
+		List<Offer> offers = null;
+		try {
+			offers = offerService.getAll(idUser);
+		} catch (Exception e) {
+			throw new InternalException("Erreur lors de la création de l'utilisateur");
+		}
 		return offers;
 	}
 
