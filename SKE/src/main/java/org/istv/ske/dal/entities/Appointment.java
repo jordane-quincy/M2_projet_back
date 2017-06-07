@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.JsonAdapter;
+
 
 @Entity
 public class Appointment {
@@ -22,6 +25,7 @@ public class Appointment {
 	private Offer offer;
 	
 	@ManyToOne
+	@JsonIgnore
 	private User applicant;
 	
 	private Date date;
