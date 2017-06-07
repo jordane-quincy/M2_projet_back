@@ -36,7 +36,7 @@ public class OfferController {
 		try {
 			// TODO tester 
 			content = parser.parse(request.getReader()).getAsJsonObject();
-			int idUser = content.get("idUser").getAsInt();
+			long idUser = content.get("idUser").getAsLong();
 			String titleOffer = content.get("titleOffer").getAsString();
 			int duration = content.get("duration").getAsInt();
 			String descriptionOffer = content.get("descriptionOffer").getAsString();
