@@ -32,7 +32,7 @@ public class SubscriptionController {
 
 	@Autowired
 	OfferService offerService;
-	
+	Appointment app;
 	private JsonParser parser = new JsonParser();
 
 	@RequestMapping(value = { "/subscription" }, method = RequestMethod.POST, headers = "Accept=application/json")
@@ -45,7 +45,8 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 			User user = userSerivce.getUser(1);
 			Offer offer = offerService.getOffer(1);
-			Appointment app = new Appointment(1, user,new Date() ,"pending");
+			
+			//Appointment app = new Appointment(1, user,new Date() ,"pending");
 			//app.setAppointmentDateTime(DateTime.now());
 			
 			subscriptionService.subscription(app);
