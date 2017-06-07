@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(String email, String name, String firstName, String password, Long birthday, Formation formation) {		
 		Role role = (email.endsWith("@etu.univ-valenciennes.fr") ? Role.STUDENT : Role.TEACHER);
-		User user = new User(5, email, password, name, firstName, new Date(birthday), null, null, role, null, null);
+		User user = new User(5, email, password, name, firstName, new Date(birthday), null, null, role, formation, null);
 		userRepository.save(user);
 		return user;
 	}

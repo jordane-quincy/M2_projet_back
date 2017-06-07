@@ -89,11 +89,11 @@ public class UserController {
 
 			try {
 				user = userService.createUser(email, name, firstName, password, birthday, formation);
-				secretQuestionService.createSecretQuestion(user, question, answer);
-				for (int i = 0 ; i < skills.size(); i++) {
-			        JsonObject skill = skills.get(i).getAsJsonObject();
-			        String label = skill.get("skillLabel").getAsString();
-			        int mark = skill.get("skillMark").getAsInt();
+//				secretQuestionService.createSecretQuestion(user, question, answer);
+//				for (int i = 0 ; i < skills.size(); i++) {
+//			        JsonObject skill = skills.get(i).getAsJsonObject();
+//			        String label = skill.get("skillLabel").getAsString();
+//			        int mark = skill.get("skillMark").getAsInt();
 			        //TODO : ajouter les skills aux users
 //			        Boolean custom = skill.get("customSkill").getAsBoolean();
 //			        
@@ -102,7 +102,7 @@ public class UserController {
 //			        } else {
 //			        	skillService.createSkill(user, label, mark, null);
 //			        }
-			    }
+//			    }
 			} catch (Exception e) {
 				throw new InternalException("Erreur lors de la création de l'utilisateur");
 			}
@@ -117,7 +117,7 @@ public class UserController {
 
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(
-			HttpServletRequest request, 
+			HttpServletRequest request,
 			@PathVariable(required=true) Long userId) throws Exception{
 
 		JsonObject response = new JsonObject();
