@@ -23,5 +23,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 		app.delete(a);
 		return true;
 	}
+	
+	public Appointment findOne(Long id) {
+		return app.findById(id);
+	}
 
 }

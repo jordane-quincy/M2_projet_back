@@ -25,11 +25,11 @@ public class SearchServiceImpl implements SearchService {
 	}
 	
 	@Override
-	public Subject findbyId(int idDomain)
+	public Subject findbyDomain(int idDomain)
 	{
-		//TODO
 		return subject_repository.findOne(idDomain);
 	}
+	
 
 
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AppointmentRepository extends CrudRepository<Appointment, Integer>{
-
+	public Appointment findById(Long id);
 }

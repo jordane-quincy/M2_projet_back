@@ -1,5 +1,6 @@
 package org.istv.ske.core.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.istv.ske.dal.Formation;
@@ -15,37 +16,8 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 
 	@Override
-	public User createUser(String email, String name, String firstName, String password, String birthday,
-			String formationName, String formationLevel) {
-		
-//		User user = new User();
-//		Formation formation = new Formation(formationLevel, formationName);
-//		
-//		
-//		user.setUserMail(email);
-//		//TODO
-//		//user.setBirthday(birthday);
-//		user.setCredit(5);
-//		user.setUserFirstName(firstName);
-//		user.setUserName(name);
-//		user.setUserPassword(password);
-//		
-//		user.setFormation(formation);
-//		
-//		
-//		userRepository.save(user);
-		return null;
-	}
-
-	@Override
-	public void deleteUser(int id) {
+	public void deleteUser(Long id) {
 		userRepository.delete(id);
-	}
-
-	@Override
-	public User updateUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -54,14 +26,34 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(String email, String fieldName, String value) {
-		// TODO Auto-generated method stub
+	public User getUser(Long userID) {
+		return userRepository.findOne(userID);
+	}
+
+	@Override
+	public User createUser(String email, String name, String firstName, String password, Long birthday,
+			String formationName, String formationLevel) {
+		//TODO :est-ce qu'il faut concerver les champs foramtionName, formationLevel ?
+		
+		User user = new User(5, email, password, name, firstName, new Date(birthday), null, null, null, null, null);
+		userRepository.save(user);
 		return null;
 	}
 
 	@Override
-	public User getUser(int userID) {
-		return userRepository.findOne(userID);
+	public User updateUser(Long id, String email, String name, String firstName, String password, Long birthday,
+			String formationName, String formationLevel) {
+		
+		//TODO :est-ce qu'il faut concerver les champs foramtionName, formationLevel ?
+		User user = userRepository.findOne(id);
+		user.setBirthday(new Date(birthday));
+		user.setUserMail(email);
+		user.setUserName(name);
+		user.setUserFirstName(firstName);
+		user.setUserPassword(password);
+		
+		userRepository.save(user);
+		return user;
 	}
 
 }
