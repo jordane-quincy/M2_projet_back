@@ -33,16 +33,17 @@ public class OfferController {
 	public Offer create(HttpServletRequest request) throws Exception {
 		JsonObject content = null;
 		Offer offer = null;
+		long idUser;
+		String titleOffer, descriptionOffer;
+		int duration;
 		try {
-			// TODO tester 
+			// TODO tester
 			content = parser.parse(request.getReader()).getAsJsonObject();
-			long idUser = content.get("idUser").getAsLong();
-			String titleOffer = content.get("titleOffer").getAsString();
-			int duration = content.get("duration").getAsInt();
-			String descriptionOffer = content.get("descriptionOffer").getAsString();
+			idUser = content.get("idUser").getAsLong();
+			titleOffer = content.get("titleOffer").getAsString();
+			duration = content.get("duration").getAsInt();
+			descriptionOffer = content.get("descriptionOffer").getAsString();
 
-			User user = userService.getUser(idUser);
-			offer = offerService.createOffer(user, titleOffer, duration, descriptionOffer);
 		} catch (Exception e) {
 			String paramManquantMsg = "";
 			if (content.get("idUser") == null) {
@@ -63,6 +64,7 @@ public class OfferController {
 				throw e;
 			}
 		}
+		offer = offerService.createOffer(idUser, titleOffer, duration, descriptionOffer);
 		return offer;
 	}
 

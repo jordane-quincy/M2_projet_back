@@ -19,7 +19,7 @@ public class OfferServiceImpl implements OfferService {
 	UserRepository userRepository;
 	
 	@Override
-	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer) {
+	public Offer createOffer(long idUser, String titleOffer, int duration, String descriptionOffer) {
 		Offer offer = new Offer();
 		
 		//offer.setAppointments(appointments);
@@ -28,7 +28,7 @@ public class OfferServiceImpl implements OfferService {
 		//offer.setRemarks(remarks);
 		//offer.setSubject(subject);
 		offer.setTitle(titleOffer);
-		//offer.setUser(userRepository.findOne(id));
+		offer.setUser(userRepository.findOne(idUser));
 		
 		offerRepository.save(offer);
 		// TODO Auto-generated method stub
