@@ -6,7 +6,7 @@ import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 
 public interface OfferService {
-	public Offer createOffer(User idUser, String titleOffer, int duration, String descriptionOffer);
+	public Offer createOffer(long idUser, String titleOffer, int duration, String descriptionOffer,long subjectID);
 	public void deleteOffer(long idOffer);
 	public Offer updateOffer(Offer offer);
 	public List<Offer> getAll(long idUser);

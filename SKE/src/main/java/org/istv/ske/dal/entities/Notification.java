@@ -1,6 +1,6 @@
 package org.istv.ske.dal.entities;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,16 +27,8 @@ public class Notification {
     private User user;
 
     public Notification() {
-    	
+    	creationDate = new Date();
     }
-
-    public Notification(String title, String content, String type, Date creationDate, User user) {
-		this.title = title;
-		this.content = content;
-		this.type = type;
-		this.creationDate = creationDate;
-		this.user = user;
-	}
 
 	public Long getId() {
 		return id;
