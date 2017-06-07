@@ -9,31 +9,31 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Domain {
-	
+
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	private String domainName;
-	
-	@OneToMany(mappedBy="domain")
-	private Collection<Subject> subjects;
-	
+
+	@OneToMany(mappedBy = "domain")
+	private Collection<Offer> offer;
+
 	public Domain() {
-		
+
 	}
 
-	public Domain(String domainName, Collection<Subject> subjects) {
+	public Domain(String domainName, Collection<Offer> offer) {
 		this.domainName = domainName;
-		this.subjects = subjects;
+		this.offer = offer;
 	}
 
-	public Collection<Subject> getSubjects() {
-		return subjects;
+	public Collection<Offer> offer() {
+		return offer;
 	}
 
-	public void setSubjects(Collection<Subject> subjects) {
-		this.subjects = subjects;
+	public void setOffer(Collection<Offer> offer) {
+		this.offer = offer;
 	}
 
 	public Long getId() {
@@ -51,5 +51,5 @@ public class Domain {
 	public void setDomainName(String domainName) {
 		this.domainName = domainName;
 	}
-	
+
 }

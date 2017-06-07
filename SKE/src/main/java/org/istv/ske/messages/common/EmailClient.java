@@ -1,5 +1,6 @@
 package org.istv.ske.messages.common;
 
+import org.istv.ske.messages.enums.EmailType;
 import org.istv.ske.messages.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,11 +31,12 @@ public class EmailClient {
     public void sendEmail(Email emailModel) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            if(emailModel.getEmailType().equals(EmailType.NOTIFICATION_EMAIL)){
+                messageHelper.setReplyTo(emailModel.getExpediteur().getUserMail());
+            }
             messageHelper.setFrom(username);
-            messageHelper.setReplyTo(emailModel.getExpediteur().getUserMail());
             messageHelper.setTo(emailModel.getDestinataire().getUserMail());
             messageHelper.setSubject(emailModel.getObjet());
-
             String content = emailTemplate.build(emailModel);
             messageHelper.setText(content, true);
         };

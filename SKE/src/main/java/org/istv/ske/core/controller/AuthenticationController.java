@@ -6,6 +6,7 @@ import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.service.AuthenticationService;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private AuthenticationService authenticationService;
+	
+	@Autowired
+	private TokenService tokenService;
 	
 	@RequestMapping(value = {"/connect"}, method = RequestMethod.POST, produces="application/json")
 	public String authenticate(HttpServletRequest request) throws Exception {
@@ -47,7 +51,7 @@ public class AuthenticationController {
 		}
 		
 		try {
-			String token = user.getUserMail() + user.getUserPassword();
+			String token = tokenService.createToken(user);
 			JsonObject content = new JsonObject();
 			content.addProperty("token", token);
 			response.addProperty("ok", true);

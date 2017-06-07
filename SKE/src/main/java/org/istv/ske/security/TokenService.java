@@ -6,6 +6,6 @@ public interface TokenService {
 	
 	String createToken(User user);
 	
-	boolean isExpired(String token);
+	void onRequest(String token) throws Exception;
 	
 }
