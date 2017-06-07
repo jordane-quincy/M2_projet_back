@@ -6,15 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "domain")
 public class Domain {
 	
 	@Id
 	@GeneratedValue
-	private int id;
+	private Long id;
 	
 	private String domainName;
 	
@@ -38,11 +36,11 @@ public class Domain {
 		this.subjects = subjects;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

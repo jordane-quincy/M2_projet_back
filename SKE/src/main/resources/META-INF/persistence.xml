@@ -5,9 +5,10 @@
 		<class>org.istv.ske.dal.Offer</class>
 		<class>org.istv.ske.dal.Formation</class>
 		<class>org.istv.ske.dal.Appointment</class>
-		<class>org.istv.ske.dal.View</class>
+		<class>org.istv.ske.dal.Remark</class>
 		<class>org.istv.ske.dal.Subject</class>
 		<class>org.istv.ske.dal.Domain</class>
 		<class>org.istv.ske.dal.Skill</class>
+		<class>org.istv.ske.dal.SecretQuestion</class>
 	</persistence-unit>
 </persistence>

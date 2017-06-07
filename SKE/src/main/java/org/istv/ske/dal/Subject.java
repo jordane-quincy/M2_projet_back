@@ -5,16 +5,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "subject")
 public class Subject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int subjectId;
-	private String subjectName;
+	private Long id;
+	
+	private String name;
 
 	@ManyToOne
 	private Domain domain;
@@ -23,20 +22,25 @@ public class Subject {
 
 	}
 
-	public int getSubjectId() {
-		return subjectId;
+	public Subject(String name, Domain domain) {
+		this.name = name;
+		this.domain = domain;
 	}
 
-	public void setSubjectId(int subjectId) {
-		this.subjectId = subjectId;
+	public Long getId() {
+		return id;
 	}
 
-	public String getSubjectName() {
-		return subjectName;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Domain getDomain() {
@@ -47,4 +51,5 @@ public class Subject {
 		this.domain = domain;
 	}
 
+	
 }

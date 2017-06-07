@@ -1,22 +1,21 @@
 package org.istv.ske.dal;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "offer")
 public class Offer {
 	
 	@Id
 	@GeneratedValue
-	private int id;
+	private Long id;
 	
 	private int duration;
 	
@@ -26,31 +25,34 @@ public class Offer {
 	
 	@ManyToOne
 	private User user;
+	
 	@ManyToOne
 	private Subject subject;
 	
 	@OneToMany(mappedBy="offer")
-	private Collection<View> views;
+	private Collection<Remark> remarks;
+	
+	@OneToMany(mappedBy="offer")
+	private List<Appointment> appointments;
 	
 	public Offer() {
 		
 	}
 
-	public Offer(int duration, String title, String description, User user, Subject subject, Collection<View> views) {
-		super();
+	public Offer(int duration, String title, String description, User user, Subject subject, Collection<Remark> remarks) {
 		this.duration = duration;
 		this.title = title;
 		this.description = description;
 		this.user = user;
 		this.subject = subject;
-		this.views = views;
+		this.remarks = remarks;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -94,12 +96,22 @@ public class Offer {
 		this.subject = subject;
 	}
 
-	public Collection<View> getViews() {
-		return views;
+	public Collection<Remark> getRemarks() {
+		return remarks;
 	}
 
-	public void setViews(Collection<View> views) {
-		this.views = views;
+	public List<Appointment> getAppointments() {
+		return appointments;
 	}
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+
+	public void setRemarks(Collection<Remark> remarks) {
+		this.remarks = remarks;
+	}
+	
+	
 
 }

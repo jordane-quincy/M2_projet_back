@@ -18,22 +18,22 @@ public class UserServiceImpl implements UserService {
 	public User createUser(String email, String name, String firstName, String password, String birthday,
 			String formationName, String formationLevel) {
 		
-		User user = new User();
-		Formation formation = new Formation(formationLevel, formationName);
-		
-		
-		user.setUserMail(email);
-		//TODO
-		//user.setBirthday(birthday);
-		user.setCredit(5);
-		user.setUserFirstName(firstName);
-		user.setUserName(name);
-		user.setUserPassword(password);
-		
-		user.setFormation(formation);
-		
-		
-		userRepository.save(user);
+//		User user = new User();
+//		Formation formation = new Formation(formationLevel, formationName);
+//		
+//		
+//		user.setUserMail(email);
+//		//TODO
+//		//user.setBirthday(birthday);
+//		user.setCredit(5);
+//		user.setUserFirstName(firstName);
+//		user.setUserName(name);
+//		user.setUserPassword(password);
+//		
+//		user.setFormation(formation);
+//		
+//		
+//		userRepository.save(user);
 		return null;
 	}
 

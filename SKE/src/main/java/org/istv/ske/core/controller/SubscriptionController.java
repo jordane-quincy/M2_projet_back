@@ -27,17 +27,17 @@ public class SubscriptionController {
 	public @ResponseBody boolean subsciption(HttpServletRequest request) {
 
 		// String s = "{\"IdOffer\": 1,\"Token\": \"untoken\"}";
-
-		try {
-			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
-			final String idOffer = content.get("IdOffer").getAsString();
-			app.setApplicantId(1);
-
-			if (subscriptionService.subscription(app))
-				return true;
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+//
+//		try {
+//			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
+//			final String idOffer = content.get("IdOffer").getAsString();
+//			app.setApplicantId(1);
+//
+//			if (subscriptionService.subscription(app))
+//				return true;
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 		return false;
 	}
 

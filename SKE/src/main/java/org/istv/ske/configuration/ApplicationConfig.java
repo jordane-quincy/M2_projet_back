@@ -59,7 +59,7 @@ public class ApplicationConfig {
 		props.put("hibernate.show_sql", "true");
 		props.put("hibernate.id.new_generator_mappings", "false");
 		props.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-		props.put("hibernate.hbm2ddl.auto", "update");
+		props.put("hibernate.hbm2ddl.auto", "create-drop");
 		entityManagerFactory.setJpaProperties(props);
 		return entityManagerFactory;
 	}

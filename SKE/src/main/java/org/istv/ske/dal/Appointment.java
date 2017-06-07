@@ -3,51 +3,73 @@ package org.istv.ske.dal;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
 
 @Entity
-@Table(name = "appointment")
 public class Appointment {
 	
 	@Id
-	@GeneratedValue
-	@JoinColumn(name="offer_id")
-	private Long appointmentId;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
 	
-	private int applicantId;
+	@ManyToOne
+	private Offer offer;
+	
+	@ManyToOne
+	private User applicant;
 	
 	private Date date;
 	
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private AppointmentStatus status;
+	
+	public enum AppointmentStatus {
+		PENDING,
+		VALIDATED,
+		REFUSED,
+		FINISHED,
+		CANCELLED
+	}
 	
 	public Appointment() {
 		
 	}
 
-	public Appointment(int applicantId, Date date, String status) {
-		this.applicantId = applicantId;
+	public Appointment(Offer offer, User applicant, Date date, AppointmentStatus status) {
+		this.offer = offer;
+		this.applicant = applicant;
 		this.date = date;
 		this.status = status;
 	}
 
-	public Long getAppointmentId() {
-		return appointmentId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setAppointmentId(Long appointmentId) {
-		this.appointmentId = appointmentId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public int getApplicantId() {
-		return applicantId;
+	public Offer getOffer() {
+		return offer;
 	}
 
-	public void setApplicantId(int applicantId) {
-		this.applicantId = applicantId;
+	public void setOffer(Offer offer) {
+		this.offer = offer;
+	}
+
+	public User getApplicant() {
+		return applicant;
+	}
+
+	public void setApplicant(User applicant) {
+		this.applicant = applicant;
 	}
 
 	public Date getDate() {
@@ -58,12 +80,12 @@ public class Appointment {
 		this.date = date;
 	}
 
-	public String getStatus() {
+	public AppointmentStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(AppointmentStatus status) {
 		this.status = status;
 	}
-	
+
 }
