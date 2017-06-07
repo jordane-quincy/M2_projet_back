@@ -64,7 +64,7 @@ public class OfferController {
 				throw e;
 			}
 		}
-		offer = offerService.createOffer(idUser, titleOffer, duration, descriptionOffer);
+		offer = offerService.createOffer(idUser, titleOffer, duration, descriptionOffer,0);
 		return offer;
 	}
 
