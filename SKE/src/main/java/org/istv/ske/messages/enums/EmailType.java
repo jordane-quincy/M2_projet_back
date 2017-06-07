@@ -1,4 +1,4 @@
-package org.istv.ske.messages.common;
+package org.istv.ske.messages.enums;
 
 /**
  * Created by abdel on 07/06/2017.
