@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 
  * @author M2
@@ -23,14 +25,16 @@ public class Skill {
 	private long id;
 
 	@Column(unique = true)
-	private String description;// label unique
+	private String label;
 	@Filters({ @Filter(name = "betweenLength", condition = "0 <= length and length <= 5") })
 	private int grade;
 
 	@ManyToOne
+	@JsonIgnore
 	private User user;
 
 	@ManyToMany
+	@JsonIgnore
 	private List<User> validators;
 
 	public Skill() {
@@ -39,7 +43,7 @@ public class Skill {
 
 	public Skill(String description, User user) {
 		super();
-		this.description = description;
+		this.label = description;
 		this.user = user;
 	}
 
@@ -52,11 +56,11 @@ public class Skill {
 	}
 
 	public String getDescription() {
-		return description;
+		return label;
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this.label = description;
 	}
 
 	public List<User> getValidators() {

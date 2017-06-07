@@ -35,6 +35,7 @@ public class Offer {
 	private Collection<Remark> remarks;
 
 	@OneToMany(mappedBy = "offer")
+	@JsonIgnore
 	private List<Appointment> appointments;
 
 	public Offer() {
