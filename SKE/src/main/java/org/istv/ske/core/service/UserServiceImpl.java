@@ -15,9 +15,30 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 
 	@Override
-	public User createUser(String email, String name, String firstName, String password, String birthday,
+	public void deleteUser(Long id) {
+		//TODO
+		//userRepository.delete(id);
+	}
+
+	@Override
+	public User updateUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getAll() {
+		return (List<User>) userRepository.findAll();
+	}
+
+	@Override
+	public User getUser(int userID) {
+		return userRepository.findOne(userID);
+	}
+
+	@Override
+	public User createUser(String email, String name, String firstName, String password, Long birthday,
 			String formationName, String formationLevel) {
-		
 //		User user = new User();
 //		Formation formation = new Formation(formationLevel, formationName);
 //		
@@ -38,30 +59,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(int id) {
-		userRepository.delete(id);
-	}
-
-	@Override
-	public User updateUser(User user) {
+	public User updateUser(Long id, String email, String name, String firstName, String password, Long birthday,
+			String formationName, String formationLevel) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public List<User> getAll() {
-		return (List<User>) userRepository.findAll();
-	}
-
-	@Override
-	public User updateUser(String email, String fieldName, String value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User getUser(int userID) {
-		return userRepository.findOne(userID);
 	}
 
 }

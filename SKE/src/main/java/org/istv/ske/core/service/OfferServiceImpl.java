@@ -22,7 +22,7 @@ public class OfferServiceImpl implements OfferService {
 
 	
 	@Override
-	public void deleteOffer(int idOffer) {
+	public void deleteOffer(long idOffer) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -34,7 +34,14 @@ public class OfferServiceImpl implements OfferService {
 	}
 
 	@Override
-	public List<Offer> getAll(int idUser) {
+	public List<Offer> getAll(long idUser) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Offer getOffer(long Offer) {
 		// TODO Auto-generated method stub
 		return null;
 	}
