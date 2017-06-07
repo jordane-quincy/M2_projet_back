@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/domain")
 public class SearchController {
 
 	@Autowired
