@@ -21,7 +21,8 @@ public class TestClient {
     @RequestMapping(value = "/client", method = RequestMethod.GET)
     public void testEmailClient() {
         System.out.println("Debut envoi mail");
-        Email email = new Email(EmailType.ACTIVATION_EMAIL);
+        Email email = new Email(EmailType.NOTIFICATION_EMAIL);
+        email.init();
         emailClient.sendEmail(email);
         System.out.println("Fin envoi mail");
     }

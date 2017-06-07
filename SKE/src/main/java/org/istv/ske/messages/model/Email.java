@@ -1,7 +1,6 @@
 package org.istv.ske.messages.model;
 
 import org.istv.ske.dal.entities.User;
-import org.istv.ske.messages.enums.EmailType;
 
 /**
  * Created by abdel on 06/06/2017.
@@ -15,6 +14,15 @@ public class Email {
     private String urlActivationAccount;
 
     public Email(String emailType) {
+        this.emailType = emailType;
+        this.destinataire = null;
+        this.expediteur = null;
+        this.contenuMail = "";
+        this.objet= "";
+        this.urlActivationAccount="";
+    }
+
+    public void init(){
         contenuMail = "Le contenu de mon mail ....";
         objet = "Objet de mon mail";
 
@@ -22,7 +30,6 @@ public class Email {
         dest.setUserMail("abdeloihid.elmardi@etu.univ-valenciennes.fr");
         dest.setUserName("el mardi");
         dest.setUserFirstName("Abdeloihid");
-
         User exp = new User();
         exp.setUserMail("quentin.senecat@etu.univ-valenciennes.fr");
         exp.setUserName("Senecat");
@@ -30,10 +37,7 @@ public class Email {
 
         destinataire = dest;
         expediteur = exp;
-
-        if(emailType.equals(EmailType.ACTIVATION_EMAIL)){
-            urlActivationAccount= "http://google.fr";
-        }
+        urlActivationAccount = "http://google.fr";
     }
 
     public String getEmailType() {
