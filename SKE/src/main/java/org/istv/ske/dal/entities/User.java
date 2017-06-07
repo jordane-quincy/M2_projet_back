@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,24 +26,25 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Min(0)
 	private int credit;
-	
+
 	@Column(unique = true)
 	private String userMail;
-	
+
 	private String userPassword;
-	
+
 	private String userName;
-	
+
 	private String userFirstName;
-	
+
 	private String token;
-	
+
 	private Date birthday;
-	
+
 	@OneToOne
 	private SecretQuestion question;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
@@ -53,27 +55,25 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	
+
 	public enum Role {
-		STUDENT,
-		TEACHER
+		STUDENT, TEACHER
 	}
 
 	@ManyToOne
 	private Formation formation;
 
-	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy = "user")
 	private List<Skill> ownedSkilled;
-	
+
 	@JsonIgnore
-	@ManyToMany(mappedBy="validators")
+	@ManyToMany(mappedBy = "validators")
 	private List<Skill> validatedSkills;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy="applicant")
+	@OneToMany(mappedBy = "applicant")
 	private List<Appointment> appointments;
-	
+
 	public User() {
 
 	}
@@ -198,5 +198,4 @@ public class User {
 		this.token = token;
 	}
 
-	
 }
