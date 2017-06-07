@@ -1,6 +1,6 @@
 package org.istv.ske.messages.service;
 
-import org.istv.ske.dal.Notification;
+import org.istv.ske.dal.entities.Notification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

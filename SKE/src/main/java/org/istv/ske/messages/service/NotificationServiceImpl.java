@@ -1,6 +1,6 @@
 package org.istv.ske.messages.service;
 
-import org.istv.ske.dal.Notification;
+import org.istv.ske.dal.entities.Notification;
 import org.istv.ske.dal.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
