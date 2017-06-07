@@ -39,6 +39,22 @@ public class Appointment {
 		this.applicantID = applicantID;
 	}
 
+	public org.joda.time.DateTime getAppointmentDateTime() {
+		return appointmentDateTime;
+	}
+
+	public void setAppointmentDateTime(org.joda.time.DateTime appointmentDateTime) {
+		this.appointmentDateTime = appointmentDateTime;
+	}
+
+	public String getAppointmentStatus() {
+		return appointmentStatus;
+	}
+
+	public void setAppointmentStatus(String appointmentStatus) {
+		this.appointmentStatus = appointmentStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "Appointment [appointmentID=" + appointmentID + ", applicantID=" + applicantID + "]";
