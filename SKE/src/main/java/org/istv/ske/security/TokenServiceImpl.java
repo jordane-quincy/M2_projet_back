@@ -2,12 +2,17 @@ package org.istv.ske.security;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.istv.ske.core.exception.BadRequestException;
+import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +23,9 @@ public class TokenServiceImpl implements TokenService {
 	private static final int TOKEN_VALIDITY_MS = 20 * 60 * 1000;
 
 	private Map<Token, Long> tokens = new HashMap<>();
+	
+	@Autowired
+	private UserService userService;
 	
 	private SecureRandom random = new SecureRandom();
 
@@ -69,9 +77,18 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
-	public User findUserByToken(HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Long getUserIdByToken(HttpServletRequest request) throws Exception {
+		String token = request.getHeader("Authorization");
+		Token t = find(token);
+		if(t != null)
+			return tokens.get(t);
+		else
+			throw new RuntimeException("Erreur dans la gestion des tokens : impossible de récupérer l'id User");
+	}
+	
+	@Override
+	public void deleteTokenForUserId(Long userId) {
+		tokens.values().removeAll(Collections.singleton(userId));
 	}
 	
 }

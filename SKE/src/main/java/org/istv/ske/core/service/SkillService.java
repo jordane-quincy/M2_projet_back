@@ -5,13 +5,15 @@ import java.util.List;
 import org.istv.ske.dal.entities.Skill;
 
 public interface SkillService {
+	
+	void createSkillsIfNotExists(List<String> skills);
 
-	public Skill createSkill(String label);
+	Skill createSkill(String label);
 	
-	public Skill updateSkill(Long skillId, String label);
+	Skill updateSkill(Long skillId, String label);
 	
-	public void deleteSkill(Long skillId);
+	void deleteSkill(Long skillId);
 	
-	public List<Skill> findAll();
+	List<Skill> findAll();
 	
 }

@@ -5,10 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * 
- * @author M2
- */
+
 @Entity
 public class Skill {
 	

@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Remark {
 
@@ -13,18 +15,21 @@ public class Remark {
 	private int id;
 
 	private String text;
+	
 	private int grade;
 
 	@ManyToOne
+	@JsonIgnore
 	private Offer offer;
 
 	public Remark() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Remark(String text, Offer offer) {
+	public Remark(String text, Offer offer, int grade) {
 		this.text = text;
 		this.offer = offer;
+		this.grade = grade;
 	}
 
 	public int getId() {
@@ -49,6 +54,14 @@ public class Remark {
 
 	public void setOffer(Offer offer) {
 		this.offer = offer;
+	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
 	}
 
 }

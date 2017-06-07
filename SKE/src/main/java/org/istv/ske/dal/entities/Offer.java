@@ -1,6 +1,6 @@
 package org.istv.ske.dal.entities;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -32,17 +32,17 @@ public class Offer {
 	private Domain domain;
 
 	@OneToMany(mappedBy = "offer")
-	private Collection<Remark> remarks;
+	private List<Remark> remarks = new ArrayList<>();
 
 	@OneToMany(mappedBy = "offer")
 	@JsonIgnore
-	private List<Appointment> appointments;
+	private List<Appointment> appointments = new ArrayList<>();
 
 	public Offer() {
 
 	}
 
-	public Offer(int duration, String title, String description, User user, Domain domain, Collection<Remark> remarks) {
+	public Offer(int duration, String title, String description, User user, Domain domain, List<Remark> remarks) {
 		this.duration = duration;
 		this.title = title;
 		this.description = description;
@@ -91,7 +91,7 @@ public class Offer {
 		this.user = user;
 	}
 
-	public Collection<Remark> getRemarks() {
+	public List<Remark> getRemarks() {
 		return remarks;
 	}
 
@@ -111,7 +111,7 @@ public class Offer {
 		this.appointments = appointments;
 	}
 
-	public void setRemarks(Collection<Remark> remarks) {
+	public void setRemarks(List<Remark> remarks) {
 		this.remarks = remarks;
 	}
 

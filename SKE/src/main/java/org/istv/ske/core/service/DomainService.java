@@ -1,9 +1,8 @@
-package org.istv.ske.dal.service;
+package org.istv.ske.core.service;
 
 import java.util.List;
 
 import org.istv.ske.dal.entities.Domain;
-import org.istv.ske.dal.entities.User;
 
 public interface DomainService {
 
@@ -11,5 +10,7 @@ public interface DomainService {
 	
 	Domain createDomain(String DomainName);
 
-	public void deleteDomain(Long id);
+	void deleteDomain(Long id);
+	
+	Domain findById(Long id);
 }

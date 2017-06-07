@@ -43,4 +43,11 @@ public class SkillServiceImpl implements SkillService {
 		}
 		return skills;
 	}
+	
+	@Override
+	public void createSkillsIfNotExists(List<String> skills) {
+		for(String skill : skills) {
+			
+		}
+	}
 }

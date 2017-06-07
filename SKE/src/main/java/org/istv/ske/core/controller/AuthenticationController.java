@@ -2,6 +2,7 @@ package org.istv.ske.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.istv.ske.configuration.ApplicationConfig;
 import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.service.AuthenticationService;
 import org.istv.ske.core.service.JsonService;
@@ -64,9 +65,11 @@ public class AuthenticationController {
 		}
 	}
 	
-	@RequestMapping
-	public String disconnect(HttpServletRequest request) {
-		return null;
+	@RequestMapping(value = {"/disconnect"}, method = RequestMethod.POST, produces="application/json")
+	public String disconnect(HttpServletRequest request) throws Exception {
+		Long userId = tokenService.getUserIdByToken(request);
+		tokenService.deleteTokenForUserId(userId);
+		return ApplicationConfig.JSON_SUCCESS;
 	}
 	
 	

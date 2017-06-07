@@ -71,7 +71,7 @@ public class User {
     @CollectionTable(name = "VALIDATED_SKILLS")
     @MapKeyColumn(name = "SKILL_ID")
     @Column(name = "VALIDATED")
-	private Map<Skill, Boolean> skills;
+	private Map<Skill, Boolean> skills = new HashMap<>();
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="applicant")
@@ -82,8 +82,7 @@ public class User {
 	}
 
 	public User(int credit, String userMail, String userPassword, String userName, String userFirstName, Date birthday,
-			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation,
-			List<Skill> skills) {
+			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation) {
 		this.credit = credit;
 		this.userMail = userMail;
 		this.userPassword = userPassword;
@@ -94,10 +93,6 @@ public class User {
 		this.notifications = notifications;
 		this.role = role;
 		this.formation = formation;
-		Map<Skill, Boolean> m = new HashMap<>();
-		for(Skill s : skills)
-			m.put(s, false);
-		this.skills = m;
 	}
 
 	public Long getId() {

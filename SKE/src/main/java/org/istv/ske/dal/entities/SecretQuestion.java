@@ -27,15 +27,7 @@ public class SecretQuestion {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SecretQuestion(String question, String answer, User user) {
-		super();
-		this.question = question;
-		this.answer = answer;
-		this.user = user;
-	}
-
 	public SecretQuestion(String question, String answer) {
-		super();
 		this.question = question;
 		this.answer = answer;
 	}

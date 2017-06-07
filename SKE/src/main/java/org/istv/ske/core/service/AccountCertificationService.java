@@ -1,4 +1,4 @@
-package org.istv.ske.dal.service;
+package org.istv.ske.core.service;
 
 import org.istv.ske.dal.entities.User;
 
