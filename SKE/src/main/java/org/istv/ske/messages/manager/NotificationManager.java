@@ -30,22 +30,47 @@ public class NotificationManager {
     public void createNotification(User user, TypeNotification typeNotification) {
         System.out.println("Création d'une notif");
 
+        String title;
+        String content;
+
         switch (typeNotification) {
             case SIMPLE:
                 System.out.println("Simple notif");
-                notificationService.createNotification("", "", typeNotification.toString(), new Date(), user);
+                title = "test title";
+                content = "test content";
+                notificationService.createNotification(title, content, typeNotification.toString(), user);
                 break;
 
             case CONFIRM:
                 System.out.println("Confirmation notif");
+                title = "test title";
+                content = "test content";
+                notificationService.createNotification(title, content, typeNotification.toString(), user);
                 break;
 
             case REDIRECT:
                 System.out.println("Redirection notif");
+                title = "test title";
+                content = "test content";
+                notificationService.createNotification(title, content, typeNotification.toString(), user);
                 break;
 
             case MEETING:
                 System.out.println("Prise de rdv notif");
+                title = "test title";
+                content = "test content";
+                notificationService.createNotification(title, content, typeNotification.toString(), user);
+
+                // TODO : Envoyer un mail
+                break;
+
+            case REMARK:
+                System.out.println("Notif notation");
+                title = "test title";
+                content = "test content";
+                notificationService.createNotification(title, content, typeNotification.toString(), user);
+
+                // TODO : Envoyer un mail
                 break;
 
             default:

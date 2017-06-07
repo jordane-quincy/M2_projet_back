@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Formation {
 
@@ -18,6 +20,7 @@ public class Formation {
 	
 	private String name;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "formation")
 	private Collection<User> users;
 

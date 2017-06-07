@@ -7,5 +7,6 @@ public enum TypeNotification {
     SIMPLE,
     CONFIRM,
     REDIRECT,
-    MEETING
+    MEETING,
+    REMARK
 }

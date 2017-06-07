@@ -34,6 +34,12 @@ public class SecretQuestion {
 		this.user = user;
 	}
 
+	public SecretQuestion(String question, String answer) {
+		super();
+		this.question = question;
+		this.answer = answer;
+	}
+
 	public Long getId() {
 		return id;
 	}

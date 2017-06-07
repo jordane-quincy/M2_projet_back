@@ -1,4 +1,3 @@
-
 INSERT INTO domain VALUES (1, 'Arts, Lettres, Langues')
 INSERT INTO domain VALUES (2, 'Droit, Economie, Gestion')
 INSERT INTO domain VALUES (3, 'Sciences Humaines et Sociales')
@@ -21,7 +20,7 @@ INSERT INTO formation VALUES (14, 'M2','Génie Civil')
 
 INSERT INTO secretquestion VALUES (1, 'Arthur', 'Quel est le nom de votre premier animal de compagnie')
 INSERT INTO secretquestion VALUES (2, 'Chocolat', 'Quel est le nom de votre premier animal de compagnie')
-INSERT INTO secretquestion VALUES (3,'Princesse' , 'Quel est le nom de votre premier animal de compagnie')
+INSERT INTO secretquestion VALUES (3,'Princesse', 'Quel est le nom de votre premier animal de compagnie')
 
 INSERT INTO user VALUES (1, {ts '1990-06-07 00:00:00.00000000'}, 5, 'STUDENT', '123' , 'Jordan', 'jordane.quincy@etu.univ-valenciennes.fr', 'QUINCY', 'jquincy', 5, 1)
 INSERT INTO user VALUES (2, {ts '1980-06-07 00:00:00.00000000'}, 1, 'TEACHER', '456' ,'Mickael', 'mikael.desertot@univ-valenciennes.fr', 'DESERTOT', 'mdesertot', 7, 2)
