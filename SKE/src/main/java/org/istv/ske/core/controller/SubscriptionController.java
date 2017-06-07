@@ -42,6 +42,7 @@ public class SubscriptionController {
 	@Autowired
 	private AppointmentRepository appointmentRepository;
 
+	// S'inscrire à un cours
 	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String subsciption(HttpServletRequest request) {
 
@@ -71,6 +72,7 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
+	// Se désinscrire à un cours
 	@RequestMapping(value = { "/unsub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String unsubsciption(HttpServletRequest request) {
 		JsonObject response = new JsonObject();
@@ -89,16 +91,20 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
+	// MAJ d'une inscription, date/status
 	@RequestMapping(value = { "/update" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String update(HttpServletRequest request) {
 		JsonObject response = new JsonObject();
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
-			final Long idOffer = content.get("idOffer").getAsLong();
-
-			String status = content.get("content").getAsString();
+			final String idOffer = content.get("IdOffer").getAsString();
+			final String status = content.get("status").getAsString();
+			final Long date = content.get("date").getAsLong();
+			System.out.println(idOffer);
 			
-			Appointment app = appointmentRepository.findOne(idOffer);
+			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
+			app.setStatus(AppointmentStatus.valueOf(status));
+			app.setDate(new Date(date));
 
 			if (subscriptionService.subscription(app))
 				response.addProperty("ok", true);
