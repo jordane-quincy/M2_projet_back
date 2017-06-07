@@ -51,8 +51,7 @@ public class OfferServiceImpl implements OfferService {
 
 	@Override
 	public List<Offer> getAll(long idUser) {
-		// TODO Auto-generated method stub
-		return null;
+		return offerRepository.findByUser(userRepository.findOne(idUser));
 	}
 
 	@Override
