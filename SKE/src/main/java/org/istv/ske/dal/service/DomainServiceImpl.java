@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.istv.ske.dal.entities.Domain;
-import org.istv.ske.dal.entities.Subject;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.entities.User.Role;
 import org.istv.ske.dal.repository.DomainRepository;
@@ -17,11 +16,11 @@ public class DomainServiceImpl implements DomainService {
 
 	@Autowired
 	private DomainRepository domainRepository;
-	
+
 	@Override
 	public List<Domain> findAll() {
 		List<Domain> domains = new ArrayList<>();
-		for(Domain d : domainRepository.findAll()) {
+		for (Domain d : domainRepository.findAll()) {
 			domains.add(d);
 		}
 		return domains;
@@ -29,8 +28,9 @@ public class DomainServiceImpl implements DomainService {
 	
 	@Override
 	public Domain createDomain(String DomainName) {
-		Domain Domain = new Domain("bbbb");
-		DomainRepository.save(Domain);
+		Domain Domain = new Domain(DomainName);
+		
+		domainRepository.save(Domain);
 		return Domain;
 	}
 
