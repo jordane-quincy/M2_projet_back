@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.repository.DomainRepository;
 import org.istv.ske.dal.repository.OfferRepository;
-import org.istv.ske.dal.repository.SubjectRepository;
 import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,17 +20,17 @@ public class OfferServiceImpl implements OfferService {
 	UserRepository userRepository;
 
 	@Autowired
-	SubjectRepository subjectRepository;
+	DomainRepository domainRepository;
 
 	@Override
-	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer, Long subjectId) {
+	public Offer createOffer(User user, String titleOffer, int duration, String descriptionOffer, Long domainId) {
 		Offer offer = new Offer();
 
 		offer.setAppointments(null);
 		offer.setDescription(descriptionOffer);
 		offer.setDuration(duration);
 		offer.setRemarks(null);
-		offer.setSubject(subjectRepository.findOne(subjectId));
+		offer.setDomain(domainRepository.findOne(domainId));
 		offer.setTitle(titleOffer);
 		offer.setUser(user);
 
