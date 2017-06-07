@@ -44,11 +44,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public List<Appointment> getAll() {
-		List<Appointment> users = new ArrayList<>();
-		for(Appointment u : appointmentRepository.findAll()) {
-			users.add(u);
+		List<Appointment> appointments = new ArrayList<>();
+		for(Appointment a : appointmentRepository.findAll()) {
+			appointments.add(a);
 		}
-		return users;
+		return appointments;
 	}
 
 }
