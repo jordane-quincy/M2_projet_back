@@ -18,20 +18,22 @@ public class SkillServiceImpl implements SkillService {
 	private SkillRepository skillRepository ;
 
 	@Override
-	public Skill createSkill(User user, String description, List<User> validators) {
+	public Skill createSkill(User user, String label, int mark, List<User> validators) {
 		Skill skill = new Skill();
-		skill.setDescription(description);
+		skill.setLabel(label);
 		skill.setUser(user);
+		skill.setGrade(mark);
 		skill.setValidators(validators);
 		skillRepository.save(skill);
 		return skill;
 	}
 
 	@Override
-	public Skill updateSkill(User user, String description, List<User> validators) {
+	public Skill updateSkill(User user, String label, int mark, List<User> validators) {
 		  Skill skill = skillRepository.findOne(user.getId());
 		  skill.setUser(user);
-		  skill.setDescription(description);
+		  skill.setLabel(label);
+		  skill.setGrade(mark);
 		  skill.setValidators(validators);
 		  skillRepository.save(skill);
 		return skill;

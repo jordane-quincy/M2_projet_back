@@ -28,7 +28,7 @@ public class Skill {
 	private String label;
 	@Filters({ @Filter(name = "betweenLength", condition = "0 <= length and length <= 5") })
 	private int grade;
-
+	
 	@ManyToOne
 	@JsonIgnore
 	private User user;
@@ -41,9 +41,9 @@ public class Skill {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Skill(String description, User user) {
+	public Skill(String label, User user) {
 		super();
-		this.label = description;
+		this.label = label;
 		this.user = user;
 	}
 
@@ -55,12 +55,12 @@ public class Skill {
 		this.id = id;
 	}
 
-	public String getDescription() {
+	public String getLabel() {
 		return label;
 	}
 
-	public void setDescription(String description) {
-		this.label = description;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public List<User> getValidators() {
@@ -78,7 +78,7 @@ public class Skill {
 	public User getUser() {
 		return user;
 	}
-
+	
 	public int getGrade() {
 		return grade;
 	}
