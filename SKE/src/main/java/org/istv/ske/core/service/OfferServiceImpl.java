@@ -39,4 +39,11 @@ public class OfferServiceImpl implements OfferService {
 		return null;
 	}
 
+
+	@Override
+	public Offer getOffer(int Offer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
