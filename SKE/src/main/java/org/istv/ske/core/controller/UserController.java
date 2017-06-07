@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.istv.ske.core.exception.BadRequestException;
+import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +15,49 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
+	JsonService jsonService;
+	
+	@Autowired
 	UserService userService;
 	
-	private JsonParser parser = new JsonParser();
-	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public User create(HttpServletRequest request){
+	public User create(HttpServletRequest request) throws Exception{
+		
+		String email = null;
+		String name = null;
+		String firstName = null;
+		String password = null;
+		String birthday = null;
+		String formationName = null;
+		String formationLevel = null;
+		
+		try {
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+			email = content.get("email").getAsString();
+			name = content.get("name").getAsString();
+			firstName = content.get("firstName").getAsString();
+			password = content.get("password").getAsString();
+			birthday = content.get("birthday").getAsString();
+			formationName = content.get("formationName").getAsString();
+			formationLevel = content.get("formationLevel").getAsString();
+		
+		} catch (Exception e) {
+			throw new BadRequestException("Contenu de la requête invalide");		
+		}
 		
 		User  user = null;
 		
 		try {
-			JsonObject content = parser.parse(request.getReader()).getAsJsonObject();
-			final String email = content.get("email").getAsString();
-			final String name = content.get("name").getAsString();
-			final String firstName = content.get("firstName").getAsString();
-			final String password = content.get("password").getAsString();
-			final String birthday = content.get("birthday").getAsString();
-			final String formationName = content.get("formationName").getAsString();
-			final String formationLevel = content.get("formationLevel").getAsString();
-			
 			user = userService.createUser(email, name, firstName, password, birthday, formationName, formationLevel);
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			//TODO: handle exception
 		}
 		
 		return user;
@@ -50,8 +65,29 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "Application/json")
-	public void delete(@RequestParam(name = "email", required = true)String email){
-		userService.deleteUser(email);
+	public String delete(HttpServletRequest request) throws Exception{
+		
+		int id = (Integer) null;
+		JsonObject response = new JsonObject();
+		
+		try {
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+			id = content.get("id").getAsInt();
+		} catch (Exception e) {
+			throw new BadRequestException("Contenu de la requête invalide");
+		}
+		
+		try {
+			userService.deleteUser(id);
+		} catch (Exception e) {
+			response.addProperty("ok", false);
+			response.addProperty("message", e.getMessage());
+			return jsonService.stringify(response);
+		}
+		
+		response.addProperty("ok", true);
+		return jsonService.stringify(response);
+		
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "Application/json")
@@ -64,7 +100,15 @@ public class UserController {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = "Application/json")
 	public List<User> list(){
-		List<User> list = userService.getAll();
+		
+		List<User> list = null;
+		
+		try {
+			list = userService.getAll();	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		return list;
 	}
 	
