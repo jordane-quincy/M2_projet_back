@@ -70,7 +70,7 @@ public class OfferController {
 		}
 	}
 
-	@RequestMapping(value = "/my_list", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
+	@RequestMapping(value = "/my_list/{userId}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public List<Offer> lister(HttpServletRequest request,//
 			@PathVariable(required=true) Long userId) throws Exception {
 		List<Offer> offers = null;
