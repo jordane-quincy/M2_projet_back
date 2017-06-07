@@ -1,8 +1,10 @@
 package org.istv.ske.messages.manager;
 
+import java.util.Date;
+
+import org.istv.ske.core.service.NotificationService;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.messages.enums.TypeNotification;
-import org.istv.ske.dal.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +33,7 @@ public class NotificationManager {
         switch (typeNotification) {
             case SIMPLE:
                 System.out.println("Simple notif");
-                notificationService.createNotification(user, "", "", typeNotification.toString());
+                notificationService.createNotification("", "", typeNotification.toString(), new Date(), user);
                 break;
 
             case CONFIRM:
