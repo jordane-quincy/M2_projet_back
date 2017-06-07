@@ -1,16 +1,16 @@
 package org.istv.ske.core.service;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.istv.ske.dal.entities.Appointment;
 import org.istv.ske.dal.entities.Notification;
-import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
