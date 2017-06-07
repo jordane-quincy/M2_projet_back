@@ -62,6 +62,7 @@ public class SubscriptionController {
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
 				user.setCredit(user.getCredit() - 1);
+				userRepository.save(user);
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
@@ -95,6 +96,8 @@ public class SubscriptionController {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final Long idOffer = content.get("idOffer").getAsLong();
 
+			String status = content.get("content").getAsString();
+			
 			Appointment app = appointmentRepository.findOne(idOffer);
 
 			if (subscriptionService.subscription(app))
@@ -110,7 +113,8 @@ public class SubscriptionController {
 	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request,
 			@PathVariable(required = true) Long id) {
 		User user = userRepository.findOne(id);
-		List<Appointment> app = appointmentRepository.findByApplicantId(user);
+		List<Appointment> app = appointmentRepository.findByApplicant(user);
+		System.out.println(app.get(0).getOffer().getDescription());
 		return app;
 	}
 
