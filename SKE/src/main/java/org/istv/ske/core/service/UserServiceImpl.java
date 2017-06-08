@@ -139,10 +139,20 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
+	@Override
+	public User updateUser(Long id, String lastName, String firstName, String question, Long birthday, String answer, Formation formation, List<String> skills) {
 		User user = userRepository.findOne(id);
-		user.setUserPassword(chiffrer(password));
 		user.setFormation(formation);
+		user.setUserName(lastName);
+		user.setUserFirstName(firstName);
+		
+		SecretQuestion secretQuestion = user.getQuestion();
+		secretQuestion.setAnswer(answer);
+		secretQuestion.setQuestion(question);
+		user.setQuestion(secretQuestion);
+		
+		user.setBirthday(new Date(birthday));
+		
 		Map<Skill, Boolean> oldSkills = user.getSkills();
 		Map<Skill, Boolean> newSkills = new HashMap<>();
 		for (String skill : skills) {

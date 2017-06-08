@@ -118,17 +118,34 @@ public class UserController {
 		Long userId = tokenService.getUserIdByToken(request);
 
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
+		
+		User user = userService.getUser(userId);
 
-		String password = FieldReader.readString(object, "password");
+		String validatePassword = FieldReader.readString(object, "validatePassword");
+		String name = FieldReader.readString(object, "lastname");
+		String firstName = FieldReader.readString(object, "firstname");
+		String question = FieldReader.readString(object, "question");
+		Long birthday = FieldReader.readLong(object, "birthdate");
+		String answer = FieldReader.readString(object, "answer");
 		Long formationId = FieldReader.readLong(object, "formationId");
 		List<String> skills = FieldReader.readStringArray(object, "skills");
+		String password = null;
+		
+		if (FieldReader.existField(object, "password"))
+			password = FieldReader.readString(object, "password");
 
+		if(!validatePassword.equals(user.getUserPassword()))
+			throw new BadRequestException("Mauvais mot de passe de validation.");
+		
+		
 		Formation formation = formationService.findFormationById(formationId);
 		if (formation == null)
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
-			User updated = userService.updateUser(userId, password, formation, skills);
+			User updated = userService.updateUser(userId, name, firstName, question, birthday, answer, formation, skills);
+			if(password != null)
+				userService.setPassword(updated.getUserMail(), password);
 			return updated;
 		} catch (Exception e) {
 			e.printStackTrace();

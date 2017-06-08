@@ -21,7 +21,7 @@ public interface UserService {
 	
 	User getUser(Long userID);
 	
-	User updateUser(Long id, String password, Formation formation, List<String> skills);
+	User updateUser(Long id, String lastName, String firstName, String question, Long birthday, String answer, Formation formation, List<String> skills);
 	
 	List<User> getUserByToken(String token);
 	
