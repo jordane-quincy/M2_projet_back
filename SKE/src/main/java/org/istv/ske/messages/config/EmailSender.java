@@ -32,6 +32,7 @@ public class EmailSender {
         javaMailSenderImpl.setPort(port);
         javaMailSenderImpl.setUsername(username);
         javaMailSenderImpl.setPassword(password);
+        javaMailSenderImpl.setDefaultEncoding("UTF-8");
         javaMailSenderImpl.setJavaMailProperties(javaMailProperties());
         return javaMailSenderImpl;
     }
