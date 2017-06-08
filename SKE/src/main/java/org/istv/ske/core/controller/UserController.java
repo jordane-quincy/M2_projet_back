@@ -122,11 +122,9 @@ public class UserController {
 		User user = userService.getUser(userId);
 
 		String validatePassword = FieldReader.readString(object, "validatePassword");
-		String name = FieldReader.readString(object, "lastname");
-		String firstName = FieldReader.readString(object, "firstname");
-		String question = FieldReader.readString(object, "question");
-		Long birthday = FieldReader.readLong(object, "birthdate");
-		String answer = FieldReader.readString(object, "answer");
+		String name = FieldReader.readString(object, "userName");
+		String firstName = FieldReader.readString(object, "userfirstName");
+		Long birthday = FieldReader.readLong(object, "birthday");
 		Long formationId = FieldReader.readLong(object, "formationId");
 		List<String> skills = FieldReader.readStringArray(object, "skills");
 		String password = null;
@@ -143,7 +141,7 @@ public class UserController {
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
-			User updated = userService.updateUser(userId, name, firstName, question, birthday, answer, formation, skills);
+			User updated = userService.updateUser(userId, name, firstName, birthday, formation, skills);
 			if(password != null)
 				userService.setPassword(updated.getUserMail(), password);
 			return updated;

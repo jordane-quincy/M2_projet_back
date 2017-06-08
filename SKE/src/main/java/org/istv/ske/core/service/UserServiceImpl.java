@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private static String chiffrer(String s) {
+	public static String chiffrer(String s) {
 		String encrypted = null;
 		try {
 			// Instantiate the cipher
@@ -140,16 +140,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(Long id, String lastName, String firstName, String question, Long birthday, String answer, Formation formation, List<String> skills) {
+	public User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation, List<String> skills) {
 		User user = userRepository.findOne(id);
 		user.setFormation(formation);
 		user.setUserName(lastName);
 		user.setUserFirstName(firstName);
-		
-		SecretQuestion secretQuestion = user.getQuestion();
-		secretQuestion.setAnswer(answer);
-		secretQuestion.setQuestion(question);
-		user.setQuestion(secretQuestion);
 		
 		user.setBirthday(new Date(birthday));
 		
