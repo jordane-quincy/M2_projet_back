@@ -28,8 +28,12 @@ public class TokenValidationFilter implements Filter {
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+		
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+		
+		if(request.getMethod() == "OPTIONS")
+			chain.doFilter(request, response);
 		
 		System.out.println(request.getContextPath());
 		if(request.getServletPath().equals("/auth/connect") || 

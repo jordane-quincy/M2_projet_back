@@ -21,6 +21,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		if(!user.getUserPassword().equals(password)) {
 			throw new BadRequestException("Mot de passe incorrect");
 		}
+		if(user.getToken() != null) {
+			throw new BadRequestException("Veuillez activer votre compte via le mail d'activation");
+		}
 		return user;
 	}
 
