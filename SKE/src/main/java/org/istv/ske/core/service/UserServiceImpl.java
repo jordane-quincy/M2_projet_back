@@ -131,4 +131,17 @@ public class UserServiceImpl implements UserService {
 	public void setToken(User user, String token) {
 		user.setToken(token);
 		userRepository.save(user);		
-	}}
+	}
+
+	public void setUserRepository(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+
+	public void setSkillRepository(SkillRepository skillRepository) {
+		this.skillRepository = skillRepository;
+	}
+
+	public void setSecretQuestionRepository(SecretQuestionRepository secretQuestionRepository) {
+		this.secretQuestionRepository = secretQuestionRepository;
+	}
+}
