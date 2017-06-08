@@ -14,6 +14,7 @@ import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.AppointmentRepository;
 import org.istv.ske.dal.repository.UserRepository;
+import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,8 @@ public class SubscriptionController {
 	@Autowired
 	private AppointmentRepository appointmentRepository;
 
+	@Autowired
+	private TokenService tokenService;
 	// S'inscrire à un cours
 	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String subsciption(HttpServletRequest request) {
@@ -51,8 +54,8 @@ public class SubscriptionController {
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
-			// TODO find user by token
-			User user = userRepository.findOne(1L);
+			Long idUser = tokenService.getUserIdByToken(request);
+			User user = userRepository.findOne(idUser);
 			Offer offer = offerService.findById(Long.valueOf(idOffer));
 			if (user.getCredit() == 0) {
 				response.addProperty("ok", false);
