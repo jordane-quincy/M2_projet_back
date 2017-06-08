@@ -65,9 +65,9 @@ public class TestClient {
 
         Appointment appointment1 = appointmentService.createAppointment(offer1, user2, new Date(1221436800));
         Remark remark1 = remarkService.createRemark("bon cours", 4, offer1);
-       // notificationManager.createSimpleNotification(user1);
-       // notificationManager.createMeetingNotification(appointment1, user1, user2);
-        notificationManager.createRemarkNotification(remark1, user1, user2);
+        // notificationManager.createSimpleNotification(user1);
+        // notificationManager.createMeetingNotification(appointment1, user1, user2);
+        // notificationManager.createRemarkNotification(remark1, user1, user2);
         System.out.println("Fin creation notif");
     }
 }
