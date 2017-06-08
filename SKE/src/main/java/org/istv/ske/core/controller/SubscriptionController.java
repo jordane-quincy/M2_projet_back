@@ -17,7 +17,6 @@ import org.istv.ske.dal.repository.AppointmentRepository;
 import org.istv.ske.dal.repository.UserRepository;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -137,36 +136,38 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	@RequestMapping(value = { "/subscriptions/{id}" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request,
-			@PathVariable(required = true) Long id) {
-		User user = userRepository.findOne(id);
+	@RequestMapping(value = { "/subscriptions" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request) {
+		List<Appointment> app = null;
 		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			User user = userRepository.findOne(idUser);
+			app = appointmentRepository.findByApplicant(user);
+			if (app == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
 			if (user == null)
 				throw new BadRequestException("Cet utilisateur n'existe pas.");
 		} catch (BadRequestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		List<Appointment> app = appointmentRepository.findByApplicant(user);
-
-		try {
-			if (app == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 		return app;
 	}
 
-	@RequestMapping(value = { "/participants/{id}" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody String participants(HttpServletRequest request, @PathVariable(required = true) Long id) {
-		List<Offer> offers = offerService.findByUserId(id);
+	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody String participants(HttpServletRequest request) {
+		List<Offer> offers = null;
 		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			offers = offerService.findByUserId(idUser);
 			if (offers == null)
 				throw new BadRequestException("Cet utilisateur n'existe pas.");
 		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
