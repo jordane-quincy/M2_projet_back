@@ -1,11 +1,17 @@
 package org.istv.ske.core.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.istv.ske.dal.entities.Formation;
 import org.istv.ske.dal.entities.SecretQuestion;
@@ -49,6 +55,38 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findOne(userID);
 	}
 
+	private static SecretKeySpec getKey(String secretKey) {
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("MD5");
+
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+
+		try {
+			return new SecretKeySpec(digest.digest(new String(secretKey.getBytes(), "UTF8").getBytes()), "AES");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static String chiffrer(String s) {
+		String encrypted = null;
+		try {
+			// Instantiate the cipher
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, getKey("testduhash"));
+			// Récupère la clé secrète
+			byte[] cipherText = cipher.doFinal(s.getBytes("ISO-8859-1"));
+			encrypted = new String(cipherText);
+		} catch (Exception e) {
+			System.out.println("Impossible to encrypt with AES algorithm: string=(" + s + ")");
+		}
+		return encrypted;
+	}
+
 	@Override
 	public User createUser(String email, String name, String firstName, String password, Long birthday,
 			Formation formation, SecretQuestion secretQuestion, List<String> skills) {
@@ -71,7 +109,7 @@ public class UserServiceImpl implements UserService {
 		user.setUserFirstName(firstName);
 		user.setUserMail(email);
 		user.setUserName(name);
-		user.setUserPassword(password);
+		user.setUserPassword(chiffrer(password));
 		return userRepository.save(user);
 	}
 
@@ -87,14 +125,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private boolean wasSkillValidated(Skill skill, Map<Skill, Boolean> skills) {
-		for(Entry<Skill, Boolean> entry : skills.entrySet()) {
-			if(entry.getKey().getLabel().equals(skill.getLabel())) {
+		for (Entry<Skill, Boolean> entry : skills.entrySet()) {
+			if (entry.getKey().getLabel().equals(skill.getLabel())) {
 				return entry.getValue();
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public User getUserByUserMail(String email) {
 		User user = userRepository.findByUserMail(email);
@@ -103,13 +141,13 @@ public class UserServiceImpl implements UserService {
 
 	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
 		User user = userRepository.findOne(id);
-		user.setUserPassword(password);
+		user.setUserPassword(chiffrer(password));
 		user.setFormation(formation);
 		Map<Skill, Boolean> oldSkills = user.getSkills();
 		Map<Skill, Boolean> newSkills = new HashMap<>();
-		for(String skill : skills) {
+		for (String skill : skills) {
 			Skill sk = skillRepository.findByLabel(skill);
-			if(sk == null) {
+			if (sk == null) {
 				sk = new Skill(skill);
 				skillRepository.save(sk);
 			}
@@ -123,7 +161,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void setPassword(String email, String password) {
 		User user = userRepository.findByUserMail(email);
-		user.setUserPassword(password);
+		user.setUserPassword(chiffrer(password));
 		userRepository.save(user);
 	}
 
@@ -131,4 +169,17 @@ public class UserServiceImpl implements UserService {
 	public void setToken(User user, String token) {
 		user.setToken(token);
 		userRepository.save(user);		
-	}}
+	}
+
+	public void setUserRepository(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+
+	public void setSkillRepository(SkillRepository skillRepository) {
+		this.skillRepository = skillRepository;
+	}
+
+	public void setSecretQuestionRepository(SecretQuestionRepository secretQuestionRepository) {
+		this.secretQuestionRepository = secretQuestionRepository;
+	}
+}

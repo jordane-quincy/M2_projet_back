@@ -1,9 +1,12 @@
 package org.istv.ske.messages.manager;
 
 import java.util.Date;
+import java.util.List;
 
 import org.istv.ske.core.service.NotificationService;
+import org.istv.ske.dal.entities.Appointment;
 import org.istv.ske.dal.entities.Notification;
+import org.istv.ske.dal.entities.Remark;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
@@ -32,84 +35,65 @@ public class NotificationManager {
      * Fonction qui creer une notif et qui gere le contenu en fonction du type
      *
      * @param user
-     * @param typeNotification
      */
-    public void createSimpleNotification(User user, TypeNotification typeNotification) {
+    public Notification createSimpleNotification(User user) {
         System.out.println("Création d'une notif");
 
-        String title;
-        String content;
+        String title = "";
+        String content = "";
 
-        switch (typeNotification) {
-            case SIMPLE:
-                System.out.println("Simple notif");
-                title = "test title";
-                content = "test content";
-                notificationService.createNotification(title, content, typeNotification.toString(), user);
-                break;
-            case REDIRECT:
-                System.out.println("Redirection notif");
-                title = "test title";
-                content = "test content";
-                notificationService.createNotification(title, content, typeNotification.toString(), user);
-                break;
-            default:
-                break;
-        }
+        System.out.println("Simple notif");
+        return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
     }
 
-    public void createNotificationWithEmail(User destinataire, User expediteur, TypeNotification typeNotification) {
+    public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
         System.out.println("Creation d'une notif et envoie d'un mail");
+        System.out.println("Prise de rdv notif");
 
-        String title;
-        String content;
+        String date = appointment.getDate().toString();
+        String title = "Confirmation de prise de rendez-vous";
+        String content = "Un rendez-vous a été créé à la date suivante : " + date;
 
-        switch (typeNotification) {
+        Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
+        emailMeeting.setDestinataire(destinataire);
+        emailMeeting.setExpediteur(expediteur);
 
-            case MEETING:
-                System.out.println("Prise de rdv notif");
-                title = "test title";
-                content = "test content";
-                notificationService.createNotification(title, content, typeNotification.toString(), destinataire);
+        // emailMeeting.init();
 
-                // TODO : Envoyer un mail
-                Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
-                emailMeeting.setDestinataire(destinataire);
-                emailMeeting.setExpediteur(expediteur);
-                emailMeeting.setObjet(title);
-                emailMeeting.setContenuMail(content);
+        emailMeeting.setObjet(title);
+        emailMeeting.setContenuMail(content);
 
-                //emailMeeting.init();
-                //emailClient.sendEmail(emailMeeting);
-                break;
+        emailClient.sendEmail(emailMeeting);
 
-            case REMARK:
-                System.out.println("Notif notation");
-                title = "test title";
-                content = "test content";
-                notificationService.createNotification(title, content, typeNotification.toString(), destinataire);
-
-                // TODO : Envoyer un mail
-                Email emailRemark = new Email(EmailType.NOTIFICATION_EMAIL);
-                emailRemark.setDestinataire(destinataire);
-                emailRemark.setExpediteur(expediteur);
-                emailRemark.setObjet(title);
-                emailRemark.setContenuMail(content);
-
-                emailClient.sendEmail(emailRemark);
-                break;
-
-            default:
-                break;
-        }
+        return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(), destinataire);
     }
 
-    /**
-     * Function qui contacte le DAO pour supprimer une notif en BDD
-     */
+    public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
+        System.out.println("Creation d'une notif et envoie d'un mail");
+        System.out.println("Notif pour signaler une note");
+
+        String title = "Vous avez reçu une note ";
+        String content = remark.getOffer().getTitle() + " a été noté " + remark.getGrade() + "/5" + " Commentaire : " + remark.getText();
+
+        Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
+        emailMeeting.setDestinataire(destinataire);
+        emailMeeting.setExpediteur(expediteur);
+
+        // emailMeeting.init();
+
+        emailMeeting.setObjet(title);
+        emailMeeting.setContenuMail(content);
+
+        emailClient.sendEmail(emailMeeting);
+
+        return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
+    }
+
     public void deleteNotification(Notification notification) {
         notificationService.deleteNotification(notification);
     }
 
-
+    public List<Notification> getUserNotifications(User user) {
+        return notificationService.findNotificationByUser(user);
+    }
 }
