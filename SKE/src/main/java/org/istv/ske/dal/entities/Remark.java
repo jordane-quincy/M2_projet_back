@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,10 +14,12 @@ public class Remark {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 
 	private String text;
-	
+
+	@Min(0)
+	@Max(5)
 	private int grade;
 
 	@ManyToOne
@@ -32,7 +36,7 @@ public class Remark {
 		this.grade = grade;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 

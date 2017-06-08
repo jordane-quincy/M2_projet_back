@@ -28,9 +28,14 @@ public class TokenValidationFilter implements Filter {
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 		
 		System.out.println(request.getContextPath());
-		if(request.getServletPath().equals("/auth/connect") || request.getServletPath().equals("/user/create")) {
+		if(request.getServletPath().equals("/auth/connect") || 
+		   request.getServletPath().equals("/user/create") ||
+		   request.getServletPath().equals("/formation/list")
+		   ) {
 			chain.doFilter(request, response);
 			return;
 		}

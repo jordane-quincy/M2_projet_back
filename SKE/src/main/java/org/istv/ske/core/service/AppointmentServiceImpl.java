@@ -51,4 +51,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return appointments;
 	}
 
+	@Override
+	public List<Appointment> findByApplicant(User applicant) {
+		List<Appointment> appointments = new ArrayList<>();
+		for(Appointment a : appointmentRepository.findByApplicant(applicant)) {
+			appointments.add(a);
+		}
+		return appointments;
+	}
+
 }
