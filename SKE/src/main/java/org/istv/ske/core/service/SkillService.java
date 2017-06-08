@@ -15,5 +15,5 @@ public interface SkillService {
 	void deleteSkill(Long skillId);
 	
 	List<Skill> findAll();
-	
+	Skill findByLabel(String label);
 }
