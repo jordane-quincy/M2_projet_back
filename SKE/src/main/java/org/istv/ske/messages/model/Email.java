@@ -27,13 +27,15 @@ public class Email {
         objet = "Objet de mon mail";
 
         User dest = new User();
-        dest.setUserMail("abdeloihid.elmardi@etu.univ-valenciennes.fr");
-        dest.setUserName("el mardi");
-        dest.setUserFirstName("Abdeloihid");
         User exp = new User();
-        exp.setUserMail("quentin.senecat@etu.univ-valenciennes.fr");
-        exp.setUserName("Senecat");
-        exp.setUserFirstName("Quentin");
+
+        exp.setUserMail("abdeloihid.elmardi@etu.univ-valenciennes.fr");
+        exp.setUserName("el mardi");
+        exp.setUserFirstName("Abdeloihid");
+
+        dest.setUserMail("quentin.senecat@etu.univ-valenciennes.fr");
+        dest.setUserName("Senecat");
+        dest.setUserFirstName("Quentin");
 
         destinataire = dest;
         expediteur = exp;
