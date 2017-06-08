@@ -1,9 +1,14 @@
 package org.istv.ske.core.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.configuration.ApplicationConfig;
@@ -77,7 +82,7 @@ public class UserController {
 
 		try {
 			SecretQuestion secretQuestion = new SecretQuestion(question, answer);			
-			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
+			User created = userService.createUser(email, name, firstName, chiffrer(password), birthday, formation, secretQuestion,
 					skills);
 			String token = new BigInteger(32 * 4, random).toString(16);
 			userService.setToken(created, token);
@@ -98,6 +103,40 @@ public class UserController {
 			throw new InternalException("Erreur lors de la création de l'utilisateur : " + e.getMessage());
 		}
 
+	}
+	
+	private static SecretKeySpec getKey(String secretKey) {
+	    MessageDigest digest = null;
+	    try {
+	        digest = MessageDigest.getInstance("MD5");
+	 
+	    } catch (NoSuchAlgorithmException e) {
+	        throw new RuntimeException(e);
+	    }
+	 
+	    try {
+	        return new SecretKeySpec(digest.digest(new String(secretKey.getBytes(),"UTF8").getBytes()), "AES");
+	    }
+	    catch (UnsupportedEncodingException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+	
+	private static String chiffrer(String s) {
+        String encrypted = null;
+        try {
+           // Instantiate the cipher
+           Cipher cipher = Cipher.getInstance("AES");
+           cipher.init(Cipher.ENCRYPT_MODE, getKey("testduhash"));
+           // Récupère la clé secrète
+            byte[] cipherText = cipher.doFinal(s.getBytes("ISO-8859-1"));
+            encrypted = new String(cipherText);
+        }
+        catch (Exception e) {
+            System.out.println("Impossible to encrypt with AES algorithm: string=(" + s + ")");
+        }
+        return encrypted;
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
