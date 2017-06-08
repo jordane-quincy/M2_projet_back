@@ -93,8 +93,8 @@ public class OfferServiceImpl implements OfferService {
 	}
 
 	@Override
-	public List<Offer> search(List<String> keywords, List<Long> domains, int durationMin, int durationMax,
-			boolean teacher, boolean student) {
+	public List<Offer> search(String keywords, List<Long> domains, int durationMin, int durationMax, boolean teacher,
+			boolean student) {
 
 		boolean both = teacher & student;
 		String queryStr = "SELECT o FROM Offer o ";
