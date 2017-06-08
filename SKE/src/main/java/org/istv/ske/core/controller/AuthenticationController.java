@@ -63,7 +63,7 @@ public class AuthenticationController {
 		for(Entry<Skill, Boolean> entry : user.getSkills().entrySet()) {
 			JsonObject skill = new JsonObject();
 			skill.addProperty("id", entry.getKey().getId());
-			skill.addProperty("name", entry.getKey().getLabel());
+			skill.addProperty("label", entry.getKey().getLabel());
 			skill.addProperty("validated", entry.getValue());
 			skills.add(skill);
 		}
