@@ -153,7 +153,7 @@ public class OfferController {
 		}
 	}
 	
-	@RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
 	public List<Offer> findAllOffer() throws Exception {
 		try {
 			List<Offer> offer = offerService.findAll();
