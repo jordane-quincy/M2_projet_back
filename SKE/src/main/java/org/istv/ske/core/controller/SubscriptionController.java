@@ -57,12 +57,19 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
+
 			Offer offer = offerService.findById(Long.valueOf(idOffer));
 			if (offer == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
+			if (offer.getUser().getId() == user.getId()) {
+				response.addProperty("ok", false);
+				response.addProperty("message", "Vous ne pouvez pas vous inscrire à votre offre");
+				return jsonService.stringify(response);
+			}
 			if (user.getCredit() == 0) {
 				response.addProperty("ok", false);
-				throw new BadRequestException("Crédit insuffisant.");
+				response.addProperty("message", "Crédit insuffisant");
+				return jsonService.stringify(response);
 			}
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
 

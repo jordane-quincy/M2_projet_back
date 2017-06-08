@@ -82,7 +82,7 @@ INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES
 
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (1, 0, 'Incompréhensible, en une heure avec lui je n''ai strictement rien appris de nouveau', 2);
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (2, 0, 'Inapte à proposer un cours', 2);
-INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (3, 1, 'Malgres beaucoup d''efforts, le resultat n''est pas là, mais tu as les connaissance, dommage', 2);
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (3, 1, 'Malgres beaucoup d''efforts, le resultat n''est pas là, mais tu as les connaissances, dommage', 2);
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (4, 3, 'Cours pas parfaitement organisé mais ce cours est compréhensible sachant que c''est une nouvelle techno !', 1);
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (5, 0, 'J''ai remarqué que je n''aimais pas du tout le développement mobile, merci', 1);
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (6, 1, 'Bien organisé mais trop difficile à comprendre', 1);
@@ -91,8 +91,8 @@ INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (8, 5, 'Rien à di
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (9, 3, 'Pas mal', 4);
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (10, 5, 'Quel fin pédagogue !', 4);
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (11, 4, 'Cours tres interessant, je vais reprendre une heure de ce pas !', 4);
-INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (12, 5, 'Imprésionnant, je recommande ce proffesseur', 4);
-INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (13, 5, 'Tres compréhensible, en une heure avec lui j''ai appris plus que 1 an tout seul', 4);
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (12, 5, 'Impressionnant, je recommande ce professeur', 4);
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (13, 5, 'Tres compréhensible, en une heure avec lui j''ai appris plus qu''en 1 an tout seul', 4);
 
 INSERT INTO "PUBLIC"."SKILL" (ID,LABEL) VALUES (1,'JAVA');
 INSERT INTO "PUBLIC"."SKILL" (ID,LABEL) VALUES (2,'SQL');
