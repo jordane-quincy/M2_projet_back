@@ -63,9 +63,10 @@ public class UserServiceImplTest {
         SecretQuestion Question = new SecretQuestion();
         List<String> skills = new ArrayList();
 
-        User user = userService.createUser("ruffin.cle@gmail.com", "Ruffin", "Clément", "pass",1496832215000l , f, Question, skills);
+        User user = userService.createUser("ruffin.cle@gmail.com", "Ruffin", "Clément", "pass", 1496832215000l, f, Question, skills);
 
         assertNotNull(user);
 
 
     }
+}
