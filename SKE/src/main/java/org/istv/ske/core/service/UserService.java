@@ -23,4 +23,8 @@ public interface UserService {
 	List<User> getUserByToken(String token);
 	
 	boolean emailAlreadyExists(String email);
+	
+	User getUserByUserMail(String email);
+
+	void setPassword(String email, String password);
 }

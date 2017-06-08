@@ -96,8 +96,25 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean emailAlreadyExists(String email) {
-		List<User> users = userRepository.findByUserMail(email);
-		return users.size() != 0;
+		User user = userRepository.findByUserMail(email);
+		return user != null;
 	}
+
+	@Override
+	public User getUserByUserMail(String email) {
+		User user = userRepository.findByUserMail(email);
+		return user;
+	}
+
+	@Override
+	public void setPassword(String email, String password) {
+		User user = userRepository.findByUserMail(email);
+		user.setUserPassword(password);
+		userRepository.save(user);
+	}
+	
+	
+	
+	
 
 }
