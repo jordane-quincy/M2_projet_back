@@ -23,5 +23,5 @@ public interface OfferService {
 	List<Offer> findAll();
 
 	List<Offer> search(String keywords, List<Long> domains, int durationMin, int durationMax, boolean teacher,
-			boolean student);
+			boolean student, int minAvgGrade);
 }

@@ -65,10 +65,10 @@ INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRST
 INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (6, {ts '1988-03-02 00:00:00.00000000'}, 1, '0612345789', 'STUDENT', NULL, 'Jon', 'Jon.Snow@univ-valenciennes.fr', 'SNOW', 'jsnow', 16, 6);
 INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (7, {ts '1893-03-02 00:00:00.00000000'}, 1, '0712345689', 'STUDENT', NULL, 'Louis', 'Louis.Quatorze@univ-valenciennes.fr', 'QUATORZE', 'lquatorze', 11, 7);
 
-INSERT INTO OFFER VALUES (1, 'Cours de développement web afin d''apprendre à utiliser les langages HTML, CSS, JSS, PHP, SQL', 1, 'Cours de développement web', 3, 1);
-INSERT INTO OFFER VALUES (2, 'Cours de développement JAVA afin d''apprendre à utiliser les langages JAVA, JEE', 1, 'Cours JAVA', 4, 1);
-INSERT INTO OFFER VALUES (3, 'Cours de développement JEE', 1, 'Cours JEE', 1, 2);
-INSERT INTO OFFER VALUES (4, 'Cours de développement mobile, nouvelles technologies', 1, 'XAMARIN', 4, 3);
+INSERT INTO OFFER VALUES (1, 'Cours de développement web afin d''apprendre à utiliser les langages HTML, CSS, JSS, PHP, SQL', 1, 'css,developpement,web,utiliser,afin,php,html,langages,jss,cours,dapprendre,sql', 'Cours de développement web', 3, 1);
+INSERT INTO OFFER VALUES (2, 'Cours de développement JAVA afin d''apprendre à utiliser les langages JAVA, JEE', 1, 'java,developpement,utiliser,afin,langages,jee,cours,dapprendre', 'Cours JAVA', 4, 1);
+INSERT INTO OFFER VALUES (3, 'Cours de développement JEE', 1, 'developpement,jee,cours', 'Cours JEE', 1, 2);
+INSERT INTO OFFER VALUES (4, 'Cours de développement mobile, nouvelles technologies', 1, 'nouvelles,technologies,xamarin,developpement,mobile,cours', 'XAMARIN', 4, 3);
 
 INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (1, {ts '2017-06-15 12:00:00.00000000'}, 'CANCELED', 4, 2);
 INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (2, {ts '2017-06-15 11:00:00.000000000'}, 'PENDING', 4, 2);

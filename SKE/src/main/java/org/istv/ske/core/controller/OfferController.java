@@ -160,7 +160,7 @@ public class OfferController {
 		}
 	}
 
-	@RequestMapping(value = "/filter", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/filter", method = RequestMethod.POST, produces = "application/json")
 	public List<Offer> filter(HttpServletRequest request) throws Exception {
 
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -172,12 +172,14 @@ public class OfferController {
 		Long durationMax = FieldReader.readLong(duration, "upper");
 		Boolean teacher = FieldReader.readBoolean(object, "teacher");
 		Boolean student = FieldReader.readBoolean(object, "student");
+		Double minimalAvgGrade = FieldReader.readDouble(object, "minavggrade");
 
 		try {
 			List<Offer> offer = offerService.search(keywords, domains, durationMin.intValue(), durationMax.intValue(),
-					teacher, student);
+					teacher, student, minimalAvgGrade.intValue());
 			return offer;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Impossible de récupérer la liste des offres");
 		}
 	}
