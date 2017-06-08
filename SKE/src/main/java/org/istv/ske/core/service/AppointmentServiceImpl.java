@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.istv.ske.dal.entities.Appointment;
+import org.istv.ske.dal.entities.Appointment.AppointmentStatus;
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.AppointmentRepository;
@@ -69,8 +70,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public List<Appointment> findByOwnerId(Long idUser) {
-		Query q = em.createQuery("SELECT a FROM Appointment a WHERE a.offer.user.id = :id");
+		Query q = em.createQuery("SELECT a FROM Appointment a WHERE a.offer.user.id = :id and status = :status");
 		q.setParameter("id", idUser);
+		q.setParameter("status", AppointmentStatus.PENDING);
 		return (List<Appointment>) q.getResultList();
 	}
 
