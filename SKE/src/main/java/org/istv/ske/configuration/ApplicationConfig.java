@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @EnableJpaRepositories(basePackages = "org.istv.ske")
 @EnableAsync
 public class ApplicationConfig {
-	
+
 	public static final String JSON_SUCCESS = "{\"ok\":\"true\"}";
 
 	@Autowired
@@ -60,6 +60,7 @@ public class ApplicationConfig {
 		props.put("hibernate.id.new_generator_mappings", "false");
 		props.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
 		props.put("hibernate.hbm2ddl.auto", "update");
+		props.put("hibernate.hbm2ddl.import_files", "Data.sql");
 		entityManagerFactory.setJpaProperties(props);
 		return entityManagerFactory;
 	}
@@ -68,37 +69,39 @@ public class ApplicationConfig {
 	public PlatformTransactionManager platformTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
-	
+
 	@Bean
 	public FilterRegistrationBean someFilterRegistration() {
-	    FilterRegistrationBean registration = new FilterRegistrationBean();
-	    registration.setFilter(getTokenValidationFilter());
-	    registration.addUrlPatterns("/*");
-	    registration.setName("tokenValidationFilter");
-	    registration.setOrder(1);
-	    return registration;
-	} 
-
-	@Bean(name="tokenValidationFilter")
-	public Filter getTokenValidationFilter() {
-	    return new TokenValidationFilter();
+		FilterRegistrationBean registration = new FilterRegistrationBean();
+		registration.setFilter(getTokenValidationFilter());
+		registration.addUrlPatterns("/*");
+		registration.setName("tokenValidationFilter");
+		registration.setOrder(1);
+		return registration;
 	}
-	
+
+	@Bean(name = "tokenValidationFilter")
+	public Filter getTokenValidationFilter() {
+		return new TokenValidationFilter();
+	}
+
 	@ControllerAdvice
 	public class BadRequestExceptionHandler {
-	    @ExceptionHandler(value = {BadRequestException.class})
-	    public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, BadRequestException e) throws IOException {
-	    	response.sendError(e.getStatus(), e.getMessage());
-	    	return null;
-	    }
+		@ExceptionHandler(value = { BadRequestException.class })
+		public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response,
+				BadRequestException e) throws IOException {
+			response.sendError(e.getStatus(), e.getMessage());
+			return null;
+		}
 	}
-	
+
 	@ControllerAdvice
 	public class InternalExceptionHandler {
-	    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
-	    public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception e) throws IOException {
-	    	response.sendError(500, e.getMessage());
-	    	return null;
-	    }
+		@ExceptionHandler(value = { Exception.class, RuntimeException.class })
+		public String defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception e)
+				throws IOException {
+			response.sendError(500, e.getMessage());
+			return null;
+		}
 	}
 }

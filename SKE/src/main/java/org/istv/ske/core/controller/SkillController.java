@@ -21,4 +21,9 @@ public class SkillController {
 		return skillService.findAll();
 	}
 	
+	@RequestMapping
+	public String validateSkill() {
+		return null;
+	}
+	
 }

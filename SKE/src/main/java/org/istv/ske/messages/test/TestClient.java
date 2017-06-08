@@ -43,7 +43,7 @@ public class TestClient {
 
         User user = userService.getUser(new Long(1));
 
-        notificationManager.createNotification(user, TypeNotification.SIMPLE);
+        notificationManager.createSimpleNotification(user, TypeNotification.SIMPLE);
 
         System.out.println("Fin creation notif");
     }

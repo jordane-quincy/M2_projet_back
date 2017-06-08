@@ -14,7 +14,7 @@ public class Remark {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 
 	private String text;
 
@@ -36,7 +36,7 @@ public class Remark {
 		this.grade = grade;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
