@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,7 +17,9 @@ public class Remark {
 	private int id;
 
 	private String text;
-	
+
+	@Min(0)
+	@Max(5)
 	private int grade;
 
 	@ManyToOne
