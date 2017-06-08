@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RequestMapping("/subscribe")
@@ -46,7 +47,6 @@ public class SubscriptionController {
 	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String subsciption(HttpServletRequest request) {
 
-		// String s = "{\"IdOffer\": 1,\"Token\": \"untoken\"}";
 		JsonObject response = new JsonObject();
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -56,14 +56,13 @@ public class SubscriptionController {
 			Offer offer = offerService.findById(Long.valueOf(idOffer));
 			if (user.getCredit() == 0) {
 				response.addProperty("ok", false);
+				response.addProperty("credit", "Crédit insufisant");
 				return jsonService.stringify(response);
 			}
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
 
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
-				user.setCredit(user.getCredit() - 1);
-				userRepository.save(user);
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
@@ -100,14 +99,24 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 			final String status = content.get("status").getAsString();
 			final Long date = content.get("date").getAsLong();
-			System.out.println(idOffer);
 			
 			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
 			app.setStatus(AppointmentStatus.valueOf(status));
 			app.setDate(new Date(date));
-
-			if (subscriptionService.subscription(app))
+			
+			if(status.equals("VALIDATED")) {
+				User user = userRepository.findOne(app.getApplicant().getId());
+				user.setCredit(user.getCredit() - 1);
+				userRepository.save(user);
+			}
+			if(status.equals("FINISHED")) {
+				User user = userRepository.findOne(app.getOffer().getId());
+				user.setCredit(user.getCredit() + 1);
+				userRepository.save(user);
+			}
+			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
+			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
 			response.addProperty("message", e.getMessage());
@@ -120,17 +129,29 @@ public class SubscriptionController {
 			@PathVariable(required = true) Long id) {
 		User user = userRepository.findOne(id);
 		List<Appointment> app = appointmentRepository.findByApplicant(user);
-		System.out.println(app.get(0).getOffer().getDescription());
 		return app;
 	}
 	
-	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody List<Appointment> participants(HttpServletRequest request,
+	@RequestMapping(value = { "/participants/{id}" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody String participants(HttpServletRequest request,
 			@PathVariable(required = true) Long id) {
-		User user = userRepository.findOne(id);
-		List<Appointment> app = appointmentRepository.findByApplicant(user);
-		System.out.println(app.get(0).getOffer().getDescription());
-		return app;
+		List<Offer> offers = offerService.findByUserId(id);
+		List<Appointment> apps = appointmentRepository.findByOfferOrderById(offers);
+		System.out.println(apps.get(0).getApplicant());
+		JsonArray response = new JsonArray();
+		
+		for (Appointment app : apps) {
+			JsonObject r = new JsonObject();
+			r.addProperty("id", app.getId());
+			r.addProperty("date", app.getDate().getTime());
+			r.addProperty("offer", app.getOffer().getTitle());
+			r.addProperty("duration", app.getOffer().getDuration());
+			r.addProperty("status", app.getStatus().toString());
+			r.addProperty("firstName", app.getApplicant().getUserFirstName());
+			r.addProperty("lastName", app.getApplicant().getUserName());
+			response.add(r);
+		}
+		return jsonService.stringify(response);
 	}
 
 }
