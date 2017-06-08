@@ -3,7 +3,6 @@ package org.istv.ske.core.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.configuration.ApplicationConfig;
-import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.service.AuthenticationService;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.utils.FieldReader;
