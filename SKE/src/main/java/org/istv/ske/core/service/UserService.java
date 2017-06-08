@@ -5,6 +5,9 @@ import java.util.List;
 import org.istv.ske.dal.entities.Formation;
 import org.istv.ske.dal.entities.SecretQuestion;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.repository.SecretQuestionRepository;
+import org.istv.ske.dal.repository.SkillRepository;
+import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,4 +32,9 @@ public interface UserService {
 	void setPassword(String email, String password);
 
 	void setToken(User user, String token);
+
+	void setUserRepository(UserRepository userRepository);
+	void setSecretQuestionRepository(SecretQuestionRepository secretQuestionRepository);
+	void setSkillRepository(SkillRepository skillRepository);
+
 }

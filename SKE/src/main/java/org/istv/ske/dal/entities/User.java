@@ -24,7 +24,9 @@ import javax.persistence.OneToOne;
 import org.istv.ske.core.utils.SkillsMapJsonAdapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.annotations.JsonAdapter;
 
 @Entity
 public class User {
@@ -34,24 +36,24 @@ public class User {
 	private Long id;
 
 	private int credit;
-
+	
 	@Column(unique = true)
 	private String userMail;
-
+	
 	@JsonIgnore
 	private String userPassword;
-
+	
 	private String userName;
-
+	
 	private String userFirstName;
-
+	
 	private String token;
-
+	
 	private Date birthday;
-
+	
 	@OneToOne
 	private SecretQuestion question;
-
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
@@ -62,25 +64,26 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
+	
 	public enum Role {
-		STUDENT, TEACHER
+		STUDENT,
+		TEACHER
 	}
 
 	@ManyToOne
 	private Formation formation;
-
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "VALIDATED_SKILLS")
-	@MapKeyColumn(name = "SKILL_ID")
-	@Column(name = "VALIDATED")
-	@JsonSerialize(using = SkillsMapJsonAdapter.class)
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "VALIDATED_SKILLS")
+    @MapKeyColumn(name = "SKILL_ID")
+    @Column(name = "VALIDATED")
+	@JsonSerialize(using=SkillsMapJsonAdapter.class)
 	private Map<Skill, Boolean> skills = new HashMap<>();
-
+	
 	@JsonIgnore
-	@OneToMany(mappedBy = "applicant")
+	@OneToMany(mappedBy="applicant")
 	private List<Appointment> appointments;
-
+	
 	public User() {
 
 	}
@@ -219,4 +222,5 @@ public class User {
 		this.token = token;
 	}
 
+	
 }
