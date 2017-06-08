@@ -57,13 +57,13 @@ INSERT INTO secretquestion VALUES (5,'Muerte', 'Quel est le nom de votre premier
 INSERT INTO secretquestion VALUES (6,'Fantôme', 'Quel est le nom de votre premier animal de compagnie');
 INSERT INTO secretquestion VALUES (7,'Gold', 'Quel est le nom de votre premier animal de compagnie');
 
-INSERT INTO user VALUES (1, {ts '1990-06-07 00:00:00.00000000'}, 5, 'STUDENT', NULL, 'Jordan', 'jordane.quincy@etu.univ-valenciennes.fr', 'QUINCY', 'jquincy', 5, 1, '0123456789');
-INSERT INTO user VALUES (2, {ts '1980-06-07 00:00:00.00000000'}, 1, 'TEACHER', NULL,'Mickael', 'mikael.desertot@univ-valenciennes.fr', 'DESERTOT', 'mdesertot', 7, 2, '0213456789');
-INSERT INTO user VALUES (3, {ts '1979-03-02 00:00:00.00000000'}, 1, 'TEACHER', NULL, 'Sylvain', 'Sylvain.Lecomte@univ-valenciennes.fr', 'LECOMTE', 'slecomte', 10, 3, '0312456789');
-INSERT INTO user VALUES (4, {ts '1993-03-02 00:00:00.00000000'}, 1, 'STUDENT', NULL, 'John', 'John.Ypeurien@univ-valenciennes.fr', 'YPEURIEN', 'jypeurien', 15, 4, '0412356789');
-INSERT INTO user VALUES (5, {ts '1973-03-02 00:00:00.00000000'}, 1, 'STUDENT', NULL, 'James', 'James.Bond@univ-valenciennes.fr', 'BOND', 'jbond', 15, 5, '0512346789');
-INSERT INTO user VALUES (6, {ts '1988-03-02 00:00:00.00000000'}, 1, 'STUDENT', NULL, 'Jon', 'Jon.Snow@univ-valenciennes.fr', 'SNOW', 'jsnow', 16, 6, '0612345789');
-INSERT INTO user VALUES (7, {ts '1893-03-02 00:00:00.00000000'}, 1, 'STUDENT', NULL, 'Louis', 'Louis.Quatorze@univ-valenciennes.fr', 'QUATORZE', 'lquatorze', 11, 7, '0712345689');
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (1, {ts '1990-06-07 00:00:00.00000000'}, 5, '0123456789', 'STUDENT', NULL, 'Jordan', 'jordane.quincy@etu.univ-valenciennes.fr', 'QUINCY', 'jquincy', 5, 1);
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (2, {ts '1980-06-07 00:00:00.00000000'}, 1, '0213456789', 'TEACHER', NULL,'Mickael', 'mikael.desertot@univ-valenciennes.fr', 'DESERTOT', 'mdesertot', 7, 2);
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (3, {ts '1979-03-02 00:00:00.00000000'}, 1, '0312456789', 'TEACHER', NULL, 'Sylvain', 'Sylvain.Lecomte@univ-valenciennes.fr', 'LECOMTE', 'slecomte', 10, 3);
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (4, {ts '1993-03-02 00:00:00.00000000'}, 1, '0412356789', 'STUDENT', NULL, 'John', 'John.Ypeurien@univ-valenciennes.fr', 'YPEURIEN', 'jypeurien', 15, 4);
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (5, {ts '1973-03-02 00:00:00.00000000'}, 1, '0512346789', 'STUDENT', NULL, 'James', 'James.Bond@univ-valenciennes.fr', 'BOND', 'jbond', 15, 5);
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (6, {ts '1988-03-02 00:00:00.00000000'}, 1, '0612345789', 'STUDENT', NULL, 'Jon', 'Jon.Snow@univ-valenciennes.fr', 'SNOW', 'jsnow', 16, 6);
+INSERT INTO "PUBLIC"."USER" (ID,BIRTHDAY,CREDIT,PHONENUMBER,ROLE,TOKEN,USERFIRSTNAME,USERMAIL,USERNAME,USERPASSWORD,FORMATION_ID,QUESTION_ID) VALUES (7, {ts '1893-03-02 00:00:00.00000000'}, 1, '0712345689', 'STUDENT', NULL, 'Louis', 'Louis.Quatorze@univ-valenciennes.fr', 'QUATORZE', 'lquatorze', 11, 7);
 
 INSERT INTO OFFER VALUES (1, 'Cours de développement web afin d''apprendre à utiliser les langages HTML, CSS, JSS, PHP, SQL', 1, 'Cours de développement web', 3, 1);
 INSERT INTO OFFER VALUES (2, 'Cours de développement JAVA afin d''apprendre à utiliser les langages JAVA, JEE', 1, 'Cours JAVA', 4, 1);
