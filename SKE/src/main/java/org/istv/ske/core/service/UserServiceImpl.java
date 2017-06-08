@@ -86,33 +86,6 @@ public class UserServiceImpl implements UserService {
 		return user != null;
 	}
 
-	@Override
-	public User createUser(String email, String name, String firstName, String password, Long birthday,
-			Formation formation, SecretQuestion secretQuestion, List<String> skills, String token) {
-		Role role = (email.endsWith("@etu.univ-valenciennes.fr") ? Role.STUDENT : Role.TEACHER);
-		User user = new User();
-		user.setBirthday(new Date(birthday));
-		user.setCredit(5);
-		user.setFormation(formation);
-		for (String skill : skills) {
-			Skill sk = skillRepository.findByLabel(skill);
-			if (sk == null) {
-				sk = new Skill(skill);
-				skillRepository.save(sk);
-			}
-			user.getSkills().put(sk, false);
-		}
-		SecretQuestion savedSecretQuestion = secretQuestionRepository.save(secretQuestion);
-		user.setQuestion(savedSecretQuestion);
-		user.setRole(role);
-		user.setUserFirstName(firstName);
-		user.setUserMail(email);
-		user.setUserName(name);
-		user.setUserPassword(password);
-		user.setToken(token);
-		return userRepository.save(user);
-	}
-
 	private boolean wasSkillValidated(Skill skill, Map<Skill, Boolean> skills) {
 		for(Entry<Skill, Boolean> entry : skills.entrySet()) {
 			if(entry.getKey().getLabel().equals(skill.getLabel())) {
@@ -152,4 +125,10 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByUserMail(email);
 		user.setUserPassword(password);
 		userRepository.save(user);
+	}
+
+	@Override
+	public void setToken(User user, String token) {
+		user.setToken(token);
+		userRepository.save(user);		
 	}}

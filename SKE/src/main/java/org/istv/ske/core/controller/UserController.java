@@ -76,11 +76,11 @@ public class UserController {
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
-			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
-			String token = new BigInteger(32 * 4, random).toString(16);
+			SecretQuestion secretQuestion = new SecretQuestion(question, answer);			
 			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
-					skills, token);
-
+					skills);
+			String token = new BigInteger(32 * 4, random).toString(16);
+			userService.setToken(created, token);
 			
 			String msgMail =  System.lineSeparator() + System.lineSeparator()
 					+ "veuillez activer votre compte en cliquant sur ce lien : ";
