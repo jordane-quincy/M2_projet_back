@@ -1,7 +1,7 @@
 package org.istv.ske.messages.test;
 
+import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.entities.User;
-import org.istv.ske.dal.service.UserService;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
 import org.istv.ske.messages.enums.TypeNotification;

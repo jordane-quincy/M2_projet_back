@@ -2,20 +2,24 @@ package org.istv.ske.dal.entities;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,25 +30,24 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Min(0)
 	private int credit;
-
+	
 	@Column(unique = true)
 	private String userMail;
-
+	
 	private String userPassword;
-
+	
 	private String userName;
-
+	
 	private String userFirstName;
-
+	
 	private String token;
-
+	
 	private Date birthday;
-
+	
 	@OneToOne
 	private SecretQuestion question;
-
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
@@ -55,32 +58,31 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
+	
 	public enum Role {
-		STUDENT, TEACHER
+		STUDENT,
+		TEACHER
 	}
 
 	@ManyToOne
 	private Formation formation;
-
-	@OneToMany(mappedBy = "user")
-	private List<Skill> ownedSkilled;
-
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "VALIDATED_SKILLS")
+    @MapKeyColumn(name = "SKILL_ID")
+    @Column(name = "VALIDATED")
+	private Map<Skill, Boolean> skills = new HashMap<>();
+	
 	@JsonIgnore
-	@ManyToMany(mappedBy = "validators")
-	private List<Skill> validatedSkills;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "applicant")
+	@OneToMany(mappedBy="applicant")
 	private List<Appointment> appointments;
-
+	
 	public User() {
 
 	}
 
 	public User(int credit, String userMail, String userPassword, String userName, String userFirstName, Date birthday,
-			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation,
-			List<Skill> skills, SecretQuestion secretQuestion) {
+			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation) {
 		this.credit = credit;
 		this.userMail = userMail;
 		this.userPassword = userPassword;
@@ -91,8 +93,6 @@ public class User {
 		this.notifications = notifications;
 		this.role = role;
 		this.formation = formation;
-		this.ownedSkilled = skills;
-		this.question = secretQuestion;
 	}
 
 	public Long getId() {
@@ -183,12 +183,28 @@ public class User {
 		this.formation = formation;
 	}
 
-	public List<Skill> getSkills() {
-		return ownedSkilled;
+	public SecretQuestion getQuestion() {
+		return question;
 	}
 
-	public void setSkills(List<Skill> skills) {
-		this.ownedSkilled = skills;
+	public void setQuestion(SecretQuestion question) {
+		this.question = question;
+	}
+
+	public Map<Skill, Boolean> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(Map<Skill, Boolean> skills) {
+		this.skills = skills;
+	}
+
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
 	}
 
 	public String getToken() {
@@ -199,38 +215,5 @@ public class User {
 		this.token = token;
 	}
 
-	public SecretQuestion getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(SecretQuestion question) {
-		this.question = question;
-	}
-
-	public List<Skill> getOwnedSkilled() {
-		return ownedSkilled;
-	}
-
-	public void setOwnedSkilled(List<Skill> ownedSkilled) {
-		this.ownedSkilled = ownedSkilled;
-	}
-
-	public List<Skill> getValidatedSkills() {
-		return validatedSkills;
-	}
-
-	public void setValidatedSkills(List<Skill> validatedSkills) {
-		this.validatedSkills = validatedSkills;
-	}
-
-	public List<Appointment> getAppointments() {
-		return appointments;
-	}
-
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
-	}
 	
-	
-
 }

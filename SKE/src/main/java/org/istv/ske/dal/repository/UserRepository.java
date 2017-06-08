@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<User, Long> {
 	
 	List<User> findByUserMail(String userMail);
+	
 	List<User> findByToken(String token);
 }

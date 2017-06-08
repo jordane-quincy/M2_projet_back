@@ -1,4 +1,4 @@
-package org.istv.ske.dal.service;
+package org.istv.ske.core.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,11 @@ public class DomainServiceImpl implements DomainService {
 	@Override
 	public void deleteDomain(Long id) {
 		domainRepository.delete(id);
+	}
+	
+	@Override
+	public Domain findById(Long id) {
+		return domainRepository.findOne(id);
 	}
 	
 }

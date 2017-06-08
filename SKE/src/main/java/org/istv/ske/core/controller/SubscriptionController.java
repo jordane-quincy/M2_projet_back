@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.service.JsonService;
+import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.SubscriptionService;
 import org.istv.ske.dal.entities.Appointment;
 import org.istv.ske.dal.entities.Appointment.AppointmentStatus;
@@ -13,7 +14,6 @@ import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.AppointmentRepository;
 import org.istv.ske.dal.repository.UserRepository;
-import org.istv.ske.dal.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +53,7 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 			// TODO find user by token
 			User user = userRepository.findOne(1L);
-			Offer offer = offerService.getOffer(Long.valueOf(idOffer));
+			Offer offer = offerService.findById(Long.valueOf(idOffer));
 			if (user.getCredit() == 0) {
 				response.addProperty("ok", false);
 				return jsonService.stringify(response);

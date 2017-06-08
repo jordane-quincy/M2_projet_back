@@ -2,6 +2,7 @@ package org.istv.ske.core.service;
 
 import java.io.Reader;
 
+import org.istv.ske.core.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
@@ -11,15 +12,23 @@ import com.google.gson.JsonParser;
 public class JsonServiceImpl implements JsonService {
 	
 	@Override
-	public JsonElement parse(String json) {
-		JsonParser parser = new JsonParser();
-		return parser.parse(json);
+	public JsonElement parse(String json) throws BadRequestException {
+		try {
+			JsonParser parser = new JsonParser();
+			return parser.parse(json);
+		} catch (Exception e) {
+			throw new BadRequestException("Le JSON fourni est invalide");
+		}
 	}
 
 	@Override
-	public JsonElement parse(Reader reader) {
-		JsonParser parser = new JsonParser();
-		return parser.parse(reader);
+	public JsonElement parse(Reader reader) throws BadRequestException {
+		try {
+			JsonParser parser = new JsonParser();
+			return parser.parse(reader);
+		} catch (Exception e) {
+			throw new BadRequestException("Le JSON fourni est invalide");
+		}
 	}
 
 	@Override

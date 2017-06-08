@@ -1,7 +1,7 @@
 package org.istv.ske.core.controller;
 
+import org.istv.ske.core.service.AccountCertificationService;
 import org.istv.ske.dal.entities.User;
-import org.istv.ske.dal.service.AccountCertificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

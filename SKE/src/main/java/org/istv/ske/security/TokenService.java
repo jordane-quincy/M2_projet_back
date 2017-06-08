@@ -10,6 +10,8 @@ public interface TokenService {
 	
 	void onRequest(String token) throws Exception;
 	
-	User findUserByToken(HttpServletRequest request) throws Exception;
+	Long getUserIdByToken(HttpServletRequest request) throws Exception;
+	
+	void deleteTokenForUserId(Long userId);
 	
 }
