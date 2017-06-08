@@ -15,5 +15,5 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
 
 	public List<Appointment> findByOfferOrderById(List<Offer> offers);
 
-	public List<Appointment> findByStatus(String status);
+	public List<Appointment> findByStatusAndApplicant(String status, User user);
 }
