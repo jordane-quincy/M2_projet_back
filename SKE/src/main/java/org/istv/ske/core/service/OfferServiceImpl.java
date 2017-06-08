@@ -47,7 +47,7 @@ public class OfferServiceImpl implements OfferService {
 
 		Set<String> selectedWords = new HashSet<>();
 		String raw = title + " " + description;
-		raw = raw.toLowerCase();
+		raw = raw.toLowerCase().replaceAll("[-+.^:,']", "");
 		String[] words = raw.split(" ");
 		for (String word : words) {
 			if (!word.isEmpty()) {
@@ -85,6 +85,21 @@ public class OfferServiceImpl implements OfferService {
 		offer.setDuration(duration);
 		offer.setDescription(description);
 		offer.setDomain(domain);
+
+		Set<String> selectedWords = new HashSet<>();
+		String raw = title + " " + description;
+		raw = raw.toLowerCase().replaceAll("[-+.^:,']", "");
+		String[] words = raw.split(" ");
+		for (String word : words) {
+			if (!word.isEmpty()) {
+				String wordWithoutAccent = StringUtils.removeAccents(word);
+				if (!StringUtils.WORDS_TO_DELETE.contains(wordWithoutAccent)) {
+					selectedWords.add(wordWithoutAccent);
+				}
+			}
+		}
+		offer.setKeywords(StringUtils.join(selectedWords));
+
 		offerRepository.save(offer);
 		return offer;
 	}
@@ -130,25 +145,21 @@ public class OfferServiceImpl implements OfferService {
 		}
 
 		String[] words = keywords.split(" ");
-		String titleClause = "";
-		String descriptionClause = "";
-		boolean addOrTitle = false;
-		boolean addOrDescription = false;
+		String searchClause = "";
+		boolean addOr = false;
 		for (String word : words) {
 			if (!word.isEmpty()) {
-				if (addOrTitle)
-					titleClause += "OR ";
-				titleClause += "UNACCENT(UPPER(o.title)) LIKE '%" + word.toUpperCase() + "%' ";
-				if (addOrDescription)
-					descriptionClause += "OR ";
-				descriptionClause += "UNACCENT(UPPER(o.description)) LIKE '%" + word.toUpperCase() + "%' ";
-				addOrDescription = true;
-				addOrTitle = true;
+				String searchWord = word.toLowerCase().replaceAll("[-+.^:,']", "");
+				searchWord = StringUtils.removeAccents(searchWord);
+				if (addOr)
+					searchClause += "OR ";
+				searchClause += "o.keywords LIKE '%" + searchWord + "%' ";
+				addOr = true;
 			}
 		}
 
-		if (!titleClause.isEmpty() && !descriptionClause.isEmpty()) {
-			queryStr += "AND (" + titleClause + (titleClause.isEmpty() ? "" : "OR ") + descriptionClause + ")";
+		if (!searchClause.isEmpty()) {
+			queryStr += "AND (" + searchClause + ")";
 		}
 
 		System.out.println(queryStr);
