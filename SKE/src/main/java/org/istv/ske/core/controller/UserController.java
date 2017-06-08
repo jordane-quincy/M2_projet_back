@@ -1,5 +1,7 @@
 package org.istv.ske.core.controller;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,9 @@ import org.istv.ske.core.utils.FieldReader;
 import org.istv.ske.dal.entities.Formation;
 import org.istv.ske.dal.entities.SecretQuestion;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.messages.common.EmailClient;
+import org.istv.ske.messages.enums.EmailType;
+import org.istv.ske.messages.model.Email;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,13 +39,18 @@ public class UserController {
 
 	@Autowired
 	private FormationService formationService;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
+	@Autowired
+	private EmailClient emailClient;
+
+	private SecureRandom random = new SecureRandom();
+
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public User create(HttpServletRequest request) throws Exception {
-		
+
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
 		String email = FieldReader.readString(object, "email");
@@ -52,21 +62,35 @@ public class UserController {
 		String question = FieldReader.readString(object, "question");
 		String answer = FieldReader.readString(object, "answer");
 		List<String> skills = FieldReader.readStringArray(object, "skills");
-		
-		if(!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
-			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
-		
-		if(userService.emailAlreadyExists(email)) {
+
+		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+			throw new BadRequestException("L'email fourni ne correspond pas a la regex requise");
+
+		if (userService.emailAlreadyExists(email)) {
 			throw new BadRequestException("Cet email a déjà servi a créer un compte");
 		}
 
 		Formation formation = formationService.findFormationById(formationId);
-		if(formation == null)
+		if (formation == null)
 			throw new BadRequestException("Cette formation n'existe pas");
-		
+
 		try {
 			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
-			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion, skills);
+			String token = new BigInteger(32 * 4, random).toString(16);
+			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
+					skills, token);
+
+			String msgMail = "Bonjour " + created.getUserFirstName() + " " + created.getUserName()
+					+ System.lineSeparator() + System.lineSeparator()
+					+ "veuillez activer votre compte en cliquant sur ce lien : ";
+			Email emailActivation = new Email(EmailType.ACTIVATION_EMAIL);
+			emailActivation.setContenuMail(msgMail);
+			emailActivation.setDestinataire(created);
+			emailActivation.setObjet("Activation de votre compte SKE");
+			emailActivation.setExpediteur(null);
+			emailActivation.setUrlActivationAccount("localhost/account_certification/certify/" + token);
+			emailClient.sendEmail(emailActivation);
+
 			return created;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,9 +113,9 @@ public class UserController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json")
 	public User update(HttpServletRequest request) throws Exception {
-		
+
 		Long userId = tokenService.getUserIdByToken(request);
-		
+
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
 		String password = FieldReader.readString(object, "password");
@@ -99,9 +123,9 @@ public class UserController {
 		List<String> skills = FieldReader.readStringArray(object, "skills");
 
 		Formation formation = formationService.findFormationById(formationId);
-		if(formation == null)
+		if (formation == null)
 			throw new BadRequestException("Cette formation n'existe pas");
-		
+
 		try {
 			User updated = userService.updateUser(userId, password, formation, skills);
 			return updated;
@@ -109,16 +133,16 @@ public class UserController {
 			e.printStackTrace();
 			throw new InternalException("Erreur lors de la modification de l'utilisateur : " + e.getMessage());
 		}
-		
+
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-	public List<User> list() throws Exception{
+	public List<User> list() throws Exception {
 
 		List<User> list = null;
 
 		try {
-			list = userService.getAll();	
+			list = userService.getAll();
 		} catch (Exception e) {
 			throw new InternalException("Erreur lors de la recherche des utilisateurs");
 		}

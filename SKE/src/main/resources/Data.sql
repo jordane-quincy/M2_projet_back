@@ -11,7 +11,7 @@ TRUNCATE TABLE user
 TRUNCATE TABLE formation
 TRUNCATE TABLE secretquestion
 
-/*******************************DROP PART************************************/
+/*******************************DROP PART***********************************
 
 DROP TABLE appointment
 DROP TABLE remark
@@ -23,6 +23,7 @@ DROP TABLE skill
 DROP TABLE user
 DROP TABLE formation
 DROP TABLE secretquestion
+*/
 
 /*******************************INSERT PART************************************/
 
@@ -62,11 +63,3 @@ INSERT INTO OFFER VALUES (2, 'Cours de développement JAVA afin d''apprendre à 
 INSERT INTO OFFER VALUES (3, 'Cours de développement JEE', 1, 'Cours JEE', 1, 2)
 INSERT INTO OFFER VALUES (4, 'Cours de développement mobile, nouvelles technologies', 1, 'XAMARIN', 4, 3)
 
-
-INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (1, {ts '2017-06-15 12:00:00.00000000'}, 'CANCELED', 4, 2)
-INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (2, {ts '2017-06-15 11:00:00.000000000'}, 'PENDING', 4, 2);
-INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (3, {ts '2017-06-18 11:00:00.000000000'}, 'PENDING', 4, 3);
-INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (4, {ts '2017-06-08 16:00:00.000000000'}, 'VALIDATED', 4, 4);
-INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (5, {ts '2017-06-06 11:00:00.000000000'}, 'FINISHED', 4, 2);
-
-INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (1, 5, 'Tres compréhensible, en une heure avec lui j''ai appris plus que 1 an tout seul', 2);
