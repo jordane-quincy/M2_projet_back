@@ -57,12 +57,19 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
+
 			Offer offer = offerService.findById(Long.valueOf(idOffer));
 			if (offer == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
+			if (offer.getUser().getId() == user.getId()) {
+				response.addProperty("ok", false);
+				response.addProperty("message", "Vous ne pouvez pas vous inscrire à votre offre");
+				return jsonService.stringify(response);
+			}
 			if (user.getCredit() == 0) {
 				response.addProperty("ok", false);
-				throw new BadRequestException("Crédit insuffisant.");
+				response.addProperty("message", "Crédit insuffisant");
+				return jsonService.stringify(response);
 			}
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
 
@@ -143,8 +150,6 @@ public class SubscriptionController {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
 			app = appointmentRepository.findByApplicant(user);
-			if (app == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
 			if (user == null)
 				throw new BadRequestException("Cet utilisateur n'existe pas.");
 		} catch (BadRequestException e) {
@@ -162,24 +167,13 @@ public class SubscriptionController {
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
 			offers = offerService.findByUserId(idUser);
-			if (offers == null)
-				throw new BadRequestException("Cet utilisateur n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(offers.get(0).getTitle());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		List<Appointment> apps = appointmentRepository.findByOfferOrderById(offers);
+		List<Appointment> apps = appointmentRepository.findByOffer(offers);
 
-		try {
-			if (apps == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		JsonArray response = new JsonArray();
 
 		for (Appointment app : apps) {
@@ -196,31 +190,30 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	@RequestMapping(value = { "/curse" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = { "/courses" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody String curse(HttpServletRequest request) {
-		List<Appointment> appointment = null;
+		List<Appointment> appointments = null;
+		List<Offer> offers = null;
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
-			User user = userRepository.findOne(idUser);
-			appointment = appointmentRepository.findByStatusAndApplicant("VALIDATED", user);
-			if (appointment == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			offers = offerService.findByUserId(idUser);
+			appointments = appointmentRepository.findByStatusAndOffer(AppointmentStatus.VALIDATED, offers);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		JsonArray response = new JsonArray();
-		for (Appointment app : appointment) {
+		for (Appointment app : appointments) {
 			JsonObject r = new JsonObject();
 			r.addProperty("id", app.getId());
 			r.addProperty("date", app.getDate().getTime());
 			r.addProperty("offer", app.getOffer().getTitle());
 			r.addProperty("duration", app.getOffer().getDuration());
 			r.addProperty("status", app.getStatus().toString());
+			r.addProperty("firstName", app.getApplicant().getUserFirstName());
+			r.addProperty("lastName", app.getApplicant().getUserName());
 			response.add(r);
 		}
 		return jsonService.stringify(response);

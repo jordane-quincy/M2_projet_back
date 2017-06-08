@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
 	User createUser(String email, String name, String firstName, String password, Long birthday, Formation formation,
-			SecretQuestion secretQuestion, List<String> skills);
+			SecretQuestion secretQuestion, List<String> skills, String phoneNumber);
 
 	void deleteUser(Long id);
 
@@ -19,7 +19,7 @@ public interface UserService {
 
 	User getUser(Long userID);
 
-	User updateUser(Long id, String password, Formation formation, List<String> skills);
+	User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation, List<String> skills, String phoneNumber);
 
 	List<User> getUserByToken(String token);
 

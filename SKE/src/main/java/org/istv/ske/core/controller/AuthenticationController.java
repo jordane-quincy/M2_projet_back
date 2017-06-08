@@ -1,11 +1,14 @@
 package org.istv.ske.core.controller;
 
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.configuration.ApplicationConfig;
 import org.istv.ske.core.service.AuthenticationService;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.utils.FieldReader;
+import org.istv.ske.dal.entities.Skill;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RestController
@@ -40,14 +44,31 @@ public class AuthenticationController {
 		String token = tokenService.createToken(user);
 		JsonObject userJson = new JsonObject();
 		userJson.addProperty("id", user.getId());
-		userJson.addProperty("userfirstName", user.getUserFirstName());
+		userJson.addProperty("userFirstName", user.getUserFirstName());
 		userJson.addProperty("userMail", user.getUserMail());
 		userJson.addProperty("userName", user.getUserName());
 		userJson.addProperty("credit", user.getCredit());
 		userJson.addProperty("birthday", user.getBirthday().getTime());
 		userJson.addProperty("role", user.getRole().name());
-		userJson.addProperty("formationId", user.getFormation().getId());
-		userJson.addProperty("questionId", user.getQuestion().getId());
+		
+		
+		JsonObject formation = new JsonObject();
+		formation.addProperty("id", user.getFormation().getId());
+		formation.addProperty("name", user.getFormation().getName());
+		formation.addProperty("level", user.getFormation().getLevel());
+		
+		userJson.add("formation", formation);
+		
+		JsonArray skills = new JsonArray();
+		for(Entry<Skill, Boolean> entry : user.getSkills().entrySet()) {
+			JsonObject skill = new JsonObject();
+			skill.addProperty("id", entry.getKey().getId());
+			skill.addProperty("label", entry.getKey().getLabel());
+			skill.addProperty("validated", entry.getValue());
+			skills.add(skill);
+		}
+		userJson.add("skills", skills);
+		userJson.addProperty("phoneNumber", user.getPhoneNumber());
 		JsonObject response = new JsonObject();
 		response.addProperty("ok", true);
 		response.addProperty("token", token);

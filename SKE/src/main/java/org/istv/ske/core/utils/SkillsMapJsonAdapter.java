@@ -21,7 +21,7 @@ public class SkillsMapJsonAdapter extends JsonSerializer<Map<Skill, Boolean>> {
 		for(Entry<Skill, Boolean> entry : arg0.entrySet()) {
 			out.writeStartObject();
 			out.writeNumberField("id", entry.getKey().getId());
-			out.writeStringField("name", entry.getKey().getLabel());
+			out.writeStringField("label", entry.getKey().getLabel());
 			out.writeBooleanField("validated", entry.getValue());
 			out.writeEndObject();
 		}
