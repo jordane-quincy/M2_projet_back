@@ -57,7 +57,7 @@ public class UserController {
 
 		String email = FieldReader.readString(object, "userMail");
 		String name = FieldReader.readString(object, "userName");
-		String firstName = FieldReader.readString(object, "userfirstName");
+		String firstName = FieldReader.readString(object, "userFirstName");
 		String password = FieldReader.readString(object, "password");
 		Long birthday = FieldReader.readLong(object, "birthday");
 		Long formationId = FieldReader.readLong(object, "formationId");
@@ -125,7 +125,7 @@ public class UserController {
 
 		String validatePassword = FieldReader.readString(object, "validatePassword");
 		String name = FieldReader.readString(object, "userName");
-		String firstName = FieldReader.readString(object, "userfirstName");
+		String firstName = FieldReader.readString(object, "userFirstName");
 		String phoneNumber=  FieldReader.readString(object, "phoneNumber");
 		Long birthday = FieldReader.readLong(object, "birthday");
 		Long formationId = FieldReader.readLong(object, "formationId");
