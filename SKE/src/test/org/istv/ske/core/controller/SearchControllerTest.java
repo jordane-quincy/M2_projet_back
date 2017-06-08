@@ -12,6 +12,8 @@ public class SearchControllerTest {
 
     @Test
     public void listDomain() throws Exception {
+
+
         // 1 . preparer la requette httpServeletRequest __ front
         // 2 . appel au WS  __ front
         // 3 . verfier la reponse  __ fichier json __ json.get("domain").getAsList()
