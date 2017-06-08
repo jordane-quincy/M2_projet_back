@@ -59,7 +59,7 @@ public class NotificationManager {
     }
 
     public void createNotificationWithEmail(User destinataire, User expediteur, TypeNotification typeNotification) {
-        System.out.println("Création d'une notif et envoie d'un mail");
+        System.out.println("Creation d'une notif et envoie d'un mail");
 
         String title;
         String content;
@@ -79,7 +79,8 @@ public class NotificationManager {
                 emailMeeting.setObjet(title);
                 emailMeeting.setContenuMail(content);
 
-                emailClient.sendEmail(emailMeeting);
+                //emailMeeting.init();
+                //emailClient.sendEmail(emailMeeting);
                 break;
 
             case REMARK:

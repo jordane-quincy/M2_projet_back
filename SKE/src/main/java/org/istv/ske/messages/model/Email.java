@@ -37,7 +37,7 @@ public class Email {
 
         destinataire = dest;
         expediteur = exp;
-        urlActivationAccount = "http://google.fr";
+        urlActivationAccount = "localhost/account_certification/certify/";
     }
 
     public String getEmailType() {

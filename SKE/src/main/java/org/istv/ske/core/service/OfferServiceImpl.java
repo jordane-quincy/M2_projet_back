@@ -1,5 +1,6 @@
 package org.istv.ske.core.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.istv.ske.dal.entities.Domain;
@@ -71,6 +72,15 @@ public class OfferServiceImpl implements OfferService {
 		remarkRepository.save(remark);
 		offerRepository.save(offer);
 
+		return offer;
+	}
+	
+	@Override
+	public List<Offer> findAll() {
+		List<Offer> offer = new ArrayList<>();
+		for (Offer d : offerRepository.findAll()) {
+			offer.add(d);
+		}
 		return offer;
 	}
 

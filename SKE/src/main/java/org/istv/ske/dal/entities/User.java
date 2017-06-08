@@ -40,6 +40,7 @@ public class User {
 	@Column(unique = true)
 	private String userMail;
 	
+	@JsonIgnore
 	private String userPassword;
 	
 	private String userName;
