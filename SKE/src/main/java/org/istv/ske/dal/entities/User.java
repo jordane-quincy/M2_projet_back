@@ -45,6 +45,8 @@ public class User {
 
 	private String userFirstName;
 
+	private String phoneNumber;
+
 	private String token;
 
 	private Date birthday;
@@ -85,13 +87,15 @@ public class User {
 
 	}
 
-	public User(int credit, String userMail, String userPassword, String userName, String userFirstName, Date birthday,
-			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation) {
+	public User(int credit, String userMail, String userPassword, String userName, String userFirstName,
+			String phoneNumber, Date birthday, Collection<Offer> offers, Collection<Notification> notifications,
+			Role role, Formation formation) {
 		this.credit = credit;
 		this.userMail = userMail;
 		this.userPassword = userPassword;
 		this.userName = userName;
 		this.userFirstName = userFirstName;
+		this.phoneNumber = phoneNumber;
 		this.birthday = birthday;
 		this.offers = offers;
 		this.notifications = notifications;
@@ -145,6 +149,14 @@ public class User {
 
 	public void setUserFirstName(String userFirstName) {
 		this.userFirstName = userFirstName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Date getBirthday() {
