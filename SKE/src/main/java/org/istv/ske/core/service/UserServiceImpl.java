@@ -52,23 +52,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(String email, String name, String firstName, String password, Long birthday,
 			Formation formation, SecretQuestion secretQuestion, List<String> skills) {
-		return createUser(email, name, firstName, password, birthday, formation, secretQuestion, skills, null);
-	}
-
-	@Override
-	public List<User> getUserByToken(String token) {
-		return userRepository.findByToken(token);
-	}
-
-	@Override
-	public boolean emailAlreadyExists(String email) {
-		User user = userRepository.findByUserMail(email);
-		return user != null;
-	}
-
-	@Override
-	public User createUser(String email, String name, String firstName, String password, Long birthday,
-			Formation formation, SecretQuestion secretQuestion, List<String> skills, String token) {
 		Role role = (email.endsWith("@etu.univ-valenciennes.fr") ? Role.STUDENT : Role.TEACHER);
 		User user = new User();
 		user.setBirthday(new Date(birthday));
@@ -89,8 +72,18 @@ public class UserServiceImpl implements UserService {
 		user.setUserMail(email);
 		user.setUserName(name);
 		user.setUserPassword(password);
-		user.setToken(token);
 		return userRepository.save(user);
+	}
+
+	@Override
+	public List<User> getUserByToken(String token) {
+		return userRepository.findByToken(token);
+	}
+
+	@Override
+	public boolean emailAlreadyExists(String email) {
+		User user = userRepository.findByUserMail(email);
+		return user != null;
 	}
 
 	private boolean wasSkillValidated(Skill skill, Map<Skill, Boolean> skills) {
@@ -132,4 +125,10 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByUserMail(email);
 		user.setUserPassword(password);
 		userRepository.save(user);
+	}
+
+	@Override
+	public void setToken(User user, String token) {
+		user.setToken(token);
+		userRepository.save(user);		
 	}}

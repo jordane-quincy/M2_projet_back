@@ -37,7 +37,8 @@ public class TokenValidationFilter implements Filter {
 		   request.getServletPath().equals("/formation/list") ||
 		   request.getServletPath().equals("/skill/list") ||
 		   request.getServletPath().equals("/user/askResetPassword") ||
-		   request.getServletPath().equals("/user/resetPassword")
+		   request.getServletPath().equals("/user/resetPassword") ||
+		   request.getServletPath().startsWith("/account_certification/certify")
 		   ) {
 			chain.doFilter(request, response);
 			return;

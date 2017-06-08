@@ -1,5 +1,6 @@
 package org.istv.ske.core.controller;
 
+import org.istv.ske.configuration.ApplicationConfig;
 import org.istv.ske.core.service.AccountCertificationService;
 import org.istv.ske.dal.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,11 @@ public class AccountCertificationController {
 	@Autowired
 	AccountCertificationService accountCertificationService;
 
-	@RequestMapping(value = "/certify/{token}", method = RequestMethod.POST, produces = "application/json")
-	private User certifyAccount(@PathVariable(required = true) String token) {
+	@RequestMapping(value = "/certify/{token}", method = RequestMethod.GET, produces = "application/json")
+	private String certifyAccount(@PathVariable(required = true) String token) {
 
-		User use = accountCertificationService.activate(token);
+		 accountCertificationService.activate(token);
 
-		return use;
+		return ApplicationConfig.JSON_SUCCESS;
 	}
 }
