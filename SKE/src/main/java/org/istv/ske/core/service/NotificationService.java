@@ -8,15 +8,15 @@ import org.istv.ske.dal.entities.User;
 
 public interface NotificationService {
 
-    public Notification createNotification(String title, String content, String type, User user);
+    Notification createNotification(String title, String content, String type, User user);
 
-    public void deleteNotification(Notification notification);
+    void deleteNotification(Notification notification);
 
-    public Notification updateNotification(Notification notification, String title, String content, String type, User user);
+    Notification updateNotification(Notification notification, String title, String content, String type, User user);
 
-    public List<Notification> getAll();
+    List<Notification> getAll();
     
-    public Notification findNotificationById(Long id);
+    Notification findNotificationById(Long id);
 
-   public List<Notification> findNotificationByUser(User user);
+   List<Notification> findNotificationByUser(User user);
 }
