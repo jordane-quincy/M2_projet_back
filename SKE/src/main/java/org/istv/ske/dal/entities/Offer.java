@@ -24,6 +24,8 @@ public class Offer {
 
 	private String description;
 
+	private String keywords;
+
 	@ManyToOne
 	@JsonIgnore
 	private User user;
@@ -113,6 +115,14 @@ public class Offer {
 
 	public void setRemarks(List<Remark> remarks) {
 		this.remarks = remarks;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
 	}
 
 }
