@@ -10,9 +10,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class FieldReader {
-	
+
 	private static JsonElement get(JsonObject object, String key) throws BadRequestException {
-		if(object.get(key) == null)
+		if (object.get(key) == null)
 			throw new BadRequestException("Le champ " + key + " n'est pas renseigné");
 		return object.get(key);
 	}
@@ -24,7 +24,7 @@ public class FieldReader {
 			throw new BadRequestException("La valeur du champ " + key + " n'est pas un String " + e.getMessage());
 		}
 	}
-	
+
 	public static Long readLong(JsonObject object, String key) throws BadRequestException {
 		try {
 			return get(object, key).getAsLong();
@@ -32,17 +32,45 @@ public class FieldReader {
 			throw new BadRequestException("La valeur du champ " + key + " n'est pas un Long : " + e.getMessage());
 		}
 	}
-	
+
 	public static List<String> readStringArray(JsonObject object, String key) throws BadRequestException {
 		try {
 			List<String> ret = new ArrayList<>();
 			JsonArray array = get(object, key).getAsJsonArray();
-			for(JsonElement o : array)
+			for (JsonElement o : array)
 				ret.add(o.getAsString());
 			return ret;
 		} catch (Exception e) {
 			throw new BadRequestException("La valeur du champ " + key + " n'est pas un String[] : " + e.getMessage());
 		}
 	}
-	
+
+	public static List<Long> readLongArray(JsonObject object, String key) throws BadRequestException {
+		try {
+			List<Long> ret = new ArrayList<>();
+			JsonArray array = get(object, key).getAsJsonArray();
+			for (JsonElement o : array)
+				ret.add(o.getAsLong());
+			return ret;
+		} catch (Exception e) {
+			throw new BadRequestException("La valeur du champ " + key + " n'est pas un Long[] : " + e.getMessage());
+		}
+	}
+
+	public static JsonObject readObject(JsonObject object, String key) throws BadRequestException {
+		try {
+			return get(object, key).getAsJsonObject();
+		} catch (Exception e) {
+			throw new BadRequestException("La valeur du champ " + key + " n'est pas un JsonObject : " + e.getMessage());
+		}
+	}
+
+	public static Boolean readBoolean(JsonObject object, String key) throws BadRequestException {
+		try {
+			return get(object, key).getAsBoolean();
+		} catch (Exception e) {
+			throw new BadRequestException("La valeur du champ " + key + " n'est pas un Boolean : " + e.getMessage());
+		}
+	}
+
 }
