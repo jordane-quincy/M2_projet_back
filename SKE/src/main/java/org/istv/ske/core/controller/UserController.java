@@ -2,6 +2,8 @@ package org.istv.ske.core.controller;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,8 @@ import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.core.utils.FieldReader;
 import org.istv.ske.dal.entities.Formation;
+import org.istv.ske.dal.entities.Offer;
+import org.istv.ske.dal.entities.Remark;
 import org.istv.ske.dal.entities.SecretQuestion;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.messages.common.EmailClient;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RestController
@@ -105,9 +110,14 @@ public class UserController {
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(HttpServletRequest request) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
+		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
+		User user = userService.getUser(userId);
+		String password = FieldReader.readString(object, "password");
 		try {
 			userService.deleteUser(userId);
 			tokenService.deleteTokenForUserId(userId);
+			if(!AuthenticationServiceImpl.chiffrer(password).equals(user.getUserPassword()))
+				throw new BadRequestException("Mot de passe erroné");
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			throw new BadRequestException("Impossible de supprimer l'user : " + e.getMessage());
@@ -242,5 +252,47 @@ public class UserController {
 		jsonObject.addProperty("firstname", user.getUserFirstName()); 
 		jsonObject.addProperty("lastname", user.getUserName());
 		return jsonService.stringify(jsonObject);
+	}
+	
+	@RequestMapping(value = "/opinions", method = RequestMethod.POST, produces = "application/json")
+	public String getOpinions(HttpServletRequest request) throws Exception {
+		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
+		String email = FieldReader.readString(object, "email");
+		User user = userService.getUserByUserMail(email);
+		
+		Collection<Offer> offers = user.getOffers();
+		
+		Iterator<Offer> iterator = offers.iterator();
+		
+		int countRemark = 0;
+		double averageMark = 0;
+		int sumMark = 0;
+		
+		JsonArray offersArray = new JsonArray();
+			
+		while (iterator.hasNext()) {
+			Offer offer = (Offer) iterator.next();
+			List<Remark> remarks = offer.getRemarks();
+			Iterator<Remark> iteratorRemark = remarks.iterator();
+			while (iteratorRemark.hasNext()) {
+				Remark remark = (Remark) iteratorRemark.next();
+				JsonObject remarkObject = new JsonObject();
+				remarkObject.addProperty("offerTitle", offer.getTitle());
+				remarkObject.addProperty("remark", remark.getText());
+				offersArray.add(remarkObject);
+				sumMark+=remark.getGrade();
+				countRemark++;
+			}
+		}
+		
+		averageMark = sumMark / countRemark;
+		
+		JsonObject result = new JsonObject();
+		result.addProperty("averageMark", averageMark);
+		result.add("remarks", offersArray);
+		
+		
+		
+		return jsonService.stringify(result);
 	}
 }

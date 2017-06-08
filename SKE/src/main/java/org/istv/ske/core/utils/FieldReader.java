@@ -57,8 +57,9 @@ public class FieldReader {
 		try {
 			List<Long> ret = new ArrayList<>();
 			JsonArray array = get(object, key).getAsJsonArray();
-			for (JsonElement o : array)
-				ret.add(o.getAsLong());
+			if (array.size() > 0)
+				for (JsonElement o : array)
+					ret.add(o.getAsLong());
 			return ret;
 		} catch (Exception e) {
 			throw new BadRequestException("La valeur du champ " + key + " n'est pas un Long[] : " + e.getMessage());
@@ -78,6 +79,14 @@ public class FieldReader {
 			return get(object, key).getAsBoolean();
 		} catch (Exception e) {
 			throw new BadRequestException("La valeur du champ " + key + " n'est pas un Boolean : " + e.getMessage());
+		}
+	}
+
+	public static Double readDouble(JsonObject object, String key) throws BadRequestException {
+		try {
+			return get(object, key).getAsDouble();
+		} catch (Exception e) {
+			throw new BadRequestException("La valeur du champ " + key + " n'est pas un Double : " + e.getMessage());
 		}
 	}
 
