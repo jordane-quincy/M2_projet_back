@@ -1,5 +1,8 @@
 package org.istv.ske.core.service;
 
+import java.util.List;
+
+import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.dal.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,14 @@ public class AccountCertificationServiceImpl implements AccountCertificationServ
 	private UserService userService;
 
 	@Override
-	public User activate(String token) {
-		//List<User> userService.getUserByToken(token);
-		//User user = .get(0);
-		// TODO Auto-generated method stub
+	public User activate(String token) throws BadRequestException {
+		List<User> users = userService.getUserByToken(token);
+		if(users.isEmpty()){
+			throw new BadRequestException("Aucun user n'est affilié a ce token d'utilisation");
+		}
+		User user = users.get(0);		
+		userService.setToken(user, null);
+		System.out.println("[Activate User][Sucess] -- user : "+user.toString());
 		return null;
 	}
 
