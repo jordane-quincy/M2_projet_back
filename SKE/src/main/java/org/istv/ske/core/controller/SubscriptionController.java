@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.SubscriptionService;
@@ -46,6 +47,7 @@ public class SubscriptionController {
 
 	@Autowired
 	private TokenService tokenService;
+
 	// S'inscrire à un cours
 	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String subsciption(HttpServletRequest request) {
@@ -57,10 +59,11 @@ public class SubscriptionController {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
 			Offer offer = offerService.findById(Long.valueOf(idOffer));
+			if (offer == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
 			if (user.getCredit() == 0) {
 				response.addProperty("ok", false);
-				response.addProperty("credit", "Crédit insufisant");
-				return jsonService.stringify(response);
+				throw new BadRequestException("Crédit insuffisant.");
 			}
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
 
@@ -83,6 +86,8 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 
 			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
+			if (app == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
 			app.setStatus(AppointmentStatus.CANCELLED);
 			if (subscriptionService.subscription(app))
 				response.addProperty("ok", true);
@@ -102,25 +107,28 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 			final String status = content.get("status").getAsString();
 			final Long date = content.get("date").getAsLong();
-			
+			final int duration = content.get("duration").getAsInt();
 			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
+			if (app == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
+
 			app.setStatus(AppointmentStatus.valueOf(status));
 			app.setDate(new Date(date));
-			
-			if(status.equals("VALIDATED")) {
+
+			if (status.equals("VALIDATED")) {
 				User user = userRepository.findOne(app.getApplicant().getId());
-				user.setCredit(user.getCredit() - 1);
+				user.setCredit(user.getCredit() - duration);
 				userRepository.save(user);
 			}
-			if(status.equals("FINISHED")) {
+			if (status.equals("FINISHED")) {
 				User user = userRepository.findOne(app.getOffer().getUser().getId());
-				user.setCredit(user.getCredit() + 1);
+				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
-				response.addProperty("credit",user.getCredit());
+				response.addProperty("credit", user.getCredit());
 			}
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
-				
+
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
@@ -133,18 +141,46 @@ public class SubscriptionController {
 	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request,
 			@PathVariable(required = true) Long id) {
 		User user = userRepository.findOne(id);
+		try {
+			if (user == null)
+				throw new BadRequestException("Cet utilisateur n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<Appointment> app = appointmentRepository.findByApplicant(user);
+
+		try {
+			if (app == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return app;
 	}
-	
+
 	@RequestMapping(value = { "/participants/{id}" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody String participants(HttpServletRequest request,
-			@PathVariable(required = true) Long id) {
+	public @ResponseBody String participants(HttpServletRequest request, @PathVariable(required = true) Long id) {
 		List<Offer> offers = offerService.findByUserId(id);
+		try {
+			if (offers == null)
+				throw new BadRequestException("Cet utilisateur n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<Appointment> apps = appointmentRepository.findByOfferOrderById(offers);
-		System.out.println(apps.get(0).getApplicant());
+
+		try {
+			if (apps == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		JsonArray response = new JsonArray();
-		
+
 		for (Appointment app : apps) {
 			JsonObject r = new JsonObject();
 			r.addProperty("id", app.getId());
