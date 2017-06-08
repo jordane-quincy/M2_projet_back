@@ -42,6 +42,13 @@ public class AuthenticationController {
 		JsonObject response = new JsonObject();
 		response.addProperty("ok", true);
 		response.addProperty("token", token);
+		response.addProperty("userId", user.getId());
+		response.addProperty("firstName", user.getUserFirstName());
+		response.addProperty("userMail", user.getUserMail());
+		response.addProperty("userName", user.getUserName());
+		response.addProperty("userCredit", user.getCredit());
+		response.addProperty("userBirthday", user.getBirthday().getTime());
+		response.addProperty("userRole", user.getRole().name());
 		return jsonService.stringify(response);
 	}
 
