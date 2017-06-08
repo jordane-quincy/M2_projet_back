@@ -7,18 +7,21 @@ import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 
 public interface OfferService {
-	
-	public Offer createOffer(User user, String title, int duration, String description, Domain domain);
-	
-	public void deleteOffer(Long id);
-	
-	public List<Offer> findByUserId(Long userId);
-	
-	public Offer findById(Long offerId);
-	
-	public Offer updateOffer(Long offerId, String title, int duration, String description, Domain domain);
-	
-	public Offer addComment(Long offerId, String comment, int grade);
 
-	public List<Offer> findAll();
+	Offer createOffer(User user, String title, int duration, String description, Domain domain);
+
+	void deleteOffer(Long id);
+
+	List<Offer> findByUserId(Long userId);
+
+	Offer findById(Long offerId);
+
+	Offer updateOffer(Long offerId, String title, int duration, String description, Domain domain);
+
+	Offer addComment(Long offerId, String comment, int grade);
+
+	List<Offer> findAll();
+
+	List<Offer> search(String keywords, List<Long> domains, int durationMin, int durationMax, boolean teacher,
+			boolean student);
 }

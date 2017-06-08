@@ -54,11 +54,11 @@ public class UserController {
 
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
-		String email = FieldReader.readString(object, "email");
-		String name = FieldReader.readString(object, "lastname");
-		String firstName = FieldReader.readString(object, "firstname");
+		String email = FieldReader.readString(object, "userMail");
+		String name = FieldReader.readString(object, "userName");
+		String firstName = FieldReader.readString(object, "userfirstName");
 		String password = FieldReader.readString(object, "password");
-		Long birthday = FieldReader.readLong(object, "birthdate");
+		Long birthday = FieldReader.readLong(object, "birthday");
 		Long formationId = FieldReader.readLong(object, "formationId");
 		String question = FieldReader.readString(object, "question");
 		String answer = FieldReader.readString(object, "answer");

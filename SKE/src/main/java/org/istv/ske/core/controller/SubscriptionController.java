@@ -196,4 +196,34 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
+	@RequestMapping(value = { "/curse" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody String curse(HttpServletRequest request) {
+		List<Appointment> appointment = null;
+		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			User user = userRepository.findOne(idUser);
+			appointment = appointmentRepository.findByStatusAndApplicant("VALIDATED", user);
+			if (appointment == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		JsonArray response = new JsonArray();
+		for (Appointment app : appointment) {
+			JsonObject r = new JsonObject();
+			r.addProperty("id", app.getId());
+			r.addProperty("date", app.getDate().getTime());
+			r.addProperty("offer", app.getOffer().getTitle());
+			r.addProperty("duration", app.getOffer().getDuration());
+			r.addProperty("status", app.getStatus().toString());
+			response.add(r);
+		}
+		return jsonService.stringify(response);
+	}
+
 }
