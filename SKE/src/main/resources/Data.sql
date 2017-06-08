@@ -11,7 +11,7 @@ TRUNCATE TABLE user
 TRUNCATE TABLE formation
 TRUNCATE TABLE secretquestion
 
-/*******************************DROP PART************************************/
+/*******************************DROP PART***********************************
 
 DROP TABLE appointment
 DROP TABLE remark
@@ -23,6 +23,7 @@ DROP TABLE skill
 DROP TABLE user
 DROP TABLE formation
 DROP TABLE secretquestion
+*/
 
 /*******************************INSERT PART************************************/
 
@@ -61,3 +62,4 @@ INSERT INTO OFFER VALUES (1, 'Cours de développement web afin d''apprendre à u
 INSERT INTO OFFER VALUES (2, 'Cours de développement JAVA afin d''apprendre à utiliser les langages JAVA, JEE', 1, 'Cours JAVA', 4, 1)
 INSERT INTO OFFER VALUES (3, 'Cours de développement JEE', 1, 'Cours JEE', 1, 2)
 INSERT INTO OFFER VALUES (4, 'Cours de développement mobile, nouvelles technologies', 1, 'XAMARIN', 4, 3)
+
