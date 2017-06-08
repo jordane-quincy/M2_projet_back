@@ -167,11 +167,12 @@ public class SubscriptionController {
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
 			offers = offerService.findByUserId(idUser);
+			System.out.println(offers.get(0).getTitle());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		List<Appointment> apps = appointmentRepository.findByOfferOrderById(offers);
+		List<Appointment> apps = appointmentRepository.findByOffer(offers);
 
 		JsonArray response = new JsonArray();
 
