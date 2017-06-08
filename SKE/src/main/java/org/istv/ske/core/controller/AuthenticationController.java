@@ -46,8 +46,9 @@ public class AuthenticationController {
 		userJson.addProperty("credit", user.getCredit());
 		userJson.addProperty("birthday", user.getBirthday().getTime());
 		userJson.addProperty("role", user.getRole().name());
-		userJson.addProperty("formationId", user.getFormation().getId());
-		userJson.addProperty("questionId", user.getQuestion().getId());
+		userJson.addProperty("formation", user.getFormation().toString());
+		userJson.addProperty("skills", user.getSkills().toString());
+		userJson.addProperty("phoneNumber", user.getPhoneNumber());
 		JsonObject response = new JsonObject();
 		response.addProperty("ok", true);
 		response.addProperty("token", token);
