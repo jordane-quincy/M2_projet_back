@@ -31,12 +31,21 @@ public class EmailClient {
     public void sendEmail(Email emailModel) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            if(emailModel.getEmailType().equals(EmailType.NOTIFICATION_EMAIL)){
-                messageHelper.setReplyTo(emailModel.getExpediteur().getUserMail());
-            }
             messageHelper.setFrom(username);
-            messageHelper.setTo(emailModel.getDestinataire().getUserMail());
             messageHelper.setSubject(emailModel.getObjet());
+
+            if (emailModel.getDestinataire() != null) {
+                messageHelper.setTo(emailModel.getDestinataire().getUserMail());
+                if (emailModel.getEmailType().equals(EmailType.NOTIFICATION_EMAIL)) {
+                    if (emailModel.getExpediteur() != null) {
+                        messageHelper.setReplyTo(emailModel.getExpediteur().getUserMail());
+                    } else {
+                        throw new NullPointerException("Dans le cadre d'une notification l'expediteur doit etre présent !!!!");
+                    }
+                }
+            } else {
+                throw new NullPointerException("Le destinataire doit impérativement etre présent !!!!");
+            }
             String content = emailTemplate.build(emailModel);
             messageHelper.setText(content, true);
         };

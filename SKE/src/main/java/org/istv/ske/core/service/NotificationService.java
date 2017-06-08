@@ -15,4 +15,8 @@ public interface NotificationService {
     public Notification updateNotification(Notification notification, String title, String content, String type, User user);
 
     public List<Notification> getAll();
+    
+    public Notification findNotificationById(Long id);
+
+   public List<Notification> findNotificationByUser(User user);
 }

@@ -13,6 +13,7 @@ public class SkillServiceImpl implements SkillService {
 	
 	@Autowired
 	private SkillRepository skillRepository;
+	private Skill skill;
 
 	@Override
 	public Skill createSkill(String label) {
@@ -46,8 +47,22 @@ public class SkillServiceImpl implements SkillService {
 	
 	@Override
 	public void createSkillsIfNotExists(List<String> skills) {
-		for(String skill : skills) {
+		skill = null;
+		for(String skillLabel : skills) {
+			if(skillRepository.findByLabel(skillLabel).equals(null))
+			{
+				skill.setLabel(skillLabel);
+				skillRepository.save(skill);
+			}
 			
 		}
+	}
+
+	@Override
+	public Skill findByLabel(String label) {
+	
+		Skill skill =skillRepository.findByLabel(label) ;
+			
+		return skill;
 	}
 }
