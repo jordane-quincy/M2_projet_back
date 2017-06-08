@@ -24,14 +24,16 @@ public class EmailTemplate {
         context.setVariable("message", email.getContenuMail());
         context.setVariable("objet", email.getObjet());
         context.setVariable("urlActivationAccount", email.getUrlActivationAccount());
-        context.setVariable("prenomDest", email.getDestinataire().getUserFirstName());
-        context.setVariable("nomDest", email.getDestinataire().getUserName());
-        context.setVariable("prenomExp", email.getExpediteur().getUserFirstName());
-        context.setVariable("nomExp", email.getExpediteur().getUserName());
 
         if(email.getEmailType().equals(EmailType.ACTIVATION_EMAIL)){
+            context.setVariable("prenomDest", email.getDestinataire().getUserFirstName());
+            context.setVariable("nomDest", email.getDestinataire().getUserName());
             return templateEngine.process("activateAccount", context);
         } else {
+            context.setVariable("prenomDest", email.getDestinataire().getUserFirstName());
+            context.setVariable("nomDest", email.getDestinataire().getUserName());
+            context.setVariable("prenomExp", email.getExpediteur().getUserFirstName());
+            context.setVariable("nomExp", email.getExpediteur().getUserName());
             return templateEngine.process("notificationEmail", context);
         }
     }
