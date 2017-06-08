@@ -110,12 +110,14 @@ public class SubscriptionController {
 				userRepository.save(user);
 			}
 			if(status.equals("FINISHED")) {
-				User user = userRepository.findOne(app.getOffer().getId());
+				User user = userRepository.findOne(app.getOffer().getUser().getId());
 				user.setCredit(user.getCredit() + 1);
 				userRepository.save(user);
+				response.addProperty("credit",user.getCredit());
 			}
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
+				
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
