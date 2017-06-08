@@ -196,4 +196,44 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
+	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody String curse(HttpServletRequest request) {
+		List<Offer> offers = null;
+		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			offers = offerService.findByStatus("VALIDATED");
+			if (offers == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Appointment> apps = appointmentRepository.findByOfferOrderById(offers);
+
+		try {
+			if (apps == null)
+				throw new BadRequestException("Cette offre n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JsonArray response = new JsonArray();
+
+		for (Appointment app : apps) {
+			JsonObject r = new JsonObject();
+			r.addProperty("id", app.getId());
+			r.addProperty("date", app.getDate().getTime());
+			r.addProperty("offer", app.getOffer().getTitle());
+			r.addProperty("duration", app.getOffer().getDuration());
+			r.addProperty("status", app.getStatus().toString());
+			r.addProperty("firstName", app.getApplicant().getUserFirstName());
+			r.addProperty("lastName", app.getApplicant().getUserName());
+			response.add(r);
+		}
+		return jsonService.stringify(response);
+	}
+
 }

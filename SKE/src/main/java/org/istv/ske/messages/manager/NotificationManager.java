@@ -1,5 +1,6 @@
 package org.istv.ske.messages.manager;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -50,9 +51,13 @@ public class NotificationManager {
         System.out.println("Creation d'une notif et envoie d'un mail");
         System.out.println("Prise de rdv notif");
 
-        String date = appointment.getDate().toString();
+        DateFormat fullDateFormat = DateFormat.getDateTimeInstance(
+                DateFormat.FULL,
+                DateFormat.FULL);
+
         String title = "Confirmation de prise de rendez-vous";
-        String content = "Un rendez-vous a été créé à la date suivante : " + date;
+        String content = "Un rendez-vous a été créé à la date suivante : " + fullDateFormat.format(appointment.getDate());
+
 
         Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
         emailMeeting.setDestinataire(destinataire);
@@ -64,7 +69,7 @@ public class NotificationManager {
         emailMeeting.setContenuMail(content);
 
         emailClient.sendEmail(emailMeeting);
-
+        
         return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(), destinataire);
     }
 
@@ -87,6 +92,10 @@ public class NotificationManager {
         emailClient.sendEmail(emailMeeting);
 
         return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
+    }
+
+    public Notification getNotificationById(Long notificationID) {
+        return notificationService.findNotificationById(notificationID);
     }
 
     public void deleteNotification(Notification notification) {

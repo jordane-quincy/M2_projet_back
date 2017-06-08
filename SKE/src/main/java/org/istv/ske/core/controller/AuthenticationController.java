@@ -38,10 +38,20 @@ public class AuthenticationController {
 
 		User user = authenticationService.authenticate(email, password);
 		String token = tokenService.createToken(user);
-
+		JsonObject userJson = new JsonObject();
+		userJson.addProperty("id", user.getId());
+		userJson.addProperty("userfirstName", user.getUserFirstName());
+		userJson.addProperty("userMail", user.getUserMail());
+		userJson.addProperty("userName", user.getUserName());
+		userJson.addProperty("credit", user.getCredit());
+		userJson.addProperty("birthday", user.getBirthday().getTime());
+		userJson.addProperty("role", user.getRole().name());
+		userJson.addProperty("formationId", user.getFormation().getId());
+		userJson.addProperty("questionId", user.getQuestion().getId());
 		JsonObject response = new JsonObject();
 		response.addProperty("ok", true);
 		response.addProperty("token", token);
+		response.add("user", userJson);
 		return jsonService.stringify(response);
 	}
 
