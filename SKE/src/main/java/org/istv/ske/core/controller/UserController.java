@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.istv.ske.configuration.ApplicationConfig;
 import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.core.exception.InternalException;
+import org.istv.ske.core.service.AuthenticationServiceImpl;
 import org.istv.ske.core.service.FormationService;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.UserService;
@@ -63,6 +64,7 @@ public class UserController {
 		String question = FieldReader.readString(object, "question");
 		String answer = FieldReader.readString(object, "answer");
 		List<String> skills = FieldReader.readStringArray(object, "skills");
+		String phoneNumber = FieldReader.readString(object, "phoneNumber");
 
 		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
 			throw new BadRequestException("L'email fourni ne correspond pas a la regex requise");
@@ -77,8 +79,8 @@ public class UserController {
 
 		try {
 			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
-			User created = userService.createUser(email, name, firstName, (password), birthday, formation,
-					secretQuestion, skills);
+			User created = userService.createUser(email, name, firstName, password, birthday, formation,
+					secretQuestion, skills, phoneNumber);
 			String token = new BigInteger(32 * 4, random).toString(16);
 			userService.setToken(created, token);
 
@@ -124,6 +126,7 @@ public class UserController {
 		String validatePassword = FieldReader.readString(object, "validatePassword");
 		String name = FieldReader.readString(object, "userName");
 		String firstName = FieldReader.readString(object, "userfirstName");
+		String phoneNumber=  FieldReader.readString(object, "phoneNumber");
 		Long birthday = FieldReader.readLong(object, "birthday");
 		Long formationId = FieldReader.readLong(object, "formationId");
 		List<String> skills = FieldReader.readStringArray(object, "skills");
@@ -132,7 +135,7 @@ public class UserController {
 		if (FieldReader.existField(object, "password"))
 			password = FieldReader.readString(object, "password");
 
-		if(!validatePassword.equals(user.getUserPassword()))
+		if(!AuthenticationServiceImpl.chiffrer(validatePassword).equals(user.getUserPassword()))
 			throw new BadRequestException("Mauvais mot de passe de validation.");
 		
 		
@@ -141,7 +144,7 @@ public class UserController {
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
-			User updated = userService.updateUser(userId, name, firstName, birthday, formation, skills);
+			User updated = userService.updateUser(userId, name, firstName, birthday, formation, skills, phoneNumber);
 			if(password != null)
 				userService.setPassword(updated.getUserMail(), password);
 			return updated;

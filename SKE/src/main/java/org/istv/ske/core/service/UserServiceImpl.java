@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(String email, String name, String firstName, String password, Long birthday,
-			Formation formation, SecretQuestion secretQuestion, List<String> skills) {
+			Formation formation, SecretQuestion secretQuestion, List<String> skills, String phoneNumber) {
 		Role role = (email.endsWith("@etu.univ-valenciennes.fr") ? Role.STUDENT : Role.TEACHER);
 		User user = new User();
 		user.setBirthday(new Date(birthday));
@@ -110,6 +110,7 @@ public class UserServiceImpl implements UserService {
 		user.setUserMail(email);
 		user.setUserName(name);
 		user.setUserPassword(chiffrer(password));
+		user.setPhoneNumber(phoneNumber);
 		return userRepository.save(user);
 	}
 
@@ -140,7 +141,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation, List<String> skills) {
+	public User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation, List<String> skills, String phoneNumber) {
 		User user = userRepository.findOne(id);
 		user.setFormation(formation);
 		user.setUserName(lastName);
@@ -159,6 +160,7 @@ public class UserServiceImpl implements UserService {
 			newSkills.put(sk, wasSkillValidated(sk, oldSkills));
 		}
 		user.setSkills(newSkills);
+		user.setPhoneNumber(phoneNumber);
 		userRepository.save(user);
 		return user;
 	}

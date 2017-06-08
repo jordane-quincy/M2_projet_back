@@ -52,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		}
 	}
 
-	private static String chiffrer(String s) {
+	public static String chiffrer(String s) {
 		String encrypted = null;
 		try {
 			// Instantiate the cipher
