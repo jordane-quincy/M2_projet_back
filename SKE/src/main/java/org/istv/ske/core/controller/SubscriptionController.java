@@ -201,7 +201,7 @@ public class SubscriptionController {
 		List<Offer> offers = null;
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
-			offers = offerService.findByStatus("VALIDATED");
+			// offers = offerService.findByStatus("VALIDATED");
 			if (offers == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
 		} catch (BadRequestException e) {
