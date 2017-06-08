@@ -44,7 +44,7 @@ public class AuthenticationController {
 		String token = tokenService.createToken(user);
 		JsonObject userJson = new JsonObject();
 		userJson.addProperty("id", user.getId());
-		userJson.addProperty("userfirstName", user.getUserFirstName());
+		userJson.addProperty("userFirstName", user.getUserFirstName());
 		userJson.addProperty("userMail", user.getUserMail());
 		userJson.addProperty("userName", user.getUserName());
 		userJson.addProperty("credit", user.getCredit());
