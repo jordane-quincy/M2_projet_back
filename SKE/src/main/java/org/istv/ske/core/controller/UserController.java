@@ -254,4 +254,15 @@ public class UserController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "/current", method = RequestMethod.GET, produces = "application/json")
+	public String Usercurrent(HttpServletRequest request) throws Exception {
+		Long userId = tokenService.getUserIdByToken(request);
+		User user = userService.getUser(userId);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("id", user.getId());
+		jsonObject.addProperty("firstname", user.getUserFirstName()); 
+		jsonObject.addProperty("lastname", user.getUserName());
+		return jsonService.stringify(jsonObject);
+	}
 }
