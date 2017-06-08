@@ -34,7 +34,10 @@ public class TokenValidationFilter implements Filter {
 		System.out.println(request.getContextPath());
 		if(request.getServletPath().equals("/auth/connect") || 
 		   request.getServletPath().equals("/user/create") ||
-		   request.getServletPath().equals("/formation/list")
+		   request.getServletPath().equals("/formation/list") ||
+		   request.getServletPath().equals("/skill/list") ||
+		   request.getServletPath().equals("/user/askResetPassword") ||
+		   request.getServletPath().equals("/user/resetPassword")
 		   ) {
 			chain.doFilter(request, response);
 			return;
