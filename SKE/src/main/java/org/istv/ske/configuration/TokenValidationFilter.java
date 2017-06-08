@@ -31,6 +31,7 @@ public class TokenValidationFilter implements Filter {
 		
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+		response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
 		
 		if(request.getMethod().equals("OPTIONS")) {
 			chain.doFilter(request, response);
