@@ -32,7 +32,10 @@ public class TokenValidationFilter implements Filter {
 		response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 		
 		System.out.println(request.getContextPath());
-		if(request.getServletPath().equals("/auth/connect") || request.getServletPath().equals("/user/create")) {
+		if(request.getServletPath().equals("/auth/connect") || 
+		   request.getServletPath().equals("/user/create") ||
+		   request.getServletPath().equals("/formation/list")
+		   ) {
 			chain.doFilter(request, response);
 			return;
 		}
