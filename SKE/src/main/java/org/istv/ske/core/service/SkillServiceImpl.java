@@ -8,6 +8,7 @@ import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.dal.entities.Skill;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.SkillRepository;
+import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class SkillServiceImpl implements SkillService {
 	private Skill skill;
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public Skill createSkill(String label) {
@@ -66,13 +70,13 @@ public class SkillServiceImpl implements SkillService {
 	@Override
 	public Skill findByLabel(String label) {
 	
-		Skill skill =skillRepository.findByLabel(label) ;
+		Skill skill = skillRepository.findByLabel(label) ;
 			
 		return skill;
 	}
 
 	@Override
-	public void validateSkill(Long userId, Long skillId) throws BadRequestException {
+	public void validateSkill(Long userId, Long skillId) throws Exception {
 		User user = userService.getUser(userId);
 		if(user == null)
 			throw new BadRequestException("Cet utilisateur n'existe pas");
@@ -83,6 +87,7 @@ public class SkillServiceImpl implements SkillService {
 					throw new BadRequestException("Ce skill a déja été validé");
 				} else {
 					entry.setValue(true);
+					userRepository.save(user);
 					return;
 				}
 			}
