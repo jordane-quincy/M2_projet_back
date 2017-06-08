@@ -143,8 +143,6 @@ public class SubscriptionController {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
 			app = appointmentRepository.findByApplicant(user);
-			if (app == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
 			if (user == null)
 				throw new BadRequestException("Cet utilisateur n'existe pas.");
 		} catch (BadRequestException e) {
@@ -162,24 +160,12 @@ public class SubscriptionController {
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
 			offers = offerService.findByUserId(idUser);
-			if (offers == null)
-				throw new BadRequestException("Cet utilisateur n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<Appointment> apps = appointmentRepository.findByOfferOrderById(offers);
 
-		try {
-			if (apps == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		JsonArray response = new JsonArray();
 
 		for (Appointment app : apps) {
@@ -204,11 +190,7 @@ public class SubscriptionController {
 			Long idUser = tokenService.getUserIdByToken(request);
 			offers = offerService.findByUserId(idUser);
 			appointments = appointmentRepository.findByStatusAndOffer(AppointmentStatus.VALIDATED, offers);
-			if (appointments == null)
-				throw new BadRequestException("Cette offre n'existe pas.");
-		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
