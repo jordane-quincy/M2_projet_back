@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.exception.BadRequestException;
+import org.istv.ske.core.service.AppointmentService;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.SubscriptionService;
@@ -43,6 +44,9 @@ public class SubscriptionController {
 
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+
+	@Autowired
+	private AppointmentService appointmentService;
 
 	@Autowired
 	private TokenService tokenService;
@@ -162,17 +166,9 @@ public class SubscriptionController {
 	}
 
 	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody String participants(HttpServletRequest request) {
-		List<Offer> offers = null;
-		try {
-			Long idUser = tokenService.getUserIdByToken(request);
-			offers = offerService.findByUserId(idUser);
-			System.out.println(offers.get(0).getTitle());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		List<Appointment> apps = appointmentRepository.findByOffer(offers);
+	public @ResponseBody String participants(HttpServletRequest request) throws Exception {
+		Long idUser = tokenService.getUserIdByToken(request);
+		List<Appointment> apps = appointmentService.findByOwnerId(idUser);
 
 		JsonArray response = new JsonArray();
 
