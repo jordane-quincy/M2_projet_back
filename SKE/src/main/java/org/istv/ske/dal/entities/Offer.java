@@ -25,7 +25,6 @@ public class Offer {
 	private String description;
 
 	@ManyToOne
-	@JsonIgnore
 	private User user;
 
 	@ManyToOne
