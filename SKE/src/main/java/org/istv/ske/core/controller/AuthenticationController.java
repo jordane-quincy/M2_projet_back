@@ -57,7 +57,8 @@ public class AuthenticationController {
 		formation.addProperty("name", user.getFormation().getName());
 		formation.addProperty("level", user.getFormation().getLevel());
 		
-		userJson.addProperty("formation", jsonService.stringify(formation));
+//		userJson.addProperty("formation", jsonService.stringify(formation));
+		userJson.add("formation", formation);
 		
 		JsonArray skills = new JsonArray();
 		for(Entry<Skill, Boolean> entry : user.getSkills().entrySet()) {
