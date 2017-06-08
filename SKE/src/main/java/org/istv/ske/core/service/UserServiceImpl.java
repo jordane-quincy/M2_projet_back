@@ -56,24 +56,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
-		User user = userRepository.findOne(id);
-		user.setUserPassword(password);
-		user.setFormation(formation);
-		user.getSkills().clear();
-		for (String skill : skills) {
-			Skill sk = skillRepository.findByLabel(skill);
-			if (sk == null) {
-				sk = new Skill(skill);
-				skillRepository.save(sk);
-			}
-			user.getSkills().put(sk, false);
-		}
-		userRepository.save(user);
-		return user;
-	}
-
-	@Override
 	public List<User> getUserByToken(String token) {
 		return userRepository.findByToken(token);
 	}
@@ -121,10 +103,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	}
-
 	public User getUserByUserMail(String email) {
 		User user = userRepository.findByUserMail(email);
+		return user;
 	}
 
 	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
