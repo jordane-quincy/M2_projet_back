@@ -149,4 +149,15 @@ public class OfferController {
 			throw new InternalException("Impossible d'ajouter un commentaire à l'offre : " + e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json")
+	public List<Offer> findAllOffer() throws Exception {
+		try {
+			List<Offer> offer = offerService.findAll();
+			return offer;
+		} catch (Exception e) {
+			throw new RuntimeException("Impossible de récupérer la liste des offres");
+		}
+	}
+	
 }
