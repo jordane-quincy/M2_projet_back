@@ -19,4 +19,6 @@ public interface OfferService {
 	public Offer updateOffer(Long offerId, String title, int duration, String description, Domain domain);
 	
 	public Offer addComment(Long offerId, String comment, int grade);
+
+	public List<Offer> findAll();
 }

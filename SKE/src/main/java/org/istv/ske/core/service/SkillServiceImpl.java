@@ -2,8 +2,11 @@ package org.istv.ske.core.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
+import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.dal.entities.Skill;
+import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ public class SkillServiceImpl implements SkillService {
 	@Autowired
 	private SkillRepository skillRepository;
 	private Skill skill;
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public Skill createSkill(String label) {
@@ -65,4 +70,26 @@ public class SkillServiceImpl implements SkillService {
 			
 		return skill;
 	}
+
+	@Override
+	public void validateSkill(Long userId, Long skillId) throws BadRequestException {
+		User user = userService.getUser(userId);
+		if(user == null)
+			throw new BadRequestException("Cet utilisateur n'existe pas");
+		
+		for(Entry<Skill, Boolean> entry : user.getSkills().entrySet()) {
+			if(entry.getKey().getId() == skillId) {
+				if(entry.getValue()) {
+					throw new BadRequestException("Ce skill a déja été validé");
+				} else {
+					entry.setValue(true);
+					return;
+				}
+			}
+		}
+		
+		throw new BadRequestException("Cet utlisateur ne possede pas ce skill");
+	}
+	
+	
 }

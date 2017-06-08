@@ -21,6 +21,7 @@ import org.istv.ske.messages.enums.EmailType;
 import org.istv.ske.messages.model.Email;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,20 +76,20 @@ public class UserController {
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
-			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
-			String token = new BigInteger(32 * 4, random).toString(16);
+			SecretQuestion secretQuestion = new SecretQuestion(question, answer);			
 			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
-					skills, token);
-
-			String msgMail = "Bonjour " + created.getUserFirstName() + " " + created.getUserName()
-					+ System.lineSeparator() + System.lineSeparator()
+					skills);
+			String token = new BigInteger(32 * 4, random).toString(16);
+			userService.setToken(created, token);
+			
+			String msgMail =  System.lineSeparator() + System.lineSeparator()
 					+ "veuillez activer votre compte en cliquant sur ce lien : ";
 			Email emailActivation = new Email(EmailType.ACTIVATION_EMAIL);
 			emailActivation.setContenuMail(msgMail);
 			emailActivation.setDestinataire(created);
 			emailActivation.setObjet("Activation de votre compte SKE");
 			emailActivation.setExpediteur(null);
-			emailActivation.setUrlActivationAccount("localhost/account_certification/certify/" + token);
+			emailActivation.setUrlActivationAccount("http://10.4.132.150:8080/account_certification/certify/" + token);
 			emailClient.sendEmail(emailActivation);
 
 			return created;
@@ -149,5 +150,69 @@ public class UserController {
 
 		return list;
 	}
+	
+	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = "application/json")
+	public User get(@PathVariable(required=true) Long id) throws Exception {
+		User user = userService.getUser(id);
+		if (user != null)
+			return user; 
+		else
+			throw new BadRequestException("Cet id d'utilisateur n'existe pas");
+	}
+	
+	@RequestMapping(value = "/askResetPassword", method = RequestMethod.POST, produces = "application/json")
+	public SecretQuestion getSecretQuestion(HttpServletRequest request) throws Exception {
+		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
+		String email = FieldReader.readString(object, "email");
+		
+		if(!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
+		
+		User user = userService.getUserByUserMail(email);
+		
+		if(user == null)
+			throw new BadRequestException("Cet email ne permet pas de retrouver un utilisateur");
+		
+		SecretQuestion secretQuestion = user.getQuestion();
+		
+		if (secretQuestion != null){
+			return secretQuestion;
+		} else {
+			throw new InternalException("Question secrète non trouvée");
+		}
+		
+	}
+	
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
+	public String respondToQuestion(HttpServletRequest request) throws Exception{
+		
+		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
+
+		String email = FieldReader.readString(object, "email");
+		String password = FieldReader.readString(object, "password");
+		String answer = FieldReader.readString(object, "answer");
+		
+		
+		if(!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
+		
+		User user = userService.getUserByUserMail(email);
+		
+		if(user == null)
+			throw new BadRequestException("Cet email ne permet pas de retrouver un utilisateur");
+		
+		SecretQuestion secretQuestion = user.getQuestion();
+		
+		if (secretQuestion == null)
+			throw new BadRequestException("Question secrète non trouvée");
+		
+		if(secretQuestion.getAnswer().equals(answer)){
+			userService.setPassword(email, password);
+			return ApplicationConfig.JSON_SUCCESS;
+		} else {
+			throw new InternalException("Mauvaise réponse à la question");
+		}
+		
+	}
 }

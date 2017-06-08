@@ -41,10 +41,10 @@ public class TestClient {
     public void testNotif() {
         System.out.println("Debut creation notif");
 
-        User user = userService.getUser(new Long(1));
-
-        notificationManager.createSimpleNotification(user, TypeNotification.SIMPLE);
-
+        User user1 = userService.getUser(new Long(1));
+        User user2 = userService.getUser(new Long(2));
+        //notificationManager.createSimpleNotification(user, TypeNotification.SIMPLE);
+        notificationManager.createNotificationWithEmail(user1, user2,TypeNotification.MEETING);
         System.out.println("Fin creation notif");
     }
 }

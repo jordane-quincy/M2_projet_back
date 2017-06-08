@@ -15,15 +15,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public User authenticate(String email, String password) throws Exception {
-		List<User> users = userRepository.findByUserMail(email);
-		if(users.isEmpty()) {
+		User user = userRepository.findByUserMail(email);
+		if(user == null) {
 			throw new RuntimeException("Cet e-mail n'existe pas");
 		}
-		User found = users.get(0);
-		if(!found.getUserPassword().equals(password)) {
+		if(!user.getUserPassword().equals(password)) {
 			throw new RuntimeException("Mot de passe incorrect");
 		}
-		return found;
+		return user;
 	}
 
 }
