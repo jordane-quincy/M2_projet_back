@@ -49,7 +49,27 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(String email, String name, String firstName, String password, Long birthday,
 			Formation formation, SecretQuestion secretQuestion, List<String> skills) {
-		return createUser(email, name, firstName, password, birthday, formation, secretQuestion, skills, null);
+		Role role = (email.endsWith("@etu.univ-valenciennes.fr") ? Role.STUDENT : Role.TEACHER);
+		User user = new User();
+		user.setBirthday(new Date(birthday));
+		user.setCredit(5);
+		user.setFormation(formation);
+		for (String skill : skills) {
+			Skill sk = skillRepository.findByLabel(skill);
+			if (sk == null) {
+				sk = new Skill(skill);
+				skillRepository.save(sk);
+			}
+			user.getSkills().put(sk, false);
+		}
+		SecretQuestion savedSecretQuestion = secretQuestionRepository.save(secretQuestion);
+		user.setQuestion(savedSecretQuestion);
+		user.setRole(role);
+		user.setUserFirstName(firstName);
+		user.setUserMail(email);
+		user.setUserName(name);
+		user.setUserPassword(password);
+		return userRepository.save(user);
 	}
 
 	@Override

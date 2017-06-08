@@ -80,15 +80,15 @@ public class UserController {
 			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
 					skills, token);
 
-			String msgMail = "Bonjour " + created.getUserFirstName() + " " + created.getUserName()
-					+ System.lineSeparator() + System.lineSeparator()
+			
+			String msgMail =  System.lineSeparator() + System.lineSeparator()
 					+ "veuillez activer votre compte en cliquant sur ce lien : ";
 			Email emailActivation = new Email(EmailType.ACTIVATION_EMAIL);
 			emailActivation.setContenuMail(msgMail);
 			emailActivation.setDestinataire(created);
 			emailActivation.setObjet("Activation de votre compte SKE");
 			emailActivation.setExpediteur(null);
-			emailActivation.setUrlActivationAccount("localhost/account_certification/certify/" + token);
+			emailActivation.setUrlActivationAccount("http://10.4.132.150:8080/account_certification/certify/" + token);
 			emailClient.sendEmail(emailActivation);
 
 			return created;
