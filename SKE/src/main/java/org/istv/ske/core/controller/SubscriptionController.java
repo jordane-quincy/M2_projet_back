@@ -198,12 +198,14 @@ public class SubscriptionController {
 
 	@RequestMapping(value = { "/curse" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody String curse(HttpServletRequest request) {
-		List<Appointment> appointment = null;
+		List<Appointment> appointments = null;
+		List<Offer> offers = null;
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
-			appointment = appointmentRepository.findByStatusAndApplicant("VALIDATED", user);
-			if (appointment == null)
+			offers = offerService.findByUserId(idUser);
+			appointments = appointmentRepository.findByStatusAndOffer(AppointmentStatus.VALIDATED, offers);
+			if (appointments == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
 		} catch (BadRequestException e) {
 			// TODO Auto-generated catch block
@@ -214,7 +216,7 @@ public class SubscriptionController {
 		}
 
 		JsonArray response = new JsonArray();
-		for (Appointment app : appointment) {
+		for (Appointment app : appointments) {
 			JsonObject r = new JsonObject();
 			r.addProperty("id", app.getId());
 			r.addProperty("date", app.getDate().getTime());
