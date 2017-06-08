@@ -2,7 +2,10 @@ package org.istv.ske.core.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.istv.ske.dal.entities.Formation;
 import org.istv.ske.dal.entities.SecretQuestion;
@@ -73,32 +76,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
-		User user = userRepository.findOne(id);
-		user.setUserPassword(password);
-		user.setFormation(formation);
-		user.getSkills().clear();
-		for (String skill : skills) {
-			Skill sk = skillRepository.findByLabel(skill);
-			if (sk == null) {
-				sk = new Skill(skill);
-				skillRepository.save(sk);
-			}
-			user.getSkills().put(sk, false);
-		}
-		userRepository.save(user);
-		return user;
-	}
-
-	@Override
 	public List<User> getUserByToken(String token) {
 		return userRepository.findByToken(token);
 	}
 
 	@Override
 	public boolean emailAlreadyExists(String email) {
-		List<User> users = userRepository.findByUserMail(email);
-		return users.size() != 0;
+		User user = userRepository.findByUserMail(email);
+		return user != null;
 	}
 
 	@Override
@@ -128,4 +113,43 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
-}
+	private boolean wasSkillValidated(Skill skill, Map<Skill, Boolean> skills) {
+		for(Entry<Skill, Boolean> entry : skills.entrySet()) {
+			if(entry.getKey().getLabel().equals(skill.getLabel())) {
+				return entry.getValue();
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public User getUserByUserMail(String email) {
+		User user = userRepository.findByUserMail(email);
+		return user;
+	}
+
+	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
+		User user = userRepository.findOne(id);
+		user.setUserPassword(password);
+		user.setFormation(formation);
+		Map<Skill, Boolean> oldSkills = user.getSkills();
+		Map<Skill, Boolean> newSkills = new HashMap<>();
+		for(String skill : skills) {
+			Skill sk = skillRepository.findByLabel(skill);
+			if(sk == null) {
+				sk = new Skill(skill);
+				skillRepository.save(sk);
+			}
+			newSkills.put(sk, wasSkillValidated(sk, oldSkills));
+		}
+		user.setSkills(newSkills);
+		userRepository.save(user);
+		return user;
+	}
+
+	@Override
+	public void setPassword(String email, String password) {
+		User user = userRepository.findByUserMail(email);
+		user.setUserPassword(password);
+		userRepository.save(user);
+	}}
