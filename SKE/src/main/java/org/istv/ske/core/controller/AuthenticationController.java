@@ -24,74 +24,70 @@ import com.google.gson.JsonObject;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-	
+
 	@Autowired
 	private JsonService jsonService;
-	
+
 	@Autowired
 	private AuthenticationService authenticationService;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
-	@RequestMapping(value = {"/connect"}, method = RequestMethod.POST, produces="application/json")
+
+	@RequestMapping(value = { "/connect" }, method = RequestMethod.POST, produces = "application/json")
 	public String authenticate(HttpServletRequest request) throws Exception {
-		
+
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
-		
+
 		String email = FieldReader.readString(object, "email");
 		String password = FieldReader.readString(object, "password");
-		
-		User user = authenticationService.authenticate(email,  chiffrer(password));
+
+		User user = authenticationService.authenticate(email, password);
 		String token = tokenService.createToken(user);
-		
+
 		JsonObject response = new JsonObject();
 		response.addProperty("ok", true);
 		response.addProperty("token", token);
 		return jsonService.stringify(response);
 	}
-	
+
 	private static SecretKeySpec getKey(String secretKey) {
-	    MessageDigest digest = null;
-	    try {
-	        digest = MessageDigest.getInstance("MD5");
-	 
-	    } catch (NoSuchAlgorithmException e) {
-	        throw new RuntimeException(e);
-	    }
-	 
-	    try {
-	        return new SecretKeySpec(digest.digest(new String(secretKey.getBytes(),"UTF8").getBytes()), "AES");
-	    }
-	    catch (UnsupportedEncodingException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("MD5");
+
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+
+		try {
+			return new SecretKeySpec(digest.digest(new String(secretKey.getBytes(), "UTF8").getBytes()), "AES");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-	
+
 	private static String chiffrer(String s) {
-        String encrypted = null;
-        try {
-           // Instantiate the cipher
-           Cipher cipher = Cipher.getInstance("AES");
-           cipher.init(Cipher.ENCRYPT_MODE, getKey("testduhash"));
-           // Récupère la clé secrète
-            byte[] cipherText = cipher.doFinal(s.getBytes("ISO-8859-1"));
-            encrypted = new String(cipherText);
-        }
-        catch (Exception e) {
-            System.out.println("Impossible to encrypt with AES algorithm");
-        }
-        return encrypted;
+		String encrypted = null;
+		try {
+			// Instantiate the cipher
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, getKey("testduhash"));
+			// Récupère la clé secrète
+			byte[] cipherText = cipher.doFinal(s.getBytes("ISO-8859-1"));
+			encrypted = new String(cipherText);
+		} catch (Exception e) {
+			System.out.println("Impossible to encrypt with AES algorithm");
+		}
+		return encrypted;
 	}
-	
-	@RequestMapping(value = {"/disconnect"}, method = RequestMethod.POST, produces="application/json")
+
+	@RequestMapping(value = { "/disconnect" }, method = RequestMethod.POST, produces = "application/json")
 	public String disconnect(HttpServletRequest request) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
 		tokenService.deleteTokenForUserId(userId);
 		return ApplicationConfig.JSON_SUCCESS;
 	}
-	
-	
-	
+
 }
