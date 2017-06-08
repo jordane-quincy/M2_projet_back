@@ -105,9 +105,14 @@ public class UserController {
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(HttpServletRequest request) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
+		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
+		User user = userService.getUser(userId);
+		String password = FieldReader.readString(object, "password");
 		try {
 			userService.deleteUser(userId);
 			tokenService.deleteTokenForUserId(userId);
+			if(!AuthenticationServiceImpl.chiffrer(password).equals(user.getUserPassword()))
+				throw new BadRequestException("Mot de passe erroné");
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			throw new BadRequestException("Impossible de supprimer l'user : " + e.getMessage());
