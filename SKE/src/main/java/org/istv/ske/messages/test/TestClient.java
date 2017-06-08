@@ -4,10 +4,7 @@ import org.istv.ske.core.service.AppointmentService;
 import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.RemarkService;
 import org.istv.ske.core.service.UserService;
-import org.istv.ske.dal.entities.Appointment;
-import org.istv.ske.dal.entities.Offer;
-import org.istv.ske.dal.entities.Remark;
-import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.entities.*;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
 import org.istv.ske.messages.enums.TypeNotification;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Created by abdel on 06/06/2017.
@@ -66,8 +64,16 @@ public class TestClient {
         Appointment appointment1 = appointmentService.createAppointment(offer1, user2, new Date(1221436800));
         Remark remark1 = remarkService.createRemark("bon cours", 4, offer1);
         // notificationManager.createSimpleNotification(user1);
-        // notificationManager.createMeetingNotification(appointment1, user1, user2);
+         notificationManager.createMeetingNotification(appointment1, user1, user2);
         // notificationManager.createRemarkNotification(remark1, user1, user2);
         System.out.println("Fin creation notif");
+    }
+
+    @RequestMapping(value = "/getNotif", method = RequestMethod.GET)
+    public void testGetNotif() {
+        User user1 = userService.getUser(1L);
+
+        List<Notification> notifications = notificationManager.getUserNotifications(user1);
+        System.out.println(notifications);
     }
 }
