@@ -13,10 +13,12 @@ public class SecretQuestion {
 	
 	@Id
 	@GeneratedValue
+	@JsonIgnore
 	private Long id;
 	
 	private String question;
 	
+	@JsonIgnore
 	private String answer;
 	
 	@OneToOne(mappedBy="question")
