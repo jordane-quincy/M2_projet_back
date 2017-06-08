@@ -115,8 +115,17 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	@RequestMapping(value = { "subscriptions/{id}" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = { "/subscriptions/{id}" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request,
+			@PathVariable(required = true) Long id) {
+		User user = userRepository.findOne(id);
+		List<Appointment> app = appointmentRepository.findByApplicant(user);
+		System.out.println(app.get(0).getOffer().getDescription());
+		return app;
+	}
+	
+	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<Appointment> participants(HttpServletRequest request,
 			@PathVariable(required = true) Long id) {
 		User user = userRepository.findOne(id);
 		List<Appointment> app = appointmentRepository.findByApplicant(user);
