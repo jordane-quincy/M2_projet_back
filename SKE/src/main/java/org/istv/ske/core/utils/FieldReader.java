@@ -2,6 +2,7 @@ package org.istv.ske.core.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.istv.ske.core.exception.BadRequestException;
 
@@ -33,6 +34,13 @@ public class FieldReader {
 		}
 	}
 
+	public static Boolean existField(JsonObject object, String key){
+		Set<String> keys = object.keySet();
+		if (keys.contains(key))
+			return true;
+		return false;
+	}
+	
 	public static List<String> readStringArray(JsonObject object, String key) throws BadRequestException {
 		try {
 			List<String> ret = new ArrayList<>();

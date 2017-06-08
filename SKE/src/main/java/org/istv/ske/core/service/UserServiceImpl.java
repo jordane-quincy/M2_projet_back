@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private static String chiffrer(String s) {
+	public static String chiffrer(String s) {
 		String encrypted = null;
 		try {
 			// Instantiate the cipher
@@ -139,10 +139,15 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-	public User updateUser(Long id, String password, Formation formation, List<String> skills) {
+	@Override
+	public User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation, List<String> skills) {
 		User user = userRepository.findOne(id);
-		user.setUserPassword(chiffrer(password));
 		user.setFormation(formation);
+		user.setUserName(lastName);
+		user.setUserFirstName(firstName);
+		
+		user.setBirthday(new Date(birthday));
+		
 		Map<Skill, Boolean> oldSkills = user.getSkills();
 		Map<Skill, Boolean> newSkills = new HashMap<>();
 		for (String skill : skills) {
