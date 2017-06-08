@@ -196,13 +196,12 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	@RequestMapping(value = { "/curse" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = { "/courses" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody String curse(HttpServletRequest request) {
 		List<Appointment> appointments = null;
 		List<Offer> offers = null;
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
-			User user = userRepository.findOne(idUser);
 			offers = offerService.findByUserId(idUser);
 			appointments = appointmentRepository.findByStatusAndOffer(AppointmentStatus.VALIDATED, offers);
 			if (appointments == null)
@@ -223,6 +222,8 @@ public class SubscriptionController {
 			r.addProperty("offer", app.getOffer().getTitle());
 			r.addProperty("duration", app.getOffer().getDuration());
 			r.addProperty("status", app.getStatus().toString());
+			r.addProperty("firstName", app.getApplicant().getUserFirstName());
+			r.addProperty("lastName", app.getApplicant().getUserName());
 			response.add(r);
 		}
 		return jsonService.stringify(response);
