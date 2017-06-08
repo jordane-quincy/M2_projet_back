@@ -57,7 +57,6 @@ public class AuthenticationController {
 		formation.addProperty("name", user.getFormation().getName());
 		formation.addProperty("level", user.getFormation().getLevel());
 		
-//		userJson.addProperty("formation", jsonService.stringify(formation));
 		userJson.add("formation", formation);
 		
 		JsonArray skills = new JsonArray();
@@ -68,9 +67,7 @@ public class AuthenticationController {
 			skill.addProperty("validated", entry.getValue());
 			skills.add(skill);
 		}
-		String skillsStr = jsonService.stringify(skills);
-		
-		userJson.addProperty("skills", skillsStr);
+		userJson.add("skills", skills);
 		userJson.addProperty("phoneNumber", user.getPhoneNumber());
 		JsonObject response = new JsonObject();
 		response.addProperty("ok", true);
