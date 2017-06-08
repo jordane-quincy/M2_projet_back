@@ -81,8 +81,10 @@ INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES
 INSERT INTO "PUBLIC"."APPOINTMENT" (ID,DATE,STATUS,APPLICANT_ID,OFFER_ID) VALUES (8, {ts '2017-06-07 13:00:00.000000000'}, 'FINISHED', 7, 3);
 
 INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (1, 5, 'Tres compréhensible, en une heure avec lui j''ai appris plus que 1 an tout seul', 2);
-/*INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (1, 5, 'Parfait rien à dire', 2);
-INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (1, 5, 'Tres compréhensible, en une heure avec lui j''ai appris plus que 1 an tout seul', 2);*/
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (2, 5, 'Parfait rien à dire.', 2);
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (3, 2, 'Pas trop mal, mais plan du cours a mettre à jour !', 2);
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (4, 3, 'Cours pas parfaitement organisé mais ce cours est compréhensible sachant que c''est une nouvelle techno !', 3);
+INSERT INTO "PUBLIC"."REMARK" (ID,GRADE,TEXT,OFFER_ID) VALUES (5, 4, 'Bien', 3);
 
 INSERT INTO "PUBLIC"."SKILL" (ID,LABEL) VALUES (1,'JAVA');
 INSERT INTO "PUBLIC"."SKILL" (ID,LABEL) VALUES (2,'SQL');
