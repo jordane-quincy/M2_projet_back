@@ -21,7 +21,12 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.istv.ske.core.utils.SkillsMapJsonAdapter;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.annotations.JsonAdapter;
 
 @Entity
 public class User {
@@ -72,6 +77,7 @@ public class User {
     @CollectionTable(name = "VALIDATED_SKILLS")
     @MapKeyColumn(name = "SKILL_ID")
     @Column(name = "VALIDATED")
+	@JsonSerialize(using=SkillsMapJsonAdapter.class)
 	private Map<Skill, Boolean> skills = new HashMap<>();
 	
 	@JsonIgnore

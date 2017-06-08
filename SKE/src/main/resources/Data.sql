@@ -11,7 +11,7 @@ TRUNCATE TABLE user
 TRUNCATE TABLE formation
 TRUNCATE TABLE secretquestion
 
-/*******************************DROP PART************************************/
+/*******************************DROP PART***********************************
 
 DROP TABLE appointment
 DROP TABLE remark
@@ -23,6 +23,7 @@ DROP TABLE skill
 DROP TABLE user
 DROP TABLE formation
 DROP TABLE secretquestion
+*/
 
 /*******************************INSERT PART************************************/
 
