@@ -36,56 +36,57 @@ public class NotificationManager {
      *
      * @param user
      */
-    public void createSimpleNotification(User user) {
+    public Notification createSimpleNotification(User user) {
         System.out.println("Création d'une notif");
 
         String title = "";
         String content = "";
 
         System.out.println("Simple notif");
-        notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
+        return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
     }
 
-    public void createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
+    public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
         System.out.println("Creation d'une notif et envoie d'un mail");
         System.out.println("Prise de rdv notif");
 
+        String date = appointment.getDate().toString();
         String title = "Confirmation de prise de rendez-vous";
-        String content = "Un rendez-vous a été créé à la date suivante : " + appointment.getDate();
-
-        notificationService.createNotification(title, content, TypeNotification.MEETING.toString(), destinataire);
+        String content = "Un rendez-vous a été créé à la date suivante : " + date;
 
         Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
         emailMeeting.setDestinataire(destinataire);
         emailMeeting.setExpediteur(expediteur);
 
-        emailMeeting.init();
+        // emailMeeting.init();
 
         emailMeeting.setObjet(title);
         emailMeeting.setContenuMail(content);
 
         emailClient.sendEmail(emailMeeting);
+
+        return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(), destinataire);
     }
 
-    public void createRemarkNotification(Remark remark, User destinataire, User expediteur) {
+    public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
         System.out.println("Creation d'une notif et envoie d'un mail");
         System.out.println("Notif pour signaler une note");
 
         String title = "Vous avez reçu une note ";
         String content = remark.getOffer().getTitle() + " a été noté " + remark.getGrade() + "/5" + " Commentaire : " + remark.getText();
 
-        notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
-
         Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
         emailMeeting.setDestinataire(destinataire);
         emailMeeting.setExpediteur(expediteur);
 
-        emailMeeting.init();
+        // emailMeeting.init();
 
         emailMeeting.setObjet(title);
         emailMeeting.setContenuMail(content);
 
         emailClient.sendEmail(emailMeeting);
+
+        return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
     }
 
     public void deleteNotification(Notification notification) {
