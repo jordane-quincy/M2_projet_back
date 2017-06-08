@@ -24,7 +24,9 @@ import javax.persistence.OneToOne;
 import org.istv.ske.core.utils.SkillsMapJsonAdapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.annotations.JsonAdapter;
 
 @Entity
 public class User {
@@ -34,26 +36,24 @@ public class User {
 	private Long id;
 
 	private int credit;
-
+	
 	@Column(unique = true)
 	private String userMail;
-
+	
 	@JsonIgnore
 	private String userPassword;
-
+	
 	private String userName;
-
+	
 	private String userFirstName;
-
-	private String phoneNumber;
-
+	
 	private String token;
-
+	
 	private Date birthday;
-
+	
 	@OneToOne
 	private SecretQuestion question;
-
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private Collection<Offer> offers;
@@ -64,38 +64,37 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
+	
 	public enum Role {
-		STUDENT, TEACHER
+		STUDENT,
+		TEACHER
 	}
 
 	@ManyToOne
 	private Formation formation;
-
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "VALIDATED_SKILLS")
-	@MapKeyColumn(name = "SKILL_ID")
-	@Column(name = "VALIDATED")
-	@JsonSerialize(using = SkillsMapJsonAdapter.class)
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "VALIDATED_SKILLS")
+    @MapKeyColumn(name = "SKILL_ID")
+    @Column(name = "VALIDATED")
+	@JsonSerialize(using=SkillsMapJsonAdapter.class)
 	private Map<Skill, Boolean> skills = new HashMap<>();
-
+	
 	@JsonIgnore
-	@OneToMany(mappedBy = "applicant")
+	@OneToMany(mappedBy="applicant")
 	private List<Appointment> appointments;
-
+	
 	public User() {
 
 	}
 
-	public User(int credit, String userMail, String userPassword, String userName, String userFirstName,
-			String phoneNumber, Date birthday, Collection<Offer> offers, Collection<Notification> notifications,
-			Role role, Formation formation) {
+	public User(int credit, String userMail, String userPassword, String userName, String userFirstName, Date birthday,
+			Collection<Offer> offers, Collection<Notification> notifications, Role role, Formation formation) {
 		this.credit = credit;
 		this.userMail = userMail;
 		this.userPassword = userPassword;
 		this.userName = userName;
 		this.userFirstName = userFirstName;
-		this.phoneNumber = phoneNumber;
 		this.birthday = birthday;
 		this.offers = offers;
 		this.notifications = notifications;
@@ -149,14 +148,6 @@ public class User {
 
 	public void setUserFirstName(String userFirstName) {
 		this.userFirstName = userFirstName;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
 	}
 
 	public Date getBirthday() {
@@ -231,4 +222,5 @@ public class User {
 		this.token = token;
 	}
 
+	
 }
