@@ -36,28 +36,28 @@ public class OfferController {
 
 	@Autowired
 	private JsonService jsonService;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private DomainService domainService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
-		
+
 		Long userId = tokenService.getUserIdByToken(request);
-		
+
 		String title = FieldReader.readString(object, "title");
 		String description = FieldReader.readString(object, "description");
 		Long duration = FieldReader.readLong(object, "duration");
 		Long domainId = FieldReader.readLong(object, "domainId");
-		
+
 		Domain domain = domainService.findById(domainId);
-		if(domain == null)
+		if (domain == null)
 			throw new BadRequestException("Ce domaine n'existe pas");
-		
+
 		User user = userService.getUser(userId);
 		try {
 			Offer created = offerService.createOffer(user, title, duration.intValue(), description, domain);
@@ -68,16 +68,15 @@ public class OfferController {
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json", produces = "application/json")
-	public String delete(HttpServletRequest request,
-			@PathVariable(required=true) Long id) throws Exception {
+	public String delete(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
 		Offer offer = offerService.findById(id);
-		if(offer == null)
+		if (offer == null)
 			throw new BadRequestException("Cette offre n'existe pas");
-		
-		if(offer.getUser().getId() != userId)
+
+		if (offer.getUser().getId() != userId)
 			throw new BadRequestException("Vous ne pouvez pas supprimer une offre qui ne vous appartient pas");
-		
+
 		try {
 			offerService.deleteOffer(id);
 			return ApplicationConfig.JSON_SUCCESS;
@@ -98,29 +97,28 @@ public class OfferController {
 	}
 
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public Offer update(HttpServletRequest request,
-			@PathVariable(required=true) Long id) throws Exception {
-		
+	public Offer update(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
+
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
-		
+
 		Long userId = tokenService.getUserIdByToken(request);
-		
+
 		String title = FieldReader.readString(object, "title");
 		String description = FieldReader.readString(object, "description");
 		Long duration = FieldReader.readLong(object, "duration");
 		Long domainId = FieldReader.readLong(object, "domainId");
-		
+
 		Domain domain = domainService.findById(domainId);
-		if(domain == null)
+		if (domain == null)
 			throw new BadRequestException("Ce domaine n'existe pas");
-		
+
 		Offer offer = offerService.findById(id);
-		if(offer == null)
+		if (offer == null)
 			throw new BadRequestException("Cette offre n'existe pas");
-		
-		if(offer.getUser().getId() != userId)
+
+		if (offer.getUser().getId() != userId)
 			throw new BadRequestException("Vous ne pouvez pas modifier une offre qui ne vous appartient pas");
-		
+
 		try {
 			Offer updated = offerService.updateOffer(id, title, duration.intValue(), description, domain);
 			return updated;
@@ -128,23 +126,22 @@ public class OfferController {
 			throw new InternalException("Erreur lors de la modification de l'offre : " + e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/comment/{id}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
-	public Offer addCommentary(HttpServletRequest request,
-			@PathVariable(required=true) Long id) throws Exception {
-		
+	public Offer addCommentary(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
+
 		Long userId = tokenService.getUserIdByToken(request);
-		//TODO vérifier que le mec qui commente a bien suivi ce cours
-		
+		// TODO vérifier que le mec qui commente a bien suivi ce cours
+
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
-		
+
 		String comment = FieldReader.readString(object, "comment");
 		Long grade = FieldReader.readLong(object, "grade");
-		
+
 		Offer offer = offerService.findById(id);
-		if(offer == null)
+		if (offer == null)
 			throw new BadRequestException("Cette offre n'existe pas");
-		
+
 		try {
 			offerService.addComment(id, comment, grade.intValue());
 			return offer;
@@ -152,15 +149,4 @@ public class OfferController {
 			throw new InternalException("Impossible d'ajouter un commentaire à l'offre : " + e.getMessage());
 		}
 	}
-	
-	@RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json")
-	public List<Offer> findAllOffer() throws Exception {
-		try {
-			List<Offer> offer = offerService.findAll();
-			return offer;
-		} catch (Exception e) {
-			throw new RuntimeException("Impossible de récupérer la liste des offres");
-		}
-	}
-	
 }
