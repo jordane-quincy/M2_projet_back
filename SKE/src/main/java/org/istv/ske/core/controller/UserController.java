@@ -1,14 +1,9 @@
 package org.istv.ske.core.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.configuration.ApplicationConfig;
@@ -81,13 +76,13 @@ public class UserController {
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
-			SecretQuestion secretQuestion = new SecretQuestion(question, answer);			
-			User created = userService.createUser(email, name, firstName, chiffrer(password), birthday, formation, secretQuestion,
-					skills);
+			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
+			User created = userService.createUser(email, name, firstName, (password), birthday, formation,
+					secretQuestion, skills);
 			String token = new BigInteger(32 * 4, random).toString(16);
 			userService.setToken(created, token);
-			
-			String msgMail =  System.lineSeparator() + System.lineSeparator()
+
+			String msgMail = System.lineSeparator() + System.lineSeparator()
 					+ "veuillez activer votre compte en cliquant sur ce lien : ";
 			Email emailActivation = new Email(EmailType.ACTIVATION_EMAIL);
 			emailActivation.setContenuMail(msgMail);
@@ -103,40 +98,6 @@ public class UserController {
 			throw new InternalException("Erreur lors de la création de l'utilisateur : " + e.getMessage());
 		}
 
-	}
-	
-	private static SecretKeySpec getKey(String secretKey) {
-	    MessageDigest digest = null;
-	    try {
-	        digest = MessageDigest.getInstance("MD5");
-	 
-	    } catch (NoSuchAlgorithmException e) {
-	        throw new RuntimeException(e);
-	    }
-	 
-	    try {
-	        return new SecretKeySpec(digest.digest(new String(secretKey.getBytes(),"UTF8").getBytes()), "AES");
-	    }
-	    catch (UnsupportedEncodingException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
-	}
-	
-	private static String chiffrer(String s) {
-        String encrypted = null;
-        try {
-           // Instantiate the cipher
-           Cipher cipher = Cipher.getInstance("AES");
-           cipher.init(Cipher.ENCRYPT_MODE, getKey("testduhash"));
-           // Récupère la clé secrète
-            byte[] cipherText = cipher.doFinal(s.getBytes("ISO-8859-1"));
-            encrypted = new String(cipherText);
-        }
-        catch (Exception e) {
-            System.out.println("Impossible to encrypt with AES algorithm: string=(" + s + ")");
-        }
-        return encrypted;
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
@@ -189,69 +150,68 @@ public class UserController {
 
 		return list;
 	}
-	
+
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = "application/json")
-	public User get(@PathVariable(required=true) Long id) throws Exception {
+	public User get(@PathVariable(required = true) Long id) throws Exception {
 		User user = userService.getUser(id);
 		if (user != null)
-			return user; 
+			return user;
 		else
 			throw new BadRequestException("Cet id d'utilisateur n'existe pas");
 	}
-	
+
 	@RequestMapping(value = "/askResetPassword", method = RequestMethod.POST, produces = "application/json")
 	public SecretQuestion getSecretQuestion(HttpServletRequest request) throws Exception {
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
 		String email = FieldReader.readString(object, "email");
-		
-		if(!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+
+		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
 			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
-		
+
 		User user = userService.getUserByUserMail(email);
-		
-		if(user == null)
+
+		if (user == null)
 			throw new BadRequestException("Cet email ne permet pas de retrouver un utilisateur");
-		
+
 		SecretQuestion secretQuestion = user.getQuestion();
-		
-		if (secretQuestion != null){
+
+		if (secretQuestion != null) {
 			return secretQuestion;
 		} else {
 			throw new InternalException("Question secrète non trouvée");
 		}
-		
+
 	}
-	
+
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
-	public String respondToQuestion(HttpServletRequest request) throws Exception{
-		
+	public String respondToQuestion(HttpServletRequest request) throws Exception {
+
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
 		String email = FieldReader.readString(object, "email");
 		String password = FieldReader.readString(object, "password");
 		String answer = FieldReader.readString(object, "answer");
-		
-		
-		if(!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+
+		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
 			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
-		
+
 		User user = userService.getUserByUserMail(email);
-		
-		if(user == null)
+
+		if (user == null)
 			throw new BadRequestException("Cet email ne permet pas de retrouver un utilisateur");
-		
+
 		SecretQuestion secretQuestion = user.getQuestion();
-		
+
 		if (secretQuestion == null)
 			throw new BadRequestException("Question secrète non trouvée");
-		
-		if(secretQuestion.getAnswer().equals(answer)){
+
+		if (secretQuestion.getAnswer().equals(answer)) {
 			userService.setPassword(email, password);
 			return ApplicationConfig.JSON_SUCCESS;
 		} else {
 			throw new InternalException("Mauvaise réponse à la question");
 		}
-		
+
 	}
 }
