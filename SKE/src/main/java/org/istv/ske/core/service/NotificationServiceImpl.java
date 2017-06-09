@@ -18,7 +18,7 @@ public class NotificationServiceImpl implements NotificationService {
     NotificationRepository notificationRepository;
 
     @Override
-    public Notification createNotification(String title, String content, String type, User user) {
+    public Notification createNotification(String title, String content, Notification.NotificationType type, User user) {
         Notification notification = new Notification();
         notification.setContent(content);
         notification.setTitle(title);
@@ -35,7 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Notification updateNotification(Notification notification, String title, String content, String type, User user) {
+    public Notification updateNotification(Notification notification, String title, String content, Notification.NotificationType type, User user) {
         Notification notificationFound = notificationRepository.findOne(notification.getId());
         notificationFound.setContent(content);
         notificationFound.setTitle(title);
@@ -68,5 +68,15 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return notifications;
     }
+
+    @Override
+    public Notification asRead(Long notificationID) {
+        Notification notification = notificationRepository.findOne(notificationID);
+
+        notification.setStatus(Notification.NotificationStatus.READ);
+        notificationRepository.save(notification);
+        return  notification;
+    }
+
 
 }

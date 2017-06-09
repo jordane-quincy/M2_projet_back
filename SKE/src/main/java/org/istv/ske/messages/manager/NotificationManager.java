@@ -10,7 +10,6 @@ import org.istv.ske.dal.entities.Remark;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
-import org.istv.ske.messages.enums.TypeNotification;
 import org.istv.ske.messages.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +30,7 @@ public class NotificationManager {
 	public NotificationManager() {
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Fonction qui creer une notif et qui gere le contenu en fonction du type
 	 *
@@ -41,6 +41,18 @@ public class NotificationManager {
 		System.out.println("Simple notif");
 		return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
 	}
+=======
+    /**
+     * Fonction qui creer une notif et qui gere le contenu en fonction du type
+     *
+     * @param user
+     */
+    public Notification createSimpleNotification(User user, String title, String content) {
+        System.out.println("Création d'une notif");
+        System.out.println("Simple notif");
+        return notificationService.createNotification(title, content, Notification.NotificationType.SIMPLE,user);
+    }
+>>>>>>> master
 
 	public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
 		System.out.println("Creation d'une notif et envoie d'un mail");
@@ -67,9 +79,14 @@ public class NotificationManager {
 				destinataire);
 	}
 
+<<<<<<< HEAD
 	public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
 		System.out.println("Creation d'une notif et envoie d'un mail");
 		System.out.println("Notif pour signaler une note");
+=======
+        return notificationService.createNotification(title, content, Notification.NotificationType.MEETING, destinataire);
+    }
+>>>>>>> master
 
 		String title = "Vous avez reçu une note ";
 		String content = remark.getOffer().getTitle() + " a été noté " + remark.getGrade() + "/5" + " Commentaire : "
@@ -89,15 +106,32 @@ public class NotificationManager {
 		return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
 	}
 
+<<<<<<< HEAD
 	public Notification getNotificationById(Long notificationID) {
 		return notificationService.findNotificationById(notificationID);
 	}
+=======
+        return notificationService.createNotification(title, content, Notification.NotificationType.REMARK, destinataire);
+    }
+>>>>>>> master
 
 	public void deleteNotification(Notification notification) {
 		notificationService.deleteNotification(notification);
 	}
 
+<<<<<<< HEAD
 	public List<Notification> getUserNotifications(User user) {
 		return notificationService.findNotificationByUser(user);
 	}
+=======
+    public void deleteNotification(Notification notification) {
+        notificationService.deleteNotification(notification);
+    }
+
+    public List<Notification> getUserNotifications(User user) {
+        return notificationService.findNotificationByUser(user);
+    }
+
+
+>>>>>>> master
 }
