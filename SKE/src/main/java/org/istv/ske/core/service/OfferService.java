@@ -10,13 +10,13 @@ public interface OfferService {
 
 	Offer createOffer(User user, String title, int duration, String description, Domain domain);
 
+	void deleteOffer(Long id);
+
 	List<Offer> findByUserId(Long userId);
 
 	Offer findById(Long offerId);
 
 	Offer updateOffer(Long offerId, String title, int duration, String description, Domain domain);
-
-	void updateStatus(Long offerId, boolean status);
 
 	Offer addComment(Long offerId, String comment, int grade);
 

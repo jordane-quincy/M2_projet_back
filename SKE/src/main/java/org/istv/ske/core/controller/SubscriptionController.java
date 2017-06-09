@@ -123,30 +123,39 @@ public class SubscriptionController {
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
-			final String status = content.get("status").getAsString();
+			AppointmentStatus status = null;
 			final Long date = content.get("date").getAsLong();
 			final int duration = content.get("duration").getAsInt();
 			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
+			try {
+				status = AppointmentStatus.valueOf(content.get("status").getAsString());
+			} catch (Exception e) {
+				throw new BadRequestException("Status incorrrect");
+			}
 			if (app == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
 
-			app.setStatus(AppointmentStatus.valueOf(status));
-			app.setDate(new Date(date));
-
 			// Crédite à nouveau le demandeur en cas de refus
-			if (status.equals("REFUSED")) {
+			if (status.equals(AppointmentStatus.REFUSED) && !app.getStatus().equals(AppointmentStatus.REFUSED)) {
 				User user = userRepository.findOne(app.getApplicant().getId());
 				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
 			}
 
+			if (status.equals(AppointmentStatus.CANCELLED) && !app.getStatus().equals(AppointmentStatus.CANCELLED)) {
+				User user = userRepository.findOne(app.getApplicant().getId());
+				user.setCredit(user.getCredit() + duration);
+				userRepository.save(user);
+			}
 			// Crédite le "prof" quand le cours est fini
-			if (status.equals("FINISHED")) {
+			if (status.equals(AppointmentStatus.FINISHED) && !app.getStatus().equals(AppointmentStatus.FINISHED)) {
 				User user = userRepository.findOne(app.getOffer().getUser().getId());
 				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
 				response.addProperty("credit", user.getCredit());
 			}
+			app.setStatus(status);
+			app.setDate(new Date(date));
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
 			}

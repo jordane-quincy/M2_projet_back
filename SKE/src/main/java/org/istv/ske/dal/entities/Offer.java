@@ -24,9 +24,8 @@ public class Offer {
 
 	private String description;
 
+	@JsonIgnore
 	private String keywords;
-
-	private boolean status;
 
 	@ManyToOne
 	private User user;
@@ -126,11 +125,4 @@ public class Offer {
 		this.keywords = keywords;
 	}
 
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
 }
