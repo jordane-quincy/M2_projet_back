@@ -12,5 +12,5 @@ public interface OfferRepository extends CrudRepository<Offer, Long> {
 
 	List<Offer> findByUserAndStatus(User user, boolean status);
 
-	List<Offer> findByStatus(Boolean status);
+	List<Offer> findByStatusOrderByIdDesc(Boolean status);
 }
