@@ -279,13 +279,16 @@ public class UserController {
 				JsonObject remarkObject = new JsonObject();
 				remarkObject.addProperty("offerTitle", offer.getTitle());
 				remarkObject.addProperty("remark", remark.getText());
+				remarkObject.addProperty("grade", remark.getGrade());
 				offersArray.add(remarkObject);
 				sumMark+=remark.getGrade();
 				countRemark++;
 			}
 		}
 		
-		averageMark = sumMark / countRemark;
+		if (countRemark > 0) {
+			averageMark = (double) Math.round(((double)sumMark / (double)countRemark) * 100) / 100;
+		}
 		
 		JsonObject result = new JsonObject();
 		result.addProperty("averageMark", averageMark);
