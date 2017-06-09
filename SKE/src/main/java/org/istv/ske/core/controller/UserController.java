@@ -54,7 +54,7 @@ public class UserController {
 	private EmailClient emailClient;
 
 	private SecureRandom random = new SecureRandom();
-	
+
 	private final String REGEX_EMAIL = "^[aA-zZ0-9]+.[aA-zZ0-9]+(@univ-valenciennes.fr|@etu.univ-valenciennes.fr)";
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
@@ -98,7 +98,7 @@ public class UserController {
 			emailActivation.setDestinataire(created);
 			emailActivation.setObjet("Activation de votre compte SKE");
 			emailActivation.setExpediteur(null);
-			emailActivation.setUrlActivationAccount("http://10.4.132.150:8080/account_certification/certify/" + token);
+			emailActivation.setUrlActivationAccount("https://clemscode.ovh/account_certification/certify/" + token);
 			emailClient.sendEmail(emailActivation);
 
 			return created;
