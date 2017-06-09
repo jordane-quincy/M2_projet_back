@@ -35,7 +35,7 @@ public class NotificationController {
 	public List<Notification> list(HttpServletRequest request) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
 		User user = userService.getUser(userId);
-		return notificationService.findNotificationByUserByOrderByCreationDateDesc(user);
+		return notificationService.findNotificationByUserOrderByCreationDateDesc(user);
 	}
 
 	@RequestMapping(value = {
