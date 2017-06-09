@@ -188,7 +188,7 @@ public class SubscriptionController {
 				response.addProperty("credit", user.getCredit());
 			}
 
-			if (status.equals(AppointmentStatus.VALIDATED)) {
+			if (status.equals(AppointmentStatus.VALIDATED) && !app.getStatus().equals(AppointmentStatus.VALIDATED)) {
 				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été validée",
 						"Votre cours \"" + app.getOffer().getTitle() + "\" aura lieu le " + DF.format(date) + " avec "
 								+ app.getOffer().getUser().getUserFirstName() + " "
