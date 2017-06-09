@@ -153,7 +153,7 @@ public class OfferController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
 	public List<Offer> findAllOffer() throws Exception {
 		try {
-			List<Offer> offer = offerService.findAll();
+			List<Offer> offer = offerService.findAllAvailable();
 			return offer;
 		} catch (Exception e) {
 			throw new RuntimeException("Impossible de récupérer la liste des offres");

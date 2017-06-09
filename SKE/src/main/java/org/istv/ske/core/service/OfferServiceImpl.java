@@ -41,6 +41,7 @@ public class OfferServiceImpl implements OfferService {
 		Offer offer = new Offer();
 		offer.setDescription(description);
 		offer.setDuration(duration);
+		offer.setStatus(false);
 		offer.setDomain(domain);
 		offer.setTitle(title);
 		offer.setUser(user);
@@ -60,11 +61,6 @@ public class OfferServiceImpl implements OfferService {
 		offer.setKeywords(StringUtils.join(selectedWords));
 		offerRepository.save(offer);
 		return offer;
-	}
-
-	@Override
-	public void deleteOffer(Long offerId) {
-		offerRepository.delete(offerId);
 	}
 
 	@Override
@@ -123,6 +119,8 @@ public class OfferServiceImpl implements OfferService {
 		}
 		return offer;
 	}
+	
+	
 
 	@Override
 	public List<Offer> search(String keywords, List<Long> domains, int durationMin, int durationMax, boolean teacher,
@@ -130,7 +128,8 @@ public class OfferServiceImpl implements OfferService {
 
 		boolean both = teacher & student;
 		String queryStr = "SELECT o FROM Offer o ";
-		queryStr += "WHERE o.duration <= :durationMax AND o.duration >= :durationMin ";
+		queryStr += "WHERE o.status = :status ";
+		queryStr += "AND o.duration <= :durationMax AND o.duration >= :durationMin ";
 
 		if (!both && (teacher || student)) {
 			queryStr += "AND o.user.role = '" + (teacher ? Role.TEACHER.name() : Role.STUDENT.name()) + "' ";
@@ -176,12 +175,29 @@ public class OfferServiceImpl implements OfferService {
 		Query query = em.createQuery(queryStr);
 		if (domains != null && !domains.isEmpty())
 			query.setParameter("domains", domains);
+		query.setParameter("status", false);
 		query.setParameter("durationMax", durationMax);
 		query.setParameter("durationMin", durationMin);
 		if (minAvgGrade != 0)
 			query.setParameter("minAvgGrade", (double) minAvgGrade);
 
 		return (List<Offer>) query.getResultList();
+	}
+
+	@Override
+	public void updateStatus(Long offerId, boolean status) {
+		Offer offer = offerRepository.findOne(offerId);
+		offer.setStatus(status);
+		offerRepository.save(offer);
+	}
+
+	@Override
+	public List<Offer> findAllAvailable() {
+		List<Offer> offers = new ArrayList<>();
+		for (Offer d : offerRepository.findByStatus(false)) {
+			offers.add(d);
+		}
+		return offers;
 	}
 
 }
