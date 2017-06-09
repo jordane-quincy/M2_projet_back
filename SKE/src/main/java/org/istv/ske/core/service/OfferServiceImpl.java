@@ -41,6 +41,7 @@ public class OfferServiceImpl implements OfferService {
 		Offer offer = new Offer();
 		offer.setDescription(description);
 		offer.setDuration(duration);
+		offer.setStatus(false);
 		offer.setDomain(domain);
 		offer.setTitle(title);
 		offer.setUser(user);
@@ -60,11 +61,6 @@ public class OfferServiceImpl implements OfferService {
 		offer.setKeywords(StringUtils.join(selectedWords));
 		offerRepository.save(offer);
 		return offer;
-	}
-
-	@Override
-	public void deleteOffer(Long offerId) {
-		offerRepository.delete(offerId);
 	}
 
 	@Override
@@ -182,6 +178,14 @@ public class OfferServiceImpl implements OfferService {
 			query.setParameter("minAvgGrade", (double) minAvgGrade);
 
 		return (List<Offer>) query.getResultList();
+	}
+
+	@Override
+	public void updateStatus(Long offerId, boolean status) {
+		// TODO Auto-generated method stub
+		Offer offer = offerRepository.findOne(offerId);
+		offer.setStatus(status);
+		offerRepository.save(offer);
 	}
 
 }
