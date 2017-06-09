@@ -173,7 +173,7 @@ public class SubscriptionController {
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
-			app = appointmentRepository.findByApplicant(user);
+			app = appointmentRepository.findByApplicantAndStatus(user, AppointmentStatus.VALIDATED);
 			if (user == null)
 				throw new BadRequestException("Cet utilisateur n'existe pas.");
 		} catch (BadRequestException e) {
@@ -207,10 +207,12 @@ public class SubscriptionController {
 	}
 
 	//
-	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = { "/participants" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String participants(HttpServletRequest request) throws Exception {
 		Long idUser = tokenService.getUserIdByToken(request);
-		List<Appointment> apps = appointmentService.findByOwnerId(idUser);
+		JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+		final String status = content.get("status").getAsString();
+		List<Appointment> apps = appointmentService.findByOwnerId(idUser, AppointmentStatus.valueOf(status));
 
 		JsonArray response = new JsonArray();
 
@@ -228,6 +230,7 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
+	// Cours validé que je vais donner
 	@RequestMapping(value = { "/courses" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody String curse(HttpServletRequest request) {
 		List<Appointment> appointments = null;

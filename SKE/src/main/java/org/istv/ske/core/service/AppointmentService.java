@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import org.istv.ske.dal.entities.Appointment;
+import org.istv.ske.dal.entities.Appointment.AppointmentStatus;
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 
@@ -19,5 +20,5 @@ public interface AppointmentService {
 
 	public List<Appointment> findByApplicant(User applicant);
 
-	public List<Appointment> findByOwnerId(Long idUser);
+	public List<Appointment> findByOwnerId(Long idUser, AppointmentStatus status);
 }
