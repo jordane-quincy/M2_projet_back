@@ -133,7 +133,10 @@ public class SubscriptionController {
 	@RequestMapping(value = { "/update" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String update(HttpServletRequest request) {
 		JsonObject response = new JsonObject();
+
 		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			User userAction = userRepository.findOne(idUser);
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 			AppointmentStatus status = null;
@@ -169,6 +172,13 @@ public class SubscriptionController {
 						app.getOffer().getUser().getUserFirstName() + " " + app.getOffer().getUser().getUserName()
 								+ " a annulé le rendez-vous du " + DF.format(date) + " pour le cours \""
 								+ app.getOffer().getTitle() + "\"");
+				if (userAction.getId() == app.getApplicant().getId()) {
+					notificationManager.createSimpleNotification(app.getOffer().getUser(), "La demande a été annulée",
+							app.getApplicant().getUserFirstName() + " " + app.getApplicant().getUserName()
+									+ " a annulé la demande de cours du " + DF.format(date) + " pour le cours \""
+									+ app.getOffer().getTitle() + "\"");
+				}
+
 			}
 			// Crédite le "prof" quand le cours est fini
 			if (status.equals(AppointmentStatus.FINISHED) && !app.getStatus().equals(AppointmentStatus.FINISHED)) {
