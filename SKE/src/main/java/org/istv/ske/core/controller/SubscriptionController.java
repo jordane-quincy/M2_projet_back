@@ -82,6 +82,7 @@ public class SubscriptionController {
 
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
+				response.addProperty("user", user.getCredit());
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
@@ -107,8 +108,10 @@ public class SubscriptionController {
 				app.setStatus(AppointmentStatus.CANCELLED);
 				user.setCredit(user.getCredit() + app.getOffer().getDuration());
 			}
-			if (subscriptionService.subscription(app))
+			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
+				response.addProperty("user", user.getCredit());
+			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
 			response.addProperty("message", e.getMessage());
@@ -158,6 +161,7 @@ public class SubscriptionController {
 			app.setDate(new Date(date));
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
+				response.addProperty("user", app.getOffer().getUser().getCredit());
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
@@ -173,7 +177,7 @@ public class SubscriptionController {
 		try {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
-			app = appointmentRepository.findByApplicant(user);
+			app = appointmentRepository.findByApplicantAndStatus(user, AppointmentStatus.VALIDATED);
 			if (user == null)
 				throw new BadRequestException("Cet utilisateur n'existe pas.");
 		} catch (BadRequestException e) {
@@ -185,6 +189,7 @@ public class SubscriptionController {
 		return app;
 	}
 
+	// Get les cours à suivre en fonction du status
 	@RequestMapping(value = {
 			"/attemptSubscriptions" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody List<Appointment> attemptSubscriptions(HttpServletRequest request) {
@@ -206,11 +211,13 @@ public class SubscriptionController {
 		return app;
 	}
 
-	//
-	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	// Get les cours à donner en fonction du status
+	@RequestMapping(value = { "/participants" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String participants(HttpServletRequest request) throws Exception {
 		Long idUser = tokenService.getUserIdByToken(request);
-		List<Appointment> apps = appointmentService.findByOwnerId(idUser);
+		JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+		final String status = content.get("status").getAsString();
+		List<Appointment> apps = appointmentService.findByOwnerId(idUser, AppointmentStatus.valueOf(status));
 
 		JsonArray response = new JsonArray();
 
@@ -228,33 +235,37 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	@RequestMapping(value = { "/courses" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody String curse(HttpServletRequest request) {
-		List<Appointment> appointments = null;
-		List<Offer> offers = null;
-		try {
-			Long idUser = tokenService.getUserIdByToken(request);
-			offers = offerService.findByUserId(idUser);
-			appointments = appointmentRepository.findByStatusAndOffer(AppointmentStatus.VALIDATED, offers);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		JsonArray response = new JsonArray();
-		for (Appointment app : appointments) {
-			JsonObject r = new JsonObject();
-			r.addProperty("id", app.getId());
-			r.addProperty("date", app.getDate().getTime());
-			r.addProperty("offer", app.getOffer().getTitle());
-			r.addProperty("duration", app.getOffer().getDuration());
-			r.addProperty("status", app.getStatus().toString());
-			r.addProperty("firstName", app.getApplicant().getUserFirstName());
-			r.addProperty("lastName", app.getApplicant().getUserName());
-			response.add(r);
-		}
-		return jsonService.stringify(response);
-	}
+	// // Cours validé que je vais donner
+	// @RequestMapping(value = { "/courses" }, method = RequestMethod.GET,
+	// headers = "Accept=application/json")
+	// public @ResponseBody String curse(HttpServletRequest request) {
+	// List<Appointment> appointments = null;
+	// List<Offer> offers = null;
+	// try {
+	// Long idUser = tokenService.getUserIdByToken(request);
+	// offers = offerService.findByUserId(idUser);
+	// appointments =
+	// appointmentRepository.findByStatusAndOffer(AppointmentStatus.VALIDATED,
+	// offers);
+	//
+	// } catch (Exception e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// JsonArray response = new JsonArray();
+	// for (Appointment app : appointments) {
+	// JsonObject r = new JsonObject();
+	// r.addProperty("id", app.getId());
+	// r.addProperty("date", app.getDate().getTime());
+	// r.addProperty("offer", app.getOffer().getTitle());
+	// r.addProperty("duration", app.getOffer().getDuration());
+	// r.addProperty("status", app.getStatus().toString());
+	// r.addProperty("firstName", app.getApplicant().getUserFirstName());
+	// r.addProperty("lastName", app.getApplicant().getUserName());
+	// response.add(r);
+	// }
+	// return jsonService.stringify(response);
+	// }
 
 }

@@ -70,7 +70,7 @@ public class TokenServiceImpl implements TokenService {
 		
 		if(System.currentTimeMillis() - t.timestamp > TOKEN_VALIDITY_MS) {
 			tokens.remove(t);
-			throw new RuntimeException("Le token " + token + " est expiré");
+			throw new RuntimeException("La session est expirée. Merci de vous reconnecter.");
 		}
 		
 		t.timestamp = System.currentTimeMillis();
