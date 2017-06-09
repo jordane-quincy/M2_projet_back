@@ -7,7 +7,6 @@ import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.entities.*;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
-import org.istv.ske.messages.enums.TypeNotification;
 import org.istv.ske.messages.manager.NotificationManager;
 import org.istv.ske.messages.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;

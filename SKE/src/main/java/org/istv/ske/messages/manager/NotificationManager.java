@@ -1,7 +1,6 @@
 package org.istv.ske.messages.manager;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.istv.ske.core.service.NotificationService;
@@ -11,7 +10,6 @@ import org.istv.ske.dal.entities.Remark;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
-import org.istv.ske.messages.enums.TypeNotification;
 import org.istv.ske.messages.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,7 +38,7 @@ public class NotificationManager {
     public Notification createSimpleNotification(User user, String title, String content) {
         System.out.println("Création d'une notif");
         System.out.println("Simple notif");
-        return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
+        return notificationService.createNotification(title, content, Notification.NotificationType.SIMPLE,user);
     }
 
     public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
@@ -66,7 +64,7 @@ public class NotificationManager {
 
         emailClient.sendEmail(emailMeeting);
 
-        return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(), destinataire);
+        return notificationService.createNotification(title, content, Notification.NotificationType.MEETING, destinataire);
     }
 
     public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
@@ -87,7 +85,7 @@ public class NotificationManager {
 
         emailClient.sendEmail(emailMeeting);
 
-        return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
+        return notificationService.createNotification(title, content, Notification.NotificationType.REMARK, destinataire);
     }
 
     public Notification getNotificationById(Long notificationID) {
@@ -101,4 +99,6 @@ public class NotificationManager {
     public List<Notification> getUserNotifications(User user) {
         return notificationService.findNotificationByUser(user);
     }
+
+
 }
