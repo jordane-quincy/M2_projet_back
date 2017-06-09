@@ -1,5 +1,7 @@
 package org.istv.ske.core.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
 import org.istv.ske.dal.repository.AppointmentRepository;
 import org.istv.ske.dal.repository.UserRepository;
+import org.istv.ske.messages.manager.NotificationManager;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +54,11 @@ public class SubscriptionController {
 	@Autowired
 	private TokenService tokenService;
 
+	@Autowired
+	private NotificationManager notificationManager;
+
+	private static final DateFormat DF = new SimpleDateFormat("dd MMMM à HH:mm");
+
 	// S'inscrire à un cours
 	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String subsciption(HttpServletRequest request) {
@@ -79,6 +87,10 @@ public class SubscriptionController {
 			user.setCredit(user.getCredit() - offer.getDuration());
 			userRepository.save(user);
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
+
+			notificationManager.createSimpleNotification(offer.getUser(), "Vous avez une demande d'inscription",
+					user.getUserFirstName() + " " + user.getUserName() + " souhaite s'inscrire à votre cours \""
+							+ offer.getTitle() + "\". Envoyez-lui une réponse !");
 
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
@@ -143,12 +155,22 @@ public class SubscriptionController {
 				User user = userRepository.findOne(app.getApplicant().getId());
 				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
+
+				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été refusée",
+						app.getOffer().getUser().getUserFirstName() + " " + app.getOffer().getUser().getUserName()
+								+ " a refusé votre demande d'inscription au cours \"" + app.getOffer().getTitle()
+								+ "\"");
 			}
 
 			if (status.equals(AppointmentStatus.CANCELLED) && !app.getStatus().equals(AppointmentStatus.CANCELLED)) {
 				User user = userRepository.findOne(app.getApplicant().getId());
 				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
+
+				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été annulée",
+						app.getOffer().getUser().getUserFirstName() + " " + app.getOffer().getUser().getUserName()
+								+ " a annulé le rendez-vous du " + DF.format(date) + " pour le cours \""
+								+ app.getOffer().getTitle() + "\"");
 			}
 			// Crédite le "prof" quand le cours est fini
 			if (status.equals(AppointmentStatus.FINISHED) && !app.getStatus().equals(AppointmentStatus.FINISHED)) {
@@ -157,6 +179,14 @@ public class SubscriptionController {
 				userRepository.save(user);
 				response.addProperty("credit", user.getCredit());
 			}
+
+			if (status.equals(AppointmentStatus.VALIDATED)) {
+				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été validée",
+						"Votre cours \"" + app.getOffer().getTitle() + "\" aura lieu le " + DF.format(date) + " avec "
+								+ app.getOffer().getUser().getUserFirstName() + " "
+								+ app.getOffer().getUser().getUserName());
+			}
+
 			app.setStatus(status);
 			app.setDate(new Date(date));
 			if (subscriptionService.subscription(app)) {

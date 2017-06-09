@@ -12,9 +12,12 @@ import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.core.utils.FieldReader;
+import org.istv.ske.dal.entities.Appointment;
+import org.istv.ske.dal.entities.Appointment.AppointmentStatus;
 import org.istv.ske.dal.entities.Domain;
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.messages.manager.NotificationManager;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +45,9 @@ public class OfferController {
 
 	@Autowired
 	private DomainService domainService;
+
+	@Autowired
+	private NotificationManager notificationManager;
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
@@ -79,6 +85,13 @@ public class OfferController {
 
 		try {
 			offerService.updateStatus(id, true);
+			for (Appointment app : offer.getAppointments()) {
+				if (app.getStatus() != AppointmentStatus.CANCELLED && app.getStatus() != AppointmentStatus.FINISHED
+						&& app.getStatus() != AppointmentStatus.REFUSED) {
+					notificationManager.createSimpleNotification(app.getApplicant(), "Offre supprimée", "L'offre \""
+							+ app.getOffer().getTitle() + "\" à laquelle vous étiez inscrit(e) a été supprimée.");
+				}
+			}
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,6 +144,7 @@ public class OfferController {
 	public Offer addCommentary(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
 
 		Long userId = tokenService.getUserIdByToken(request);
+		User user = userService.getUser(userId);
 		// TODO vérifier que le mec qui commente a bien suivi ce cours
 
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -144,6 +158,9 @@ public class OfferController {
 
 		try {
 			offerService.addComment(id, comment, grade.intValue());
+			notificationManager.createSimpleNotification(offer.getUser(), "Vous avez reçu un avis",
+					user.getUserFirstName() + " " + user.getUserName() + " vous a laissé un avis pour le cours \""
+							+ offer.getTitle() + "\".");
 			return offer;
 		} catch (Exception e) {
 			throw new InternalException("Impossible d'ajouter un commentaire à l'offre : " + e.getMessage());
