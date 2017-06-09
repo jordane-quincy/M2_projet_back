@@ -69,10 +69,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findByOwnerId(Long idUser) {
+	public List<Appointment> findByOwnerId(Long idUser, AppointmentStatus status) {
 		Query q = em.createQuery("SELECT a FROM Appointment a WHERE a.offer.user.id = :id and status = :status");
 		q.setParameter("id", idUser);
-		q.setParameter("status", AppointmentStatus.PENDING);
+		q.setParameter("status", status);
 		return (List<Appointment>) q.getResultList();
 	}
 
