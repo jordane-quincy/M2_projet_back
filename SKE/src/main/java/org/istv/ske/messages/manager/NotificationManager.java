@@ -37,12 +37,8 @@ public class NotificationManager {
      *
      * @param user
      */
-    public Notification createSimpleNotification(User user) {
+    public Notification createSimpleNotification(User user, String title, String content) {
         System.out.println("Création d'une notif");
-
-        String title = "";
-        String content = "";
-
         System.out.println("Simple notif");
         return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
     }
@@ -69,7 +65,7 @@ public class NotificationManager {
         emailMeeting.setContenuMail(content);
 
         emailClient.sendEmail(emailMeeting);
-        
+
         return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(), destinataire);
     }
 
