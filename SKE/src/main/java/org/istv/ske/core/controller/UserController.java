@@ -114,10 +114,12 @@ public class UserController {
 		User user = userService.getUser(userId);
 		String password = FieldReader.readString(object, "password");
 		try {
+			if(!AuthenticationServiceImpl.chiffrer(password).equals(user.getUserPassword())){
+				throw new BadRequestException("Mot de passe erroné");
+			}
 			userService.deleteUser(userId);
 			tokenService.deleteTokenForUserId(userId);
-			if(!AuthenticationServiceImpl.chiffrer(password).equals(user.getUserPassword()))
-				throw new BadRequestException("Mot de passe erroné");
+			
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			throw new BadRequestException("Impossible de supprimer l'user : " + e.getMessage());
