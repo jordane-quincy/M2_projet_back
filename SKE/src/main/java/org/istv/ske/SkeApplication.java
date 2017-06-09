@@ -11,22 +11,28 @@ import org.istv.ske.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootApplication
 @ComponentScan({ "org.istv.ske" })
-public class SkeApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(SkeApplication.class, args);
-
-	}
-
+public class SkeApplication extends SpringBootServletInitializer {
 	@Autowired
 	UserRepository userRepository;
 	private boolean crypted = false;
+	private static Class<SkeApplication> applicationClass = SkeApplication.class;
+
+	public static void main(String[] args) {
+		SpringApplication.run(SkeApplication.class, args);
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(applicationClass);
+	}
 
 	@PostConstruct
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -34,6 +40,7 @@ public class SkeApplication {
 		// Changer password claires en chiffrés
 		if (crypted == false) {
 			chiffrerAutoCompletion();
+			crypted = true;
 		}
 	}
 
