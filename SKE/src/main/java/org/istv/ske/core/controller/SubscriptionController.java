@@ -166,6 +166,7 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
+	//
 	@RequestMapping(value = { "/subscriptions" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request) {
 		List<Appointment> app = null;
@@ -184,6 +185,28 @@ public class SubscriptionController {
 		return app;
 	}
 
+	@RequestMapping(value = {
+			"/attemptSubscriptions" }, method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<Appointment> attemptSubscriptions(HttpServletRequest request) {
+		List<Appointment> app = null;
+		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			User user = userRepository.findOne(idUser);
+			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
+			final String status = content.get("status").getAsString();
+			app = appointmentRepository.findByApplicantAndStatus(user, AppointmentStatus.valueOf(status));
+			if (user == null)
+				throw new BadRequestException("Cet utilisateur n'existe pas.");
+		} catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return app;
+	}
+
+	//
 	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody String participants(HttpServletRequest request) throws Exception {
 		Long idUser = tokenService.getUserIdByToken(request);
