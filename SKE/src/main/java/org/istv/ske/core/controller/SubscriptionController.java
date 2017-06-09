@@ -75,14 +75,12 @@ public class SubscriptionController {
 			if (offer == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
 			if (offer.getUser().getId() == user.getId()) {
-				response.addProperty("ok", false);
-				response.addProperty("message", "Vous ne pouvez pas vous inscrire à votre offre");
-				return jsonService.stringify(response);
+				throw new BadRequestException("Vous ne pouvez pas vous inscire à vos cours.");
 			}
 			if (user.getCredit() < offer.getDuration()) {
-				response.addProperty("ok", false);
-				response.addProperty("message", "Crédit insuffisant");
-				return jsonService.stringify(response);
+				// response.addProperty("ok", false);
+				// response.addProperty("message", "Crédit insuffisant");
+				throw new BadRequestException("Crédit insuffisant");
 			}
 			user.setCredit(user.getCredit() - offer.getDuration());
 			userRepository.save(user);
