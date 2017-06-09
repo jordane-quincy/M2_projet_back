@@ -86,8 +86,8 @@ public class UserController {
 
 		try {
 			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
-			User created = userService.createUser(email, name, firstName, password, birthday, formation,
-					secretQuestion, skills, phoneNumber);
+			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
+					skills, phoneNumber);
 			String token = new BigInteger(32 * 4, random).toString(16);
 			userService.setToken(created, token);
 
@@ -116,10 +116,12 @@ public class UserController {
 		User user = userService.getUser(userId);
 		String password = FieldReader.readString(object, "password");
 		try {
+			if (!AuthenticationServiceImpl.chiffrer(password).equals(user.getUserPassword())) {
+				throw new BadRequestException("Mot de passe erroné");
+			}
 			userService.deleteUser(userId);
 			tokenService.deleteTokenForUserId(userId);
-			if(!AuthenticationServiceImpl.chiffrer(password).equals(user.getUserPassword()))
-				throw new BadRequestException("Mot de passe erroné");
+
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			throw new BadRequestException("Impossible de supprimer l'user : " + e.getMessage());
@@ -132,32 +134,31 @@ public class UserController {
 		Long userId = tokenService.getUserIdByToken(request);
 
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
-		
+
 		User user = userService.getUser(userId);
 
 		String validatePassword = FieldReader.readString(object, "validatePassword");
 		String name = FieldReader.readString(object, "userName");
 		String firstName = FieldReader.readString(object, "userFirstName");
-		String phoneNumber=  FieldReader.readString(object, "phoneNumber");
+		String phoneNumber = FieldReader.readString(object, "phoneNumber");
 		Long birthday = FieldReader.readLong(object, "birthday");
 		Long formationId = FieldReader.readLong(object, "formationId");
 		List<String> skills = FieldReader.readStringArray(object, "skills");
 		String password = null;
-		
+
 		if (FieldReader.existField(object, "password"))
 			password = FieldReader.readString(object, "password");
 
-		if(!AuthenticationServiceImpl.chiffrer(validatePassword).equals(user.getUserPassword()))
+		if (!AuthenticationServiceImpl.chiffrer(validatePassword).equals(user.getUserPassword()))
 			throw new BadRequestException("Mauvais mot de passe de validation.");
-		
-		
+
 		Formation formation = formationService.findFormationById(formationId);
 		if (formation == null)
 			throw new BadRequestException("Cette formation n'existe pas");
 
 		try {
 			User updated = userService.updateUser(userId, name, firstName, birthday, formation, skills, phoneNumber);
-			if(password != null)
+			if (password != null)
 				userService.setPassword(updated.getUserMail(), password);
 			return updated;
 		} catch (Exception e) {
@@ -244,34 +245,34 @@ public class UserController {
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/current", method = RequestMethod.GET, produces = "application/json")
 	public String Usercurrent(HttpServletRequest request) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
 		User user = userService.getUser(userId);
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id", user.getId());
-		jsonObject.addProperty("firstname", user.getUserFirstName()); 
+		jsonObject.addProperty("firstname", user.getUserFirstName());
 		jsonObject.addProperty("lastname", user.getUserName());
 		return jsonService.stringify(jsonObject);
 	}
-	
+
 	@RequestMapping(value = "/opinions", method = RequestMethod.POST, produces = "application/json")
 	public String getOpinions(HttpServletRequest request) throws Exception {
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 		String email = FieldReader.readString(object, "email");
 		User user = userService.getUserByUserMail(email);
-		
+
 		Collection<Offer> offers = user.getOffers();
-		
+
 		Iterator<Offer> iterator = offers.iterator();
-		
+
 		int countRemark = 0;
 		double averageMark = 0;
 		int sumMark = 0;
-		
+
 		JsonArray offersArray = new JsonArray();
-			
+
 		while (iterator.hasNext()) {
 			Offer offer = (Offer) iterator.next();
 			List<Remark> remarks = offer.getRemarks();
@@ -283,21 +284,28 @@ public class UserController {
 				remarkObject.addProperty("remark", remark.getText());
 				remarkObject.addProperty("grade", remark.getGrade());
 				offersArray.add(remarkObject);
-				sumMark+=remark.getGrade();
+				sumMark += remark.getGrade();
 				countRemark++;
 			}
 		}
-		
+
 		if (countRemark > 0) {
-			averageMark = (double) Math.round(((double)sumMark / (double)countRemark) * 100) / 100;
+			averageMark = (double) Math.round(((double) sumMark / (double) countRemark) * 100) / 100;
 		}
-		
+
 		JsonObject result = new JsonObject();
 		result.addProperty("averageMark", averageMark);
 		result.add("remarks", offersArray);
-		
-		
-		
+
 		return jsonService.stringify(result);
+	}
+
+	@RequestMapping(value = "/credit", method = RequestMethod.GET, produces = "application/json")
+	public String getCredit(HttpServletRequest request) throws Exception {
+		Long userId = tokenService.getUserIdByToken(request);
+		User user = userService.getUser(userId);
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("credit", user.getCredit());
+		return jsonService.stringify(jsonObject);
 	}
 }

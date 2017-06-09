@@ -17,6 +17,8 @@ import org.istv.ske.dal.entities.Appointment.AppointmentStatus;
 import org.istv.ske.dal.entities.Domain;
 import org.istv.ske.dal.entities.Offer;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.repository.AppointmentRepository;
+import org.istv.ske.dal.repository.UserRepository;
 import org.istv.ske.messages.manager.NotificationManager;
 import org.istv.ske.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,12 @@ public class OfferController {
 
 	@Autowired
 	private NotificationManager notificationManager;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
@@ -90,6 +98,11 @@ public class OfferController {
 						&& app.getStatus() != AppointmentStatus.REFUSED) {
 					notificationManager.createSimpleNotification(app.getApplicant(), "Offre supprimée", "L'offre \""
 							+ app.getOffer().getTitle() + "\" à laquelle vous étiez inscrit(e) a été supprimée.");
+					app.setStatus(AppointmentStatus.CANCELLED);
+					appointmentRepository.save(app);
+					User user = userService.getUser(app.getApplicant().getId());
+					user.setCredit(user.getCredit() + app.getOffer().getDuration());
+					userRepository.save(user);
 				}
 			}
 			return ApplicationConfig.JSON_SUCCESS;
