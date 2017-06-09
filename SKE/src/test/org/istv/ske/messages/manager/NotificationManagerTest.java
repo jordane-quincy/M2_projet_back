@@ -47,7 +47,7 @@ public class NotificationManagerTest {
     @Test
     public void createSimpleNotification() throws Exception {
         User user1 = userService.getUser(1L);
-        Notification notifInsert = notificationManager.createSimpleNotification(user1);
+        Notification notifInsert = notificationManager.createSimpleNotification(user1, "titre", "contenu");
 
         Notification notifInDB = notificationManager.getNotificationById(notifInsert.getId());
 

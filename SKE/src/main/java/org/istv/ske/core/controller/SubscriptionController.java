@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.istv.ske.core.exception.BadRequestException;
+import org.istv.ske.core.service.AppointmentService;
 import org.istv.ske.core.service.JsonService;
 import org.istv.ske.core.service.OfferService;
 import org.istv.ske.core.service.SubscriptionService;
@@ -45,6 +46,9 @@ public class SubscriptionController {
 	private AppointmentRepository appointmentRepository;
 
 	@Autowired
+	private AppointmentService appointmentService;
+
+	@Autowired
 	private TokenService tokenService;
 
 	// S'inscrire à un cours
@@ -55,6 +59,7 @@ public class SubscriptionController {
 		try {
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
+
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
 
@@ -66,11 +71,13 @@ public class SubscriptionController {
 				response.addProperty("message", "Vous ne pouvez pas vous inscrire à votre offre");
 				return jsonService.stringify(response);
 			}
-			if (user.getCredit() == 0) {
+			if (user.getCredit() < offer.getDuration()) {
 				response.addProperty("ok", false);
 				response.addProperty("message", "Crédit insuffisant");
 				return jsonService.stringify(response);
 			}
+			user.setCredit(user.getCredit() - offer.getDuration());
+			userRepository.save(user);
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
 
 			if (subscriptionService.subscription(app)) {
@@ -88,13 +95,18 @@ public class SubscriptionController {
 	public @ResponseBody String unsubsciption(HttpServletRequest request) {
 		JsonObject response = new JsonObject();
 		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			User user = userRepository.findOne(idUser);
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 
 			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
 			if (app == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
-			app.setStatus(AppointmentStatus.CANCELLED);
+			if (!app.getStatus().equals(AppointmentStatus.CANCELLED)) {
+				app.setStatus(AppointmentStatus.CANCELLED);
+				user.setCredit(user.getCredit() + app.getOffer().getDuration());
+			}
 			if (subscriptionService.subscription(app))
 				response.addProperty("ok", true);
 		} catch (Exception e) {
@@ -121,11 +133,14 @@ public class SubscriptionController {
 			app.setStatus(AppointmentStatus.valueOf(status));
 			app.setDate(new Date(date));
 
-			if (status.equals("VALIDATED")) {
+			// Crédite à nouveau le demandeur en cas de refus
+			if (status.equals("REFUSED")) {
 				User user = userRepository.findOne(app.getApplicant().getId());
-				user.setCredit(user.getCredit() - duration);
+				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
 			}
+
+			// Crédite le "prof" quand le cours est fini
 			if (status.equals("FINISHED")) {
 				User user = userRepository.findOne(app.getOffer().getUser().getId());
 				user.setCredit(user.getCredit() + duration);
@@ -134,7 +149,6 @@ public class SubscriptionController {
 			}
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
-
 			}
 		} catch (Exception e) {
 			response.addProperty("ok", false);
@@ -162,17 +176,9 @@ public class SubscriptionController {
 	}
 
 	@RequestMapping(value = { "/participants" }, method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody String participants(HttpServletRequest request) {
-		List<Offer> offers = null;
-		try {
-			Long idUser = tokenService.getUserIdByToken(request);
-			offers = offerService.findByUserId(idUser);
-			System.out.println(offers.get(0).getTitle());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		List<Appointment> apps = appointmentRepository.findByOffer(offers);
+	public @ResponseBody String participants(HttpServletRequest request) throws Exception {
+		Long idUser = tokenService.getUserIdByToken(request);
+		List<Appointment> apps = appointmentService.findByOwnerId(idUser);
 
 		JsonArray response = new JsonArray();
 
