@@ -7,6 +7,7 @@ import org.istv.ske.core.service.RemarkService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.entities.*;
 import org.istv.ske.messages.common.EmailClient;
+import org.istv.ske.messages.manager.NotificationManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class NotificationManagerTest {
     @Test
     public void createSimpleNotification() throws Exception {
         User user1 = userService.getUser(1L);
-        Notification notifInsert = notificationManager.createSimpleNotification(user1);
+        Notification notifInsert = notificationManager.createSimpleNotification(user1,"titreNotif","contenuNotif");
 
         Notification notifInDB = notificationManager.getNotificationById(notifInsert.getId());
 

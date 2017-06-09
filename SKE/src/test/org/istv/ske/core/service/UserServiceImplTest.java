@@ -1,5 +1,6 @@
 package org.istv.ske.core.service;
 
+import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.entities.Skill;
 import org.istv.ske.dal.repository.SecretQuestionRepository;
 import org.istv.ske.dal.repository.SkillRepository;

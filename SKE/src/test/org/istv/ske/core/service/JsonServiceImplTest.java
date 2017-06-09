@@ -3,6 +3,8 @@ package org.istv.ske.core.service;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.istv.ske.core.service.JsonService;
+import org.istv.ske.core.service.JsonServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
