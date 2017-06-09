@@ -98,7 +98,7 @@ public class NotificationManager {
 	}
 
 	public List<Notification> getUserNotifications(User user) {
-		return notificationService.findNotificationByUserByOrderByCreationDate(user);
+		return notificationService.findNotificationByUserOrderByCreationDateDesc(user);
 	}
 
 }

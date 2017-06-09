@@ -54,6 +54,8 @@ public class UserController {
 	private EmailClient emailClient;
 
 	private SecureRandom random = new SecureRandom();
+	
+	private final String REGEX_EMAIL = "^[aA-zZ0-9]+.[aA-zZ0-9]+(@univ-valenciennes.fr|@etu.univ-valenciennes.fr)";
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public User create(HttpServletRequest request) throws Exception {
@@ -71,7 +73,7 @@ public class UserController {
 		List<String> skills = FieldReader.readStringArray(object, "skills");
 		String phoneNumber = FieldReader.readString(object, "phoneNumber");
 
-		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+		if (!email.matches(REGEX_EMAIL))
 			throw new BadRequestException("L'email fourni ne correspond pas a la regex requise");
 
 		if (userService.emailAlreadyExists(email)) {
@@ -194,7 +196,7 @@ public class UserController {
 
 		String email = FieldReader.readString(object, "email");
 
-		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+		if (!email.matches(REGEX_EMAIL))
 			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
 
 		User user = userService.getUserByUserMail(email);
@@ -221,7 +223,7 @@ public class UserController {
 		String password = FieldReader.readString(object, "password");
 		String answer = FieldReader.readString(object, "answer");
 
-		if (!email.matches("^[aA-zZ0-9]+.[aA-zZ0-9]+@(univ-valenciennes.fr|etu.univ-valenciennes.fr)"))
+		if (!email.matches(REGEX_EMAIL))
 			throw new BadRequestException("L'email fourni ne correspond pas au regex requis");
 
 		User user = userService.getUserByUserMail(email);
