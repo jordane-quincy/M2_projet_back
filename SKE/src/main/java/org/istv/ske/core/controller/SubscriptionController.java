@@ -57,7 +57,7 @@ public class SubscriptionController {
 	@Autowired
 	private NotificationManager notificationManager;
 
-	private static final DateFormat DF = new SimpleDateFormat("dd mmmm à HH:MM");
+	private static final DateFormat DF = new SimpleDateFormat("dd MMMM à HH:mm");
 
 	// S'inscrire à un cours
 	@RequestMapping(value = { "/sub" }, method = RequestMethod.POST, headers = "Accept=application/json")
