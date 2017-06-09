@@ -186,7 +186,7 @@ public class SubscriptionController {
 	}
 
 	@RequestMapping(value = {
-			"/attemptSubscriptions" }, method = RequestMethod.GET, headers = "Accept=application/json")
+			"/attemptSubscriptions" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody List<Appointment> attemptSubscriptions(HttpServletRequest request) {
 		List<Appointment> app = null;
 		try {
