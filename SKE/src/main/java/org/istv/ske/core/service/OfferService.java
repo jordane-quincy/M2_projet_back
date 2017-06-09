@@ -10,8 +10,6 @@ public interface OfferService {
 
 	Offer createOffer(User user, String title, int duration, String description, Domain domain);
 
-	void deleteOffer(Long id);
-
 	List<Offer> findByUserId(Long userId);
 
 	Offer findById(Long offerId);
@@ -22,6 +20,10 @@ public interface OfferService {
 
 	List<Offer> findAll();
 
+	List<Offer> findAllAvailable();
+
 	List<Offer> search(String keywords, List<Long> domains, int durationMin, int durationMax, boolean teacher,
 			boolean student, int minAvgGrade);
+
+	void updateStatus(Long offerId, boolean status);
 }

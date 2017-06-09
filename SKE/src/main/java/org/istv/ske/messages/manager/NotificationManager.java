@@ -30,7 +30,6 @@ public class NotificationManager {
 	public NotificationManager() {
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Fonction qui creer une notif et qui gere le contenu en fonction du type
 	 *
@@ -39,20 +38,8 @@ public class NotificationManager {
 	public Notification createSimpleNotification(User user, String title, String content) {
 		System.out.println("Création d'une notif");
 		System.out.println("Simple notif");
-		return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
+		return notificationService.createNotification(title, content, Notification.NotificationType.SIMPLE, user);
 	}
-=======
-    /**
-     * Fonction qui creer une notif et qui gere le contenu en fonction du type
-     *
-     * @param user
-     */
-    public Notification createSimpleNotification(User user, String title, String content) {
-        System.out.println("Création d'une notif");
-        System.out.println("Simple notif");
-        return notificationService.createNotification(title, content, Notification.NotificationType.SIMPLE,user);
-    }
->>>>>>> master
 
 	public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
 		System.out.println("Creation d'une notif et envoie d'un mail");
@@ -75,18 +62,13 @@ public class NotificationManager {
 
 		emailClient.sendEmail(emailMeeting);
 
-		return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(),
+		return notificationService.createNotification(title, content, Notification.NotificationType.MEETING,
 				destinataire);
 	}
 
-<<<<<<< HEAD
 	public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
 		System.out.println("Creation d'une notif et envoie d'un mail");
 		System.out.println("Notif pour signaler une note");
-=======
-        return notificationService.createNotification(title, content, Notification.NotificationType.MEETING, destinataire);
-    }
->>>>>>> master
 
 		String title = "Vous avez reçu une note ";
 		String content = remark.getOffer().getTitle() + " a été noté " + remark.getGrade() + "/5" + " Commentaire : "
@@ -103,35 +85,20 @@ public class NotificationManager {
 
 		emailClient.sendEmail(emailMeeting);
 
-		return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
+		return notificationService.createNotification(title, content, Notification.NotificationType.REMARK,
+				destinataire);
 	}
 
-<<<<<<< HEAD
 	public Notification getNotificationById(Long notificationID) {
 		return notificationService.findNotificationById(notificationID);
 	}
-=======
-        return notificationService.createNotification(title, content, Notification.NotificationType.REMARK, destinataire);
-    }
->>>>>>> master
 
 	public void deleteNotification(Notification notification) {
 		notificationService.deleteNotification(notification);
 	}
 
-<<<<<<< HEAD
 	public List<Notification> getUserNotifications(User user) {
-		return notificationService.findNotificationByUser(user);
+		return notificationService.findNotificationByUserByOrderByCreationDateDesc(user);
 	}
-=======
-    public void deleteNotification(Notification notification) {
-        notificationService.deleteNotification(notification);
-    }
 
-    public List<Notification> getUserNotifications(User user) {
-        return notificationService.findNotificationByUser(user);
-    }
-
-
->>>>>>> master
 }

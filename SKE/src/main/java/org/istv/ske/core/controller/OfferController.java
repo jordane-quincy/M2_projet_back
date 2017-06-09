@@ -78,7 +78,7 @@ public class OfferController {
 			throw new BadRequestException("Vous ne pouvez pas supprimer une offre qui ne vous appartient pas");
 
 		try {
-			offerService.deleteOffer(id);
+			offerService.updateStatus(id, true);
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +153,7 @@ public class OfferController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
 	public List<Offer> findAllOffer() throws Exception {
 		try {
-			List<Offer> offer = offerService.findAll();
+			List<Offer> offer = offerService.findAllAvailable();
 			return offer;
 		} catch (Exception e) {
 			throw new RuntimeException("Impossible de récupérer la liste des offres");
