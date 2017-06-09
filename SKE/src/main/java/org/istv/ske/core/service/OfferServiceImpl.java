@@ -192,7 +192,7 @@ public class OfferServiceImpl implements OfferService {
 	@Override
 	public List<Offer> findAllAvailable() {
 		List<Offer> offers = new ArrayList<>();
-		for (Offer d : offerRepository.findByStatus(false)) {
+		for (Offer d : offerRepository.findByStatusOrderByIdDesc(false)) {
 			offers.add(d);
 		}
 		return offers;

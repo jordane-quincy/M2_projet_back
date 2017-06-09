@@ -75,14 +75,12 @@ public class SubscriptionController {
 			if (offer == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
 			if (offer.getUser().getId() == user.getId()) {
-				response.addProperty("ok", false);
-				response.addProperty("message", "Vous ne pouvez pas vous inscrire à votre offre");
-				return jsonService.stringify(response);
+				throw new BadRequestException("Vous ne pouvez pas vous inscire à vos cours.");
 			}
 			if (user.getCredit() < offer.getDuration()) {
-				response.addProperty("ok", false);
-				response.addProperty("message", "Crédit insuffisant");
-				return jsonService.stringify(response);
+				// response.addProperty("ok", false);
+				// response.addProperty("message", "Crédit insuffisant");
+				throw new BadRequestException("Crédit insuffisant");
 			}
 			user.setCredit(user.getCredit() - offer.getDuration());
 			userRepository.save(user);
@@ -135,7 +133,10 @@ public class SubscriptionController {
 	@RequestMapping(value = { "/update" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String update(HttpServletRequest request) {
 		JsonObject response = new JsonObject();
+
 		try {
+			Long idUser = tokenService.getUserIdByToken(request);
+			User userAction = userRepository.findOne(idUser);
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 			AppointmentStatus status = null;
@@ -171,6 +172,13 @@ public class SubscriptionController {
 						app.getOffer().getUser().getUserFirstName() + " " + app.getOffer().getUser().getUserName()
 								+ " a annulé le rendez-vous du " + DF.format(date) + " pour le cours \""
 								+ app.getOffer().getTitle() + "\"");
+				if (userAction.getId() == app.getApplicant().getId()) {
+					notificationManager.createSimpleNotification(app.getOffer().getUser(), "La demande a été annulée",
+							app.getApplicant().getUserFirstName() + " " + app.getApplicant().getUserName()
+									+ " a annulé la demande de cours du " + DF.format(date) + " pour le cours \""
+									+ app.getOffer().getTitle() + "\"");
+				}
+
 			}
 			// Crédite le "prof" quand le cours est fini
 			if (status.equals(AppointmentStatus.FINISHED) && !app.getStatus().equals(AppointmentStatus.FINISHED)) {
@@ -180,7 +188,7 @@ public class SubscriptionController {
 				response.addProperty("credit", user.getCredit());
 			}
 
-			if (status.equals(AppointmentStatus.VALIDATED)) {
+			if (status.equals(AppointmentStatus.VALIDATED) && !app.getStatus().equals(AppointmentStatus.VALIDATED)) {
 				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été validée",
 						"Votre cours \"" + app.getOffer().getTitle() + "\" aura lieu le " + DF.format(date) + " avec "
 								+ app.getOffer().getUser().getUserFirstName() + " "
