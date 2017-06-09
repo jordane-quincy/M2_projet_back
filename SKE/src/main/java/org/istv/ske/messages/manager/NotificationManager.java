@@ -21,15 +21,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationManager {
 
-    @Autowired
-    NotificationService notificationService;
+	@Autowired
+	NotificationService notificationService;
 
-    @Autowired
-    private EmailClient emailClient;
+	@Autowired
+	private EmailClient emailClient;
 
-    public NotificationManager() {
-    }
+	public NotificationManager() {
+	}
 
+<<<<<<< HEAD
+	/**
+	 * Fonction qui creer une notif et qui gere le contenu en fonction du type
+	 *
+	 * @param user
+	 */
+	public Notification createSimpleNotification(User user, String title, String content) {
+		System.out.println("Création d'une notif");
+		System.out.println("Simple notif");
+		return notificationService.createNotification(title, content, TypeNotification.SIMPLE.toString(), user);
+	}
+=======
     /**
      * Fonction qui creer une notif et qui gere le contenu en fonction du type
      *
@@ -40,58 +52,78 @@ public class NotificationManager {
         System.out.println("Simple notif");
         return notificationService.createNotification(title, content, Notification.NotificationType.SIMPLE,user);
     }
+>>>>>>> master
 
-    public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
-        System.out.println("Creation d'une notif et envoie d'un mail");
-        System.out.println("Prise de rdv notif");
+	public Notification createMeetingNotification(Appointment appointment, User destinataire, User expediteur) {
+		System.out.println("Creation d'une notif et envoie d'un mail");
+		System.out.println("Prise de rdv notif");
 
-        DateFormat fullDateFormat = DateFormat.getDateTimeInstance(
-                DateFormat.FULL,
-                DateFormat.FULL);
+		DateFormat fullDateFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
 
-        String title = "Confirmation de prise de rendez-vous";
-        String content = "Un rendez-vous a été créé à la date suivante : " + fullDateFormat.format(appointment.getDate());
+		String title = "Confirmation de prise de rendez-vous";
+		String content = "Un rendez-vous a été créé à la date suivante : "
+				+ fullDateFormat.format(appointment.getDate());
 
+		Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
+		emailMeeting.setDestinataire(destinataire);
+		emailMeeting.setExpediteur(expediteur);
 
-        Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
-        emailMeeting.setDestinataire(destinataire);
-        emailMeeting.setExpediteur(expediteur);
+		// emailMeeting.init();
 
-        // emailMeeting.init();
+		emailMeeting.setObjet(title);
+		emailMeeting.setContenuMail(content);
 
-        emailMeeting.setObjet(title);
-        emailMeeting.setContenuMail(content);
+		emailClient.sendEmail(emailMeeting);
 
-        emailClient.sendEmail(emailMeeting);
+		return notificationService.createNotification(title, content, TypeNotification.MEETING.toString(),
+				destinataire);
+	}
 
+<<<<<<< HEAD
+	public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
+		System.out.println("Creation d'une notif et envoie d'un mail");
+		System.out.println("Notif pour signaler une note");
+=======
         return notificationService.createNotification(title, content, Notification.NotificationType.MEETING, destinataire);
     }
+>>>>>>> master
 
-    public Notification createRemarkNotification(Remark remark, User destinataire, User expediteur) {
-        System.out.println("Creation d'une notif et envoie d'un mail");
-        System.out.println("Notif pour signaler une note");
+		String title = "Vous avez reçu une note ";
+		String content = remark.getOffer().getTitle() + " a été noté " + remark.getGrade() + "/5" + " Commentaire : "
+				+ remark.getText();
 
-        String title = "Vous avez reçu une note ";
-        String content = remark.getOffer().getTitle() + " a été noté " + remark.getGrade() + "/5" + " Commentaire : " + remark.getText();
+		Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
+		emailMeeting.setDestinataire(destinataire);
+		emailMeeting.setExpediteur(expediteur);
 
-        Email emailMeeting = new Email(EmailType.NOTIFICATION_EMAIL);
-        emailMeeting.setDestinataire(destinataire);
-        emailMeeting.setExpediteur(expediteur);
+		// emailMeeting.init();
 
-        // emailMeeting.init();
+		emailMeeting.setObjet(title);
+		emailMeeting.setContenuMail(content);
 
-        emailMeeting.setObjet(title);
-        emailMeeting.setContenuMail(content);
+		emailClient.sendEmail(emailMeeting);
 
-        emailClient.sendEmail(emailMeeting);
+		return notificationService.createNotification(title, content, TypeNotification.REMARK.toString(), destinataire);
+	}
 
+<<<<<<< HEAD
+	public Notification getNotificationById(Long notificationID) {
+		return notificationService.findNotificationById(notificationID);
+	}
+=======
         return notificationService.createNotification(title, content, Notification.NotificationType.REMARK, destinataire);
     }
+>>>>>>> master
 
-    public Notification getNotificationById(Long notificationID) {
-        return notificationService.findNotificationById(notificationID);
-    }
+	public void deleteNotification(Notification notification) {
+		notificationService.deleteNotification(notification);
+	}
 
+<<<<<<< HEAD
+	public List<Notification> getUserNotifications(User user) {
+		return notificationService.findNotificationByUser(user);
+	}
+=======
     public void deleteNotification(Notification notification) {
         notificationService.deleteNotification(notification);
     }
@@ -101,4 +133,5 @@ public class NotificationManager {
     }
 
 
+>>>>>>> master
 }
