@@ -34,7 +34,6 @@ public class SkeApplication {
 		// Changer password claires en chiffrés
 		if (crypted == false) {
 			chiffrerAutoCompletion();
-			crypted = true;
 		}
 	}
 
