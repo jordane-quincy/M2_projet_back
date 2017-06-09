@@ -7,6 +7,7 @@ import org.istv.ske.core.service.RemarkService;
 import org.istv.ske.core.service.UserService;
 import org.istv.ske.dal.entities.*;
 import org.istv.ske.messages.common.EmailClient;
+
 import org.istv.ske.messages.manager.NotificationManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.Date;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
