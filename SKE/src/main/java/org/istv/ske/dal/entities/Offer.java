@@ -24,6 +24,7 @@ public class Offer {
 
 	private String description;
 
+	@JsonIgnore
 	private String keywords;
 
 	@ManyToOne
