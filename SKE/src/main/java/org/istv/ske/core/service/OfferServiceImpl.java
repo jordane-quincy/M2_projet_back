@@ -66,7 +66,7 @@ public class OfferServiceImpl implements OfferService {
 	@Override
 	public List<Offer> findByUserId(Long userId) {
 		User user = userRepository.findOne(userId);
-		return offerRepository.findByUser(user);
+		return offerRepository.findByUserAndStatus(user, false);
 	}
 
 	@Override
@@ -119,8 +119,6 @@ public class OfferServiceImpl implements OfferService {
 		}
 		return offer;
 	}
-	
-	
 
 	@Override
 	public List<Offer> search(String keywords, List<Long> domains, int durationMin, int durationMax, boolean teacher,

@@ -78,7 +78,7 @@ public class OfferController {
 			throw new BadRequestException("Vous ne pouvez pas supprimer une offre qui ne vous appartient pas");
 
 		try {
-			offerService.deleteOffer(id);
+			offerService.updateStatus(id, true);
 			return ApplicationConfig.JSON_SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
