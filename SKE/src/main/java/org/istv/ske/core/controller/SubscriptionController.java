@@ -71,21 +71,29 @@ public class SubscriptionController {
 			Long idUser = tokenService.getUserIdByToken(request);
 			User user = userRepository.findOne(idUser);
 
+			// On retrouve l'offre via l'id passé dans le json
 			Offer offer = offerService.findById(Long.valueOf(idOffer));
+			// Si aucune offre ne correspond, on lève une exception
 			if (offer == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
+
+			// On interndit l'inscritpion à son propre cours
 			if (offer.getUser().getId() == user.getId()) {
 				throw new BadRequestException("Vous ne pouvez pas vous inscire à vos cours.");
 			}
+			// On vérifie si le crédit est suffisant
 			if (user.getCredit() < offer.getDuration()) {
 				// response.addProperty("ok", false);
 				// response.addProperty("message", "Crédit insuffisant");
 				throw new BadRequestException("Crédit insuffisant");
 			}
+			// On met à jour le crédit du demandeur
 			user.setCredit(user.getCredit() - offer.getDuration());
 			userRepository.save(user);
+			// On sauvegarde la demande avec le status pending, en attente
 			Appointment app = new Appointment(offer, user, new Date(), AppointmentStatus.PENDING);
 
+			// Notification d'une demande d'inscription à un cours
 			notificationManager.createSimpleNotification(offer.getUser(), "Vous avez une demande d'inscription",
 					user.getUserFirstName() + " " + user.getUserName() + " souhaite s'inscrire à votre cours \""
 							+ offer.getTitle() + "\". Envoyez-lui une réponse !");
@@ -112,12 +120,16 @@ public class SubscriptionController {
 			final String idOffer = content.get("IdOffer").getAsString();
 
 			Appointment app = appointmentRepository.findOne(Long.valueOf(idOffer));
+			// Si nous n'avons aucune offre correspondant à l'id
 			if (app == null)
 				throw new BadRequestException("Cette offre n'existe pas.");
+			// On vérifie si le status n'est pas déjà annulé et on crédite le
+			// demandeur
 			if (!app.getStatus().equals(AppointmentStatus.CANCELLED)) {
 				app.setStatus(AppointmentStatus.CANCELLED);
 				user.setCredit(user.getCredit() + app.getOffer().getDuration());
 			}
+			// On sauvegarde la modification et retourne le crédit mis à jour
 			if (subscriptionService.subscription(app)) {
 				response.addProperty("ok", true);
 				response.addProperty("user", user.getCredit());
@@ -135,8 +147,10 @@ public class SubscriptionController {
 		JsonObject response = new JsonObject();
 
 		try {
+			// On recherche l'utilisateur via le token
 			Long idUser = tokenService.getUserIdByToken(request);
 			User userAction = userRepository.findOne(idUser);
+
 			JsonObject content = jsonService.parse(request.getReader()).getAsJsonObject();
 			final String idOffer = content.get("IdOffer").getAsString();
 			AppointmentStatus status = null;
@@ -157,21 +171,27 @@ public class SubscriptionController {
 				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
 
+				// Et on envoi une notification
 				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été refusée",
 						app.getOffer().getUser().getUserFirstName() + " " + app.getOffer().getUser().getUserName()
 								+ " a refusé votre demande d'inscription au cours \"" + app.getOffer().getTitle()
 								+ "\"");
 			}
 
+			// Crédite le demandeur en cas d'annulation
 			if (status.equals(AppointmentStatus.CANCELLED) && !app.getStatus().equals(AppointmentStatus.CANCELLED)) {
 				User user = userRepository.findOne(app.getApplicant().getId());
 				user.setCredit(user.getCredit() + duration);
 				userRepository.save(user);
 
+				// Notification en cas de demande annulée au demandeur
 				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été annulée",
 						app.getOffer().getUser().getUserFirstName() + " " + app.getOffer().getUser().getUserName()
 								+ " a annulé le rendez-vous du " + DF.format(date) + " pour le cours \""
 								+ app.getOffer().getTitle() + "\"");
+
+				// Notification en cas de demande annulée au propriétaire de
+				// l'offre
 				if (userAction.getId() == app.getApplicant().getId()) {
 					notificationManager.createSimpleNotification(app.getOffer().getUser(), "La demande a été annulée",
 							app.getApplicant().getUserFirstName() + " " + app.getApplicant().getUserName()
@@ -188,6 +208,7 @@ public class SubscriptionController {
 				response.addProperty("credit", user.getCredit());
 			}
 
+			// Notification quand la demande a été validé
 			if (status.equals(AppointmentStatus.VALIDATED) && !app.getStatus().equals(AppointmentStatus.VALIDATED)) {
 				notificationManager.createSimpleNotification(app.getApplicant(), "Votre inscription a été validée",
 						"Votre cours \"" + app.getOffer().getTitle() + "\" aura lieu le " + DF.format(date) + " avec "
@@ -208,7 +229,7 @@ public class SubscriptionController {
 		return jsonService.stringify(response);
 	}
 
-	//
+	// Return les cours auquels l'utilisateur connecté est inscrit et confirmé
 	@RequestMapping(value = { "/subscriptions" }, method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody List<Appointment> subscriptions(HttpServletRequest request) {
 		List<Appointment> app = null;
@@ -227,7 +248,7 @@ public class SubscriptionController {
 		return app;
 	}
 
-	// Get les cours à suivre en fonction du status
+	// Récupère les cours à suivre en fonction du status
 	@RequestMapping(value = {
 			"/attemptSubscriptions" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody List<Appointment> attemptSubscriptions(HttpServletRequest request) {
@@ -249,7 +270,7 @@ public class SubscriptionController {
 		return app;
 	}
 
-	// Get les cours à donner en fonction du status
+	// Récupère les cours à donner en fonction du status
 	@RequestMapping(value = { "/participants" }, method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody String participants(HttpServletRequest request) throws Exception {
 		Long idUser = tokenService.getUserIdByToken(request);
