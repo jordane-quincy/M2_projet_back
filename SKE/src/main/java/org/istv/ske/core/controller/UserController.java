@@ -59,9 +59,11 @@ public class UserController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public User create(HttpServletRequest request) throws Exception {
-
+		
+		// Récupération del'object JSON passé en paramètre par le front
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
+		// 
 		String email = FieldReader.readString(object, "userMail");
 		String name = FieldReader.readString(object, "userName");
 		String firstName = FieldReader.readString(object, "userFirstName");
@@ -73,24 +75,35 @@ public class UserController {
 		List<String> skills = FieldReader.readStringArray(object, "skills");
 		String phoneNumber = FieldReader.readString(object, "phoneNumber");
 
+		// Vérification de la conformité de l'email
 		if (!email.matches(REGEX_EMAIL))
+			// Si non conforme, erreur 400 retournée
 			throw new BadRequestException("L'email fourni ne correspond pas a la regex requise");
 
+		// Vérification de l'unicité de email
 		if (userService.emailAlreadyExists(email)) {
+			// Si l'email est déjà utilisé, erreur 400 retournée
 			throw new BadRequestException("Cet email a déjà servi a créer un compte");
 		}
 
 		Formation formation = formationService.findFormationById(formationId);
+		// Vérification de l'existance de la formation dans la base
 		if (formation == null)
+			// Si la formation n'est pas en base, erreur 400 retournée
 			throw new BadRequestException("Cette formation n'existe pas");
 
+		// Création d'un utilisateur
 		try {
+			// Instanciation de la question secrète
 			SecretQuestion secretQuestion = new SecretQuestion(question, answer);
+			// Instanciation du user
 			User created = userService.createUser(email, name, firstName, password, birthday, formation, secretQuestion,
 					skills, phoneNumber);
+			// Génération du token lié à l'utilisateur
 			String token = new BigInteger(32 * 4, random).toString(16);
 			userService.setToken(created, token);
 
+			// Préparation de l'eMail d'activation
 			String msgMail = System.lineSeparator() + System.lineSeparator()
 					+ "veuillez activer votre compte en cliquant sur ce lien : ";
 			Email emailActivation = new Email(EmailType.ACTIVATION_EMAIL);
@@ -99,11 +112,13 @@ public class UserController {
 			emailActivation.setObjet("Activation de votre compte SKE");
 			emailActivation.setExpediteur(null);
 			emailActivation.setUrlActivationAccount("https://clemscode.ovh/account_certification/certify/" + token);
+			// Envoie de l'eMail d'activation
 			emailClient.sendEmail(emailActivation);
 
 			return created;
 		} catch (Exception e) {
 			e.printStackTrace();
+			// Erreur 500 si un problème est survenu lors de la création d'u utilisateur
 			throw new InternalException("Erreur lors de la création de l'utilisateur : " + e.getMessage());
 		}
 
