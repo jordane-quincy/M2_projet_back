@@ -63,7 +63,7 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public List<Notification> findNotificationByUserByOrderByCreationDate(User user) {
+	public List<Notification> findNotificationByUserOrderByCreationDateDesc(User user) {
 		List<Notification> notifications = new ArrayList<>();
 		for (Notification n : notificationRepository.findNotificationByUser(user)) {
 			notifications.add(n);

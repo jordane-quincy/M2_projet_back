@@ -18,51 +18,50 @@ public class TokenValidationFilter implements Filter {
 
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Override
-	public void destroy() {}
+	public void destroy() {
+	}
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-		
+
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		
+
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 		response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-		
-		if(request.getMethod().equals("OPTIONS")) {
+
+		if (request.getMethod().equals("OPTIONS")) {
 			chain.doFilter(request, response);
 			return;
 		}
-		
+
 		System.out.println(request.getContextPath());
-		if(request.getServletPath().equals("/auth/connect") || 
-		   request.getServletPath().equals("/user/create") ||
-		   request.getServletPath().equals("/formation/list") ||
-		   request.getServletPath().equals("/skill/list") ||
-		   request.getServletPath().equals("/user/askResetPassword") ||
-		   request.getServletPath().equals("/user/resetPassword") ||
-		   request.getServletPath().startsWith("/account_certification/certify")
-		   ) {
+		if (request.getServletPath().startsWith("/auth/connect") || request.getServletPath().startsWith("/user/create")
+				|| request.getServletPath().startsWith("/formation/list")
+				|| request.getServletPath().startsWith("/skill/list")
+				|| request.getServletPath().startsWith("/user/askResetPassword")
+				|| request.getServletPath().startsWith("/user/resetPassword")
+				|| request.getServletPath().startsWith("/account_certification/certify")) {
 			chain.doFilter(request, response);
 			return;
 		}
-		
+
 		try {
 			String token = request.getHeader("Authorization");
 			tokenService.onRequest(token);
 			chain.doFilter(request, response);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		}
 	}
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
-		
+
 	}
 
 }

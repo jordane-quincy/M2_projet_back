@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(String email, String name, String firstName, String password, Long birthday,
 			Formation formation, SecretQuestion secretQuestion, List<String> skills, String phoneNumber) {
-		Role role = (email.endsWith("@etu.univ-valenciennes.fr") ? Role.STUDENT : Role.TEACHER);
+		Role role = (email.endsWith("@univ-valenciennes.fr") ? Role.TEACHER : Role.STUDENT);
 		User user = new User();
 		user.setBirthday(new Date(birthday));
 		user.setCredit(5);

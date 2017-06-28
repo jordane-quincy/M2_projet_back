@@ -57,8 +57,15 @@ public class OfferController {
 	@Autowired
 	private AppointmentRepository appointmentRepository;
 
+	/**
+	 * creation d'une offre, elle apartiendra a l'utilisateur courant
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Offer create(HttpServletRequest request) throws Exception {
+		// control input
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
 		Long userId = tokenService.getUserIdByToken(request);
@@ -67,7 +74,7 @@ public class OfferController {
 		String description = FieldReader.readString(object, "description");
 		Long duration = FieldReader.readLong(object, "duration");
 		Long domainId = FieldReader.readLong(object, "domainId");
-
+		// verification que l offre cree a bien un domaine pour l'acceuilir
 		Domain domain = domainService.findById(domainId);
 		if (domain == null)
 			throw new BadRequestException("Ce domaine n'existe pas");
@@ -81,10 +88,18 @@ public class OfferController {
 		}
 	}
 
+	/**
+	 * suppresion d'une offre qui nous appartient
+	 * @param request
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json", produces = "application/json")
 	public String delete(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
 		Offer offer = offerService.findById(id);
+		// controle
 		if (offer == null)
 			throw new BadRequestException("Cette offre n'existe pas");
 
@@ -112,6 +127,12 @@ public class OfferController {
 		}
 	}
 
+	/**
+	 * lister les offres de utilisateur connecté
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET, headers = "Accept=application/json", produces = "Application/json")
 	public List<Offer> lister(HttpServletRequest request) throws Exception {
 		Long userId = tokenService.getUserIdByToken(request);
@@ -122,9 +143,16 @@ public class OfferController {
 		}
 	}
 
+	/**
+	 * mise a jour d'une offre a l'ID données si elle existe et nous appartient
+	 * @param request
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public Offer update(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
-
+		// control input
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
 		Long userId = tokenService.getUserIdByToken(request);
@@ -153,12 +181,19 @@ public class OfferController {
 		}
 	}
 
+	/**
+	 * ajouter un commentaire a une offre 
+	 * @param request
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/comment/{id}", method = RequestMethod.POST, headers = "Accept=application/json", produces = "Application/json")
 	public Offer addCommentary(HttpServletRequest request, @PathVariable(required = true) Long id) throws Exception {
-
+		// control input
 		Long userId = tokenService.getUserIdByToken(request);
 		User user = userService.getUser(userId);
-		// TODO vérifier que le mec qui commente a bien suivi ce cours
+		// vérifier que le mec qui commente a bien suivi ce cours
 
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
 
@@ -180,6 +215,11 @@ public class OfferController {
 		}
 	}
 
+	/**
+	 * lister toutes les offres
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
 	public List<Offer> findAllOffer() throws Exception {
 		try {
@@ -190,6 +230,12 @@ public class OfferController {
 		}
 	}
 
+	/**
+	 * rechercher les offres selont un filtre de caracteristiques
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/filter", method = RequestMethod.POST, produces = "application/json")
 	public List<Offer> filter(HttpServletRequest request) throws Exception {
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.istv.ske.core.exception.BadRequestException;
 import org.istv.ske.dal.entities.User;
+import org.istv.ske.dal.repository.UserRepository;
 import org.istv.ske.messages.common.EmailClient;
 import org.istv.ske.messages.enums.EmailType;
 import org.istv.ske.messages.model.Email;
@@ -15,19 +16,22 @@ public class AccountCertificationServiceImpl implements AccountCertificationServ
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private EmailClient emailClient;
+
+	@Autowired
+	private UserRepository urepo;
 
 	@Override
 	public User activate(String token) throws BadRequestException {
 		List<User> users = userService.getUserByToken(token);
-		if(users.isEmpty()){
+		if (users.isEmpty()) {
 			throw new BadRequestException("Aucun user n'est affilié a ce token d'utilisation");
 		}
-		User user = users.get(0);		
+		User user = users.get(0);
 		userService.setToken(user, null);
-		System.out.println("[Activate User][Sucess] -- user : "+user.toString());
+		System.out.println("[Activate User][Sucess] -- user : " + user.toString());
 		Email emailActivation = new Email(EmailType.NOTIFICATION_EMAIL);
 		emailActivation.setContenuMail("Votre compte SKE a bien été activé");
 		emailActivation.setDestinataire(user);
@@ -35,6 +39,7 @@ public class AccountCertificationServiceImpl implements AccountCertificationServ
 		emailActivation.setExpediteur(null);
 		emailActivation.setUrlActivationAccount(null);
 		emailClient.sendEmail(emailActivation);
+		urepo.save(user);
 		return user;
 	}
 

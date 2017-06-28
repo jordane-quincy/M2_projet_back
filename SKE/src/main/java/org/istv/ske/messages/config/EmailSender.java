@@ -37,9 +37,14 @@ public class EmailSender {
 
 	public Properties javaMailProperties() {
 		Properties properties = new Properties();
-		properties.put("mail.transport.protocol", "smtps");
+		properties.put("mail.transport.protocol", "smtp");
 		properties.put("mail.smtp.auth", "true");
 		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		properties.put("mail.smtp.socketFactory.fallback", "false");
+		properties.put("mail.smtp.port", "465");
+		properties.put("mail.smtp.socketFactory.port", "465");
+		properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 		return properties;
 	}
 }

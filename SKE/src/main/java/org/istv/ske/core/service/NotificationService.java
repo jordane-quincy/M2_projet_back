@@ -18,7 +18,7 @@ public interface NotificationService {
 
     Notification findNotificationById(Long id);
 
-    List<Notification> findNotificationByUserByOrderByCreationDate(User user);
+    List<Notification> findNotificationByUserOrderByCreationDateDesc(User user);
 
     Notification asRead(Long notificationID);
 
