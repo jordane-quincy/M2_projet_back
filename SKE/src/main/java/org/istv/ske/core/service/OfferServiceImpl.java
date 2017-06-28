@@ -38,6 +38,7 @@ public class OfferServiceImpl implements OfferService {
 
 	@Override
 	public Offer createOffer(User user, String title, int duration, String description, Domain domain) {
+		// control input
 		Offer offer = new Offer();
 		offer.setDescription(description);
 		offer.setDuration(duration);
@@ -45,7 +46,7 @@ public class OfferServiceImpl implements OfferService {
 		offer.setDomain(domain);
 		offer.setTitle(title);
 		offer.setUser(user);
-
+		// suppression des caracteres derangeants
 		Set<String> selectedWords = new HashSet<>();
 		String raw = title + " " + description;
 		raw = raw.toLowerCase().replaceAll("[-+.^:,']", "");
@@ -59,12 +60,14 @@ public class OfferServiceImpl implements OfferService {
 			}
 		}
 		offer.setKeywords(StringUtils.join(selectedWords));
+		// enregistrement
 		offerRepository.save(offer);
 		return offer;
 	}
 
 	@Override
 	public List<Offer> findByUserId(Long userId) {
+		// trouver des offre appartenant a un user particulier
 		User user = userRepository.findOne(userId);
 		return offerRepository.findByUserAndStatus(user, false);
 	}
@@ -76,12 +79,13 @@ public class OfferServiceImpl implements OfferService {
 
 	@Override
 	public Offer updateOffer(Long offerId, String title, int duration, String description, Domain domain) {
+		// control input
 		Offer offer = offerRepository.findOne(offerId);
 		offer.setTitle(title);
 		offer.setDuration(duration);
 		offer.setDescription(description);
 		offer.setDomain(domain);
-
+		// suppression des caracteres derangeants
 		Set<String> selectedWords = new HashSet<>();
 		String raw = title + " " + description;
 		raw = raw.toLowerCase().replaceAll("[-+.^:,']", "");
@@ -95,7 +99,7 @@ public class OfferServiceImpl implements OfferService {
 			}
 		}
 		offer.setKeywords(StringUtils.join(selectedWords));
-
+		// enregistrement
 		offerRepository.save(offer);
 		return offer;
 	}
@@ -105,7 +109,9 @@ public class OfferServiceImpl implements OfferService {
 		Offer offer = offerRepository.findOne(offerId);
 		Remark remark = new Remark(comment, offer, grade);
 		offer.getRemarks().add(remark);
+		// sauvegarde du comentaire
 		remarkRepository.save(remark);
+		// suavegarde du lien commentaire -- offre
 		offerRepository.save(offer);
 
 		return offer;
