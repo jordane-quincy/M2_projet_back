@@ -28,6 +28,7 @@ public class FormationController {
 	@Autowired
 	private FormationService formationService;
 
+	// Methode de creation d'une formation
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Formation create(HttpServletRequest request) throws Exception {
 		
@@ -40,11 +41,13 @@ public class FormationController {
 		return created;
 	}
 	
+	// Recuperation de toutes les formations
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
 	public List<Formation> list() throws Exception {
 		return formationService.getAll();
 	}
 	
+	// Methode de supression d'une formation
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(@PathVariable(required=true) Long id) throws Exception {
 		try {
