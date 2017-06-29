@@ -57,7 +57,12 @@ public class UserController {
 
 	private final String REGEX_EMAIL = "^[aA-zZ0-9]+.[aA-zZ0-9]+(@univ-valenciennes.fr|@etu.univ-valenciennes.fr)";
 
-	// Methode de création d'un utilisateur
+	/**
+	 * création d'un utilisateur
+	 * @param request with JSON
+	 * @return user created
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public User create(HttpServletRequest request) throws Exception {
 		
@@ -126,7 +131,12 @@ public class UserController {
 
 	}
 	
-	// Methode de suppression d'un utilisateur
+	/**
+	 * suppresion d'un utilisateur
+	 * @param request with JSON contening id
+	 * @return JSON with response if success
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(HttpServletRequest request) throws Exception {
 		// Récupération de l'ID de l'utilisateur en fonction du Token
@@ -155,7 +165,12 @@ public class UserController {
 		}
 	}
 
-	// Methode de mise à jour d'un utilisateur
+	/**
+	 * création d'un utilisateur
+	 * @param request with JSON
+	 * @return user updated
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json")
 	public User update(HttpServletRequest request) throws Exception {
 		// Récupération de l'ID de l'utilisateur en fonction du Token
@@ -201,7 +216,11 @@ public class UserController {
 
 	}
 
-	// Methode qui renvoie la liste complète des utilisateurs
+	/**
+	 * liste de users
+	 * @return liste des users
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
 	public List<User> list() throws Exception {
 
@@ -216,8 +235,12 @@ public class UserController {
 		return list;
 	}
 
-	// Methode qui renvoie un utilisateur en fonction de son id
-	// ID en paramètre dans l'URI
+	/**
+	 * get user by ID
+	 * @param ID
+	 * @return user
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = "application/json")
 	public User get(@PathVariable(required = true) Long id) throws Exception {
 		User user = userService.getUser(id);
@@ -227,7 +250,12 @@ public class UserController {
 			throw new BadRequestException("Cet id d'utilisateur n'existe pas");
 	}
 
-	// Methode qui renvoie la question secrete d'un utilisateur pour mettre à jour le password
+	/**
+	 * Methode qui renvoie la question secrete d'un utilisateur pour mettre à jour le password
+	 * @param request with JSON contening email of user
+	 * @return Question Secrète
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/askResetPassword", method = RequestMethod.POST, produces = "application/json")
 	public SecretQuestion getSecretQuestion(HttpServletRequest request) throws Exception {
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -261,7 +289,12 @@ public class UserController {
 
 	}
 
-	// Methode qui change le password si la réponse est bonne
+	/**
+	 * Methode qui change le password si la réponse est bonne
+	 * @param request with JSON contening response and new password
+	 * @return JSON with response if success
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
 	public String respondToQuestion(HttpServletRequest request) throws Exception {
 
@@ -304,6 +337,14 @@ public class UserController {
 
 	}
 	
+	/**
+	 * get current user
+	 * @param request contening token
+	 * @return id
+	 * @return firstname
+	 * @return lastname
+	 * @throws Exception
+	 */
 	// Methode qui renvoie les information de l'utilisateur courant
 	@RequestMapping(value = "/current", method = RequestMethod.GET, produces = "application/json")
 	public String Usercurrent(HttpServletRequest request) throws Exception {
@@ -320,7 +361,13 @@ public class UserController {
 		return jsonService.stringify(jsonObject);
 	}
 
-	// Méthode qui renvoie l'intégralité des avis d'un utilisateur
+	/**
+	 * Méthode qui renvoie l'intégralité des avis d'un utilisateur
+	 * @param request with JSON contening email of user
+	 * @return liste des avis
+	 * @return note moyenne
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/opinions", method = RequestMethod.POST, produces = "application/json")
 	public String getOpinions(HttpServletRequest request) throws Exception {
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -374,7 +421,12 @@ public class UserController {
 		return jsonService.stringify(result);
 	}
 
-	// Methode qui renvoie le nombre de credits  d'un uitilisateur
+	/**
+	 * Methode qui renvoie le nombre de credits  d'un uitilisateur
+	 * @param request with JSON contening token
+	 * @return credits
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/credit", method = RequestMethod.GET, produces = "application/json")
 	public String getCredit(HttpServletRequest request) throws Exception {
 		// récupération de l'ID en fonction du Token
