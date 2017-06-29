@@ -5,10 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-
+/**
+ * La table Skill permet de définir les compétences d'un utilisateur.
+ * 
+ * @param id
+ *            Identifiant.
+ * @param label
+ *            Nom de la compétence (ex: Java, JS, C#, ...)
+ */
 @Entity
 public class Skill {
-	
+
 	@Id
 	@GeneratedValue
 	private long id;

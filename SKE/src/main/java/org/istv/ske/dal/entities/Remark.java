@@ -9,6 +9,19 @@ import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * La table Remark contient tous les comentaires pour une offre.
+ * 
+ * @param id
+ *            Identifiant
+ * @param text
+ *            Contenu du commentaire.
+ * @param grade
+ *            Note donnée par le participant à l'offre apres que le cours soit
+ *            passé.
+ * @param Offer
+ *            Offre à laquelle est lié le commentaire.
+ */
 @Entity
 public class Remark {
 
@@ -30,6 +43,14 @@ public class Remark {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Constucteur utilisé dans la partie core pour créér un commentaire pour
+	 * une offre donnée.
+	 * 
+	 * @param text
+	 * @param offer
+	 * @param grade
+	 */
 	public Remark(String text, Offer offer, int grade) {
 		this.text = text;
 		this.offer = offer;

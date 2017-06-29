@@ -11,6 +11,36 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * La table offre liste toutes les offres disponibles dans l'application. Une
+ * offre étant un cours proposé par un utilisateur en fonction de ses
+ * compétences dans un domaine.
+ * 
+ * @param id
+ *            Identifiant de l'offre.
+ * @param duration
+ *            Durée du cours.
+ * @param title
+ *            Titre du cours.
+ * @param description
+ *            Description du cours.
+ * @param keywords
+ *            Mots clés pour pouvoir accéder à cette offre dans la barre de
+ *            recherche.
+ * @param status
+ *            Indique si l'offre est active. Permet aussi de différencier les
+ *            offres actives ou non dans l'affichage.
+ * @param user
+ *            L'utilisateur fournisseur.
+ * @param domain
+ *            Une offre est toujours liée à un domaine.
+ * @param remarks
+ *            Liste des avis/commentaires pour une offre, ces commentaires ne
+ *            peuvent être ajoutés qu'une fois le cours terminé.
+ * @param appointments
+ *            Les rendez-vous pour une offre. Obligatoirement bien sur à des
+ *            horaires différents.
+ */
 @Entity
 public class Offer {
 
@@ -46,6 +76,16 @@ public class Offer {
 
 	}
 
+	/**
+	 * Constucteur utilisé dans la partie core pour créér une offre de cours.
+	 * 
+	 * @param duration
+	 * @param title
+	 * @param description
+	 * @param user
+	 * @param domain
+	 * @param remarks
+	 */
 	public Offer(int duration, String title, String description, User user, Domain domain, List<Remark> remarks) {
 		this.duration = duration;
 		this.title = title;

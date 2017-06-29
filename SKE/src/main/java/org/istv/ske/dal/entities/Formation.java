@@ -9,15 +9,28 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Chaque utilisateur inscrit dans l'application dispose d'une formation, d'un
+ * parcours scolaire qui lui est propre.
+ * 
+ * @param id
+ *            Identifiant de la formation.
+ * @param level
+ *            Niveau de la formation (ex: M1, L3, ...).
+ * @param name
+ *            Nom de la formation.
+ * @param users
+ *            Liste des utilisateurs de la formation.
+ */
 @Entity
 public class Formation {
 
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	private String level;
-	
+
 	private String name;
 
 	@JsonIgnore
@@ -28,6 +41,13 @@ public class Formation {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Constucteur utilisé dans la partie core pour créér un une formation.
+	 * 
+	 * @param level
+	 * @param name
+	 * @param users
+	 */
 	public Formation(String level, String name, Collection<User> users) {
 		this.level = level;
 		this.name = name;

@@ -7,6 +7,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * La table Domain liste les grands domaines dans lesquels un utilisateur peut
+ * proposer une compétence.
+ * 
+ * @param id
+ *            Identifiant du domaine.
+ * @param domainName
+ *            Le nom du domaine.
+ * @param offer
+ *            Liste des offres proposées par tous les utilisateur pour un
+ *            domaine spécifique.
+ */
 @Entity
 public class Domain {
 
@@ -23,6 +35,12 @@ public class Domain {
 
 	}
 
+	/**
+	 * Constucteur utilisé dans la partie core pour créér un domaine.
+	 * 
+	 * @param domainName
+	 * @param offer
+	 */
 	public Domain(String domainName, Collection<Offer> offer) {
 		this.domainName = domainName;
 		this.offer = offer;

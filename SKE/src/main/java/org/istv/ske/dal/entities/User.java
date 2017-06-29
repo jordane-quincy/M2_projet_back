@@ -26,6 +26,48 @@ import org.istv.ske.core.utils.SkillsMapJsonAdapter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * La table utilisateur permet de gérer les utilisateurs inscrits dans
+ * l'application.
+ * 
+ * @param id
+ *            Identifiant utilisateur.
+ * @param credit
+ *            Nombre de crédit dont dispose un utilisateur, une fois à 0 il ne
+ *            peut plus participer à un cours et doit donc en donner un pour
+ *            récupérer une heure.
+ * @param userMail
+ *            Adresse mail de l'utilisateur.
+ * @param userPassword
+ *            Mot de passe chiffré dans la base.
+ * @param userName
+ *            Nom de l'utilisateur.
+ * @param userFirstName
+ *            Prénom de l'utilisateur.
+ * @param phoneNumber
+ *            Numéro de telephone de l'utilisateur.
+ * @param token
+ *            Code permettant de savoir si un utilisateur est bien inscrit à
+ *            l'application ou non.
+ * @param birthday
+ *            Date de naissance.
+ * @param question
+ *            Question secrete.
+ * @param offers
+ *            Liste des offres proposées par l'utilisateur.
+ * @param notifications
+ *            Liste des notifications pour cet utilisateur.
+ * @param role
+ *            Occupation de l'utilisateur choisi dans une énumération 'Role'
+ *            (étudiant, enseignant).
+ * @param formation
+ *            Formation de l'utilisateur.
+ * @param skills
+ *            Map qui permet de savoir si une compétence a été validée par un
+ *            enseignant ou non.
+ * @param appointments
+ *            Liste des rendez-vous pour un utilisateur.
+ */
 @Entity
 public class User {
 
@@ -72,6 +114,9 @@ public class User {
 	@ManyToOne
 	private Formation formation;
 
+	/**
+	 * Création de la table validated_skills.
+	 */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "VALIDATED_SKILLS")
 	@MapKeyColumn(name = "SKILL_ID")
@@ -87,6 +132,23 @@ public class User {
 
 	}
 
+	/**
+	 * Constucteur utilisé dans la partie core pour créér un utilisateur, ici il
+	 * faut beaucoup de parametres pour créer un utilisateur car pratiquement au
+	 * centre de toutes les fonctionnalités.
+	 * 
+	 * @param credit
+	 * @param userMail
+	 * @param userPassword
+	 * @param userName
+	 * @param userFirstName
+	 * @param phoneNumber
+	 * @param birthday
+	 * @param offers
+	 * @param notifications
+	 * @param role
+	 * @param formation
+	 */
 	public User(int credit, String userMail, String userPassword, String userName, String userFirstName,
 			String phoneNumber, Date birthday, Collection<Offer> offers, Collection<Notification> notifications,
 			Role role, Formation formation) {
