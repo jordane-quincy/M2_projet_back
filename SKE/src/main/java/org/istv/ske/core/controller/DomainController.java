@@ -32,7 +32,11 @@ public class DomainController {
 	@Autowired
 	private JsonService jsonService;
 
-	// Récupère la liste de tous les domaines 
+  /** 
+   * Get all domains 
+   * @return domains 
+   * @throws Exception 
+   */ 
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
 	public List<Domain> findAllDomains() throws Exception {
 		try {
@@ -43,7 +47,12 @@ public class DomainController {
 		}
 	}
 	
-	// Methode de création d'un domaine
+ /** 
+   * création d'un domain
+   * @param request with JSON 
+   * @return Domain created 
+   * @throws Exception 
+   */ 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json", produces = "application/json")
 	public Domain create(HttpServletRequest request) throws Exception {
 		JsonObject object = jsonService.parse(request.getReader()).getAsJsonObject();
@@ -54,7 +63,12 @@ public class DomainController {
 		return created;
 	}
 	
-	// Methode de supression d'un domaine
+ /** 	
+   * suppresion d'un domaine
+   * @param request with JSON contening id 
+   * @return JSON with response if success 
+   * @throws Exception 
+   */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public String delete(@PathVariable(required=true) Long id) throws Exception {
 		try {

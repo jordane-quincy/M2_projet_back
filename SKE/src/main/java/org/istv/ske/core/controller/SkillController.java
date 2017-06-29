@@ -37,6 +37,11 @@ public class SkillController {
 	@Autowired
 	private UserService userService;
 
+  /** 
+   * Liste des compétences
+   * @return skill 
+   * @throws Exception 
+   */ 
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
 	public List<Skill> list() throws Exception {
 		return skillService.findAll();
