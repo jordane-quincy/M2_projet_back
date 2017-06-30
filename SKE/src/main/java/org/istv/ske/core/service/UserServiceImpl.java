@@ -141,14 +141,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation, List<String> skills, String phoneNumber) {
+	public User updateUser(Long id, String lastName, String firstName, Long birthday, Formation formation,
+			List<String> skills, String phoneNumber) {
 		User user = userRepository.findOne(id);
 		user.setFormation(formation);
 		user.setUserName(lastName);
 		user.setUserFirstName(firstName);
-		
+
 		user.setBirthday(new Date(birthday));
-		
+
 		Map<Skill, Boolean> oldSkills = user.getSkills();
 		Map<Skill, Boolean> newSkills = new HashMap<>();
 		for (String skill : skills) {

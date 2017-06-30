@@ -16,6 +16,13 @@ public class AccountCertificationController {
 	@Autowired
 	AccountCertificationService accountCertificationService;
 
+	/**
+	 * certification d'un token. Vérifie la validité d'un token
+	 * 
+	 * @param token
+	 * @return JSON success
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/certify/{token}", method = RequestMethod.GET, produces = "application/json")
 	private String certifyAccount(@PathVariable(required = true) String token) throws BadRequestException {
 

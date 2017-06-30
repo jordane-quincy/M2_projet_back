@@ -23,6 +23,11 @@ public class TokenValidationFilter implements Filter {
 	public void destroy() {
 	}
 
+	/**
+	 * filtrage des requêtes via le token. Ajout des headers dans les reponses
+	 * 
+	 * @throws Exception
+	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
@@ -30,32 +35,37 @@ public class TokenValidationFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
-		response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+		if (!response.containsHeader("Access-Control-Allow-Origin"))
+			response.addHeader("Access-Control-Allow-Origin", "*");
+		if (!response.containsHeader("Access-Control-Allow-Headers"))
+			response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+		if (!response.containsHeader("Access-Control-Allow-Methods"))
+			response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
 
 		if (request.getMethod().equals("OPTIONS")) {
 			chain.doFilter(request, response);
 			return;
 		}
 
-		System.out.println(request.getContextPath());
-		if (request.getServletPath().startsWith("/auth/connect") || request.getServletPath().startsWith("/user/create")
-				|| request.getServletPath().startsWith("/formation/list")
-				|| request.getServletPath().startsWith("/skill/list")
-				|| request.getServletPath().startsWith("/user/askResetPassword")
-				|| request.getServletPath().startsWith("/user/resetPassword")
-				|| request.getServletPath().startsWith("/account_certification/certify")) {
+		String path = request.getServletPath();
+		System.out.println(path);
+		System.out.println(path.contains("auth/connect"));
+		// Pas de token nécessaire pour accéder à ces URI
+		if (path.contains("auth/connect") || path.contains("user/create") || path.contains("formation/list")
+				|| path.contains("skill/list") || path.contains("user/askResetPassword")
+				|| path.contains("user/resetPassword") || path.contains("account_certification/certify")
+				|| path.contains("/error")) {
 			chain.doFilter(request, response);
-			return;
-		}
-
-		try {
+		} else {
+			System.out.println("Path requires token, validating");
 			String token = request.getHeader("Authorization");
-			tokenService.onRequest(token);
-			chain.doFilter(request, response);
-		} catch (Exception e) {
-			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+			try {
+				tokenService.onRequest(token);
+				chain.doFilter(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+				((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+			}
 		}
 	}
 
